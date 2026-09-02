@@ -43,23 +43,30 @@ Mirroring rules (left-right reflection about the sagittal plane):
 from dataclasses import dataclass
 
 import torch
-from tensordict import TensorDict
 from mjlab.rl import RslRlPpoAlgorithmCfg
+from tensordict import TensorDict
+
+
+@dataclass
+class SymmetryCfg:
+    """Typed mirror-loss options that Tyro can render and ``asdict`` can lower."""
+
+    use_data_augmentation: bool = False
+    use_mirror_loss: bool = True
+    mirror_loss_coeff: float = 0.5
+    data_augmentation_func: str = (
+        "mjlab_microduck.tasks.symmetry.microduck_vel_symmetry"
+    )
 
 
 @dataclass
 class PpoWithSymmetryCfg(RslRlPpoAlgorithmCfg):
-    """PPO algorithm config extended with an optional symmetry_cfg field."""
+    """PPO algorithm config extended with optional typed symmetry options."""
 
-    symmetry_cfg: dict | None = None
+    symmetry_cfg: SymmetryCfg | None = None
 
 
-SYMMETRY_CFG = {
-    "use_data_augmentation": False,
-    "use_mirror_loss": True,
-    "mirror_loss_coeff": 0.5,
-    "data_augmentation_func": "mjlab_microduck.tasks.symmetry.microduck_vel_symmetry",
-}
+SYMMETRY_CFG = SymmetryCfg()
 
 # ---------------------------------------------------------------------------
 # Permutation and sign tables
