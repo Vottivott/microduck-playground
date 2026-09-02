@@ -1,5 +1,7 @@
 # MicroDuck Playground
 
+[![CI](https://github.com/Vottivott/microduck-playground/actions/workflows/ci.yml/badge.svg)](https://github.com/Vottivott/microduck-playground/actions/workflows/ci.yml)
+
 Reproducible reinforcement-learning experiments, policy demonstrations, and
 printable hardware add-ons for
 [Pollen Robotics' MicroDuck](https://github.com/pollen-robotics/microduck).
