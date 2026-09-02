@@ -1,8 +1,8 @@
 """Progressive locomotion task for platform-to-peg Microduck stilts.
 
-Each run compiles one fixed morphology.  Checkpoints transfer between runs in
-this order: support-shape blends at 20 mm, then increasing heights on the
-12 mm peg.  Keeping morphology fixed within a run makes contacts and inertias
+Each run compiles one fixed morphology. Checkpoints transfer between runs in
+this order: support-shape blends at 2 cm, then increasing heights on the
+12 mm peg. Keeping morphology fixed within a run makes contacts and inertias
 auditable and avoids non-stationary physics inside PPO rollouts.
 """
 
@@ -21,41 +21,41 @@ from mjlab_microduck.tasks.microduck_velocity_env_cfg import (
     make_microduck_velocity_env_cfg,
 )
 
-STILT_HEIGHT_MM = float(os.environ.get("MICRODUCK_STILT_HEIGHT_MM", "20"))
+STILT_HEIGHT_CM = float(os.environ.get("MICRODUCK_STILT_HEIGHT_CM", "2"))
 STILT_BLEND = float(os.environ.get("MICRODUCK_STILT_BLEND", "0"))
 _STILT_MASS_TEXT = os.environ.get("MICRODUCK_STILT_MASS_KG")
 STILT_MASS_KG = float(_STILT_MASS_TEXT) if _STILT_MASS_TEXT else None
 STILT_PLAY_SPEED = float(os.environ.get("MICRODUCK_STILT_PLAY_SPEED", "0.15"))
 
 
-def _stage_name(height_mm: float, blend: float) -> str:
-    return f"stilt-h{height_mm:03.0f}-b{blend * 100:03.0f}"
+def _stage_name(height_cm: float, blend: float) -> str:
+    return f"stilt-h{height_cm:g}cm-b{blend * 100:03.0f}"
 
 
 def make_microduck_stilt_env_cfg(
     play: bool = False,
-    height_mm: float = STILT_HEIGHT_MM,
+    height_cm: float = STILT_HEIGHT_CM,
     blend: float = STILT_BLEND,
     mass_kg: float | None = STILT_MASS_KG,
 ):
     """Build one fixed stilt morphology on the proven velocity recipe."""
     cfg = make_microduck_velocity_env_cfg(play=play, rough=False)
     cfg.scene.entities["robot"] = make_stilt_walk_robot_cfg(
-        height_mm=height_mm,
+        height_cm=height_cm,
         blend=blend,
         mass_kg=mass_kg,
     )
     cfg.episode_length_s = 10.0
     # Stay close at short stages; expand only enough to keep very tall stilts
-    # in frame.  At 20 mm this is the same close 0.55 m view as running.
-    cfg.viewer.distance = max(0.55, 0.45 + 2.0 * height_mm * 0.001)
+    # in frame. At 2 cm this is the same close 0.55 m view as running.
+    cfg.viewer.distance = max(0.55, 0.45 + 2.0 * height_cm * 0.01)
     cfg.viewer.max_extra_envs = 0
 
     # The original reset height puts the old sole about 3 mm above the floor.
     # Raise both bounds by the exact stilt length so the new tips start with the
     # same clearance and no penetration impulse.
     reset_height = cfg.events["reset_base"].params["pose_range"]["z"]
-    height_m = height_mm * 0.001
+    height_m = height_cm * 0.01
     cfg.events["reset_base"].params["pose_range"]["z"] = (
         reset_height[0] + height_m,
         reset_height[1] + height_m,
@@ -127,6 +127,6 @@ def make_microduck_stilt_env_cfg(
 
 MicroduckStiltRlCfg = deepcopy(MicroduckRlCfg)
 MicroduckStiltRlCfg.experiment_name = "stilt_locomotion"
-MicroduckStiltRlCfg.run_name = _stage_name(STILT_HEIGHT_MM, STILT_BLEND)
+MicroduckStiltRlCfg.run_name = _stage_name(STILT_HEIGHT_CM, STILT_BLEND)
 MicroduckStiltRlCfg.save_interval = 100
 MicroduckStiltRlCfg.max_iterations = 4_000

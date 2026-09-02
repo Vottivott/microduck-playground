@@ -7,12 +7,10 @@ import argparse
 from pathlib import Path
 
 import mujoco
-import numpy as np
 from PIL import Image
 
 from mjlab_microduck.robot.microduck_constants import get_swing_spec
 from mjlab_microduck.robot.stilt_constants import get_stilt_walk_spec
-
 
 GREEN = (0.0, 0.6823529412, 0.2588235294, 1.0)  # #00AE42
 STUDIO = (0.84, 0.87, 0.91, 1.0)
@@ -182,8 +180,8 @@ def swing_gallery(output_dir: Path) -> None:
     )
 
 
-def stilt_gallery(output_dir: Path, height_mm: float) -> None:
-    spec = get_stilt_walk_spec(height_mm=height_mm, blend=0.5)
+def stilt_gallery(output_dir: Path, height_cm: float) -> None:
+    spec = get_stilt_walk_spec(height_cm=height_cm, blend=0.5)
     # Match the demonstrated hardware: both the replacement sole and stilt are green.
     for geom in spec.geoms:
         if geom.name.endswith("_stilt_visual") or geom.meshname in {
@@ -195,15 +193,15 @@ def stilt_gallery(output_dir: Path, height_mm: float) -> None:
     add_studio(spec, floor_z=0.0)
     model = spec.compile()
     data = mujoco.MjData(model)
-    root_z = 0.12 + height_mm * 0.001
+    root_z = 0.12 + height_cm * 0.01
     set_pose(model, data, (0.0, 0.0, root_z), STAND_POSE)
     render_views(
         model,
         data,
         output_dir,
         "stilts",
-        lookat=(0.0, 0.0, 0.20 + height_mm * 0.0005),
-        distance=0.58 + height_mm * 0.0006,
+        lookat=(0.0, 0.0, 0.20 + height_cm * 0.005),
+        distance=0.58 + height_cm * 0.006,
         views=(
             ("front", 180.0, -9.0),
             ("three_quarter", 137.0, -12.0),
@@ -215,10 +213,10 @@ def stilt_gallery(output_dir: Path, height_mm: float) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-root", type=Path, default=Path("hardware"))
-    parser.add_argument("--stilt-height-mm", type=float, default=100.0)
+    parser.add_argument("--stilt-height-cm", type=float, default=10.0)
     args = parser.parse_args()
     swing_gallery(args.output_root / "swing-seat" / "renders")
-    stilt_gallery(args.output_root / "stilts" / "renders", args.stilt_height_mm)
+    stilt_gallery(args.output_root / "stilts" / "renders", args.stilt_height_cm)
 
 
 if __name__ == "__main__":

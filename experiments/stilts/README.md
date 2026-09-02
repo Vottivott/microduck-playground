@@ -30,20 +30,20 @@ hardware.
 All released heights are collected in one
 [`HannesVonEssen/microduck-stilts`](https://huggingface.co/HannesVonEssen/microduck-stilts)
 model repository. Every height directory contains its own `policy.onnx`, full
-playable video, GIF preview, continuation checkpoint, manifest, and checksum.
+playable video, continuation checkpoint, manifest, and checksum.
 The policies share the 61D actor observation and 14D action contract, but each
 is specialized to its listed height.
 
 | Height | Training checkpoint | Model |
 |---:|---:|---|
-| 10 cm | 2,200 | [Artifacts](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/100mm) |
-| 15 cm | 2,400 | [Artifacts](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/150mm) |
-| 20 cm | 2,600 | [Artifacts](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/200mm) |
-| 25 cm | 2,800 | [Artifacts](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/250mm) |
-| 50 cm | 3,400 | [Artifacts](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/500mm) |
-| 1.0 m | 4,000 | [Artifacts](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/1000mm) |
-| 1.4 m | 4,300 | [Artifacts](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/1400mm) |
-| 2.0 m | 6,500 | [Artifacts](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/2000mm) |
+| 10 cm | 2,200 | [Artifacts](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/10cm) |
+| 15 cm | 2,400 | [Artifacts](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/15cm) |
+| 20 cm | 2,600 | [Artifacts](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/20cm) |
+| 25 cm | 2,800 | [Artifacts](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/25cm) |
+| 50 cm | 3,400 | [Artifacts](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/50cm) |
+| 1.0 m | 4,000 | [Artifacts](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/100cm) |
+| 1.4 m | 4,300 | [Artifacts](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/140cm) |
+| 2.0 m | 6,500 | [Artifacts](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/200cm) |
 
 Matching left, right, and paired STL geometry is indexed in the
 [`hardware/stilts` README](../../hardware/stilts/README.md#released-policy-geometry).

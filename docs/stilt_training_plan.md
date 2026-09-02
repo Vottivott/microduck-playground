@@ -14,7 +14,7 @@ encounters a simultaneous height jump and support-area reduction.
 `Mjlab-Stilt-Flat-MicroDuck` compiles one morphology selected by:
 
 ```bash
-MICRODUCK_STILT_HEIGHT_MM=20 MICRODUCK_STILT_BLEND=0 \
+MICRODUCK_STILT_HEIGHT_CM=2 MICRODUCK_STILT_BLEND=0 \
   uv run train Mjlab-Stilt-Flat-MicroDuck
 ```
 

@@ -128,7 +128,7 @@ register_mjlab_task(
 )
 
 # Modular stilt locomotion. Morphology is selected at compile time through
-# MICRODUCK_STILT_HEIGHT_MM and MICRODUCK_STILT_BLEND so checkpoints can move
+# MICRODUCK_STILT_HEIGHT_CM and MICRODUCK_STILT_BLEND so checkpoints can move
 # through a platform-to-peg, then short-to-tall curriculum.
 register_mjlab_task(
     task_id="Mjlab-Stilt-Flat-MicroDuck",

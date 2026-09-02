@@ -18,7 +18,7 @@ then bolt on without modifying the robot.
 Run from the repository root:
 
     uv run hardware/stilts/generate_stilts.py
-    uv run hardware/stilts/generate_stilts.py --heights 5 8 12 16 20
+    uv run hardware/stilts/generate_stilts.py --heights-cm .5 .8 1.2 1.6 2
 """
 
 from __future__ import annotations
@@ -61,6 +61,16 @@ POD_BODY_TOP_WIDTH = 23.0
 POD_BODY_TOP_LENGTH = 41.0
 SCREW_HEAD_DIAMETER = 6.2
 SCREW_HEAD_DEPTH = 2.0
+
+
+def _height_stl_units(height_cm: float) -> float:
+    """Convert centimetres to the millimetre coordinate units used by STL."""
+    return height_cm * 10.0
+
+
+def _height_token(height_cm: float) -> str:
+    """Return a stable filename token such as ``10p0cm``."""
+    return f"{height_cm:.1f}cm".replace(".", "p")
 
 
 def _rounded_rectangle_loop(
@@ -245,7 +255,8 @@ def make_carrier(
     return carrier, metadata
 
 
-def _make_mounting_hole_cutters(height: float) -> list[trimesh.Trimesh]:
+def _make_mounting_hole_cutters(height_cm: float) -> list[trimesh.Trimesh]:
+    height = _height_stl_units(height_cm)
     cutters: list[trimesh.Trimesh] = []
     flange_bottom = height - POD_FLANGE_THICKNESS
     for x in (-MOUNT_SPACING / 2.0, MOUNT_SPACING / 2.0):
@@ -260,15 +271,16 @@ def _make_mounting_hole_cutters(height: float) -> list[trimesh.Trimesh]:
     return cutters
 
 
-def make_pod(height: float, tip_width: float, tip_length: float) -> trimesh.Trimesh:
+def make_pod(height_cm: float, tip_width: float, tip_length: float) -> trimesh.Trimesh:
     """Make a fixed-height stilt cartridge; height is sole-to-ground distance."""
-    if height < 5.0:
-        raise ValueError("Pod height must be at least 5 mm")
+    if height_cm < 0.5:
+        raise ValueError("Pod height must be at least 0.5 cm")
     if not 8.0 <= tip_width <= POD_BODY_TOP_WIDTH:
         raise ValueError(f"Tip width must be between 8 and {POD_BODY_TOP_WIDTH:g} mm")
     if not 12.0 <= tip_length <= POD_BODY_TOP_LENGTH:
         raise ValueError(f"Tip length must be between 12 and {POD_BODY_TOP_LENGTH:g} mm")
 
+    height = _height_stl_units(height_cm)
     flange_bottom = height - POD_FLANGE_THICKNESS
     flange = _rounded_loft(
         POD_FLANGE_WIDTH,
@@ -291,21 +303,22 @@ def make_pod(height: float, tip_width: float, tip_length: float) -> trimesh.Trim
         flange_bottom + 0.25,
     )
     pod = _boolean_union([flange, body])
-    pod = _boolean_difference(pod, _make_mounting_hole_cutters(height))
+    pod = _boolean_difference(pod, _make_mounting_hole_cutters(height_cm))
     pod.remove_unreferenced_vertices()
     return pod
 
 
-def make_peg_pod(height: float, peg_diameter: float, root_diameter: float) -> trimesh.Trimesh:
+def make_peg_pod(height_cm: float, peg_diameter: float, root_diameter: float) -> trimesh.Trimesh:
     """Make a narrow, circular peg-style cartridge."""
-    if height < 8.0:
-        raise ValueError("Peg height must be at least 8 mm")
+    if height_cm < 0.8:
+        raise ValueError("Peg height must be at least 0.8 cm")
     if not 8.0 <= peg_diameter <= 16.0:
         raise ValueError("Peg diameter must be between 8 and 16 mm")
     minimum_root = peg_diameter + 4.0
     if not minimum_root <= root_diameter <= POD_BODY_TOP_WIDTH:
         raise ValueError(f"Peg root diameter must be between {minimum_root:g} and {POD_BODY_TOP_WIDTH:g} mm")
 
+    height = _height_stl_units(height_cm)
     flange_bottom = height - POD_FLANGE_THICKNESS
     flange = _rounded_loft(
         POD_FLANGE_WIDTH,
@@ -324,13 +337,13 @@ def make_peg_pod(height: float, peg_diameter: float, root_diameter: float) -> tr
         flange_bottom + 0.25,
     )
     pod = _boolean_union([flange, peg])
-    pod = _boolean_difference(pod, _make_mounting_hole_cutters(height))
+    pod = _boolean_difference(pod, _make_mounting_hole_cutters(height_cm))
     pod.remove_unreferenced_vertices()
     return pod
 
 
 def make_transition_pod(
-    height: float,
+    height_cm: float,
     blend: float,
     wide_tip_width: float,
     wide_tip_length: float,
@@ -340,8 +353,8 @@ def make_transition_pod(
     mounting_holes: bool = True,
 ) -> trimesh.Trimesh:
     """Morph continuously from the rounded platform pod to the circular peg."""
-    if height < 8.0:
-        raise ValueError("Transition pod height must be at least 8 mm")
+    if height_cm < 0.8:
+        raise ValueError("Transition pod height must be at least 0.8 cm")
     if not 0.0 <= blend <= 1.0:
         raise ValueError("Transition blend must be between 0 (platform) and 1 (peg)")
 
@@ -355,6 +368,7 @@ def make_transition_pod(
     root_length = lerp(POD_BODY_TOP_LENGTH, peg_root_diameter)
     root_radius = lerp(4.5, peg_root_diameter / 2.0)
 
+    height = _height_stl_units(height_cm)
     flange_bottom = height - POD_FLANGE_THICKNESS
     flange = _rounded_loft(
         POD_FLANGE_WIDTH,
@@ -378,14 +392,14 @@ def make_transition_pod(
     )
     pod = _boolean_union([flange, body])
     if mounting_holes:
-        pod = _boolean_difference(pod, _make_mounting_hole_cutters(height))
+        pod = _boolean_difference(pod, _make_mounting_hole_cutters(height_cm))
     pod.remove_unreferenced_vertices()
     return pod
 
 
 def make_direct_transition_stilt(
     side: str,
-    height: float,
+    height_cm: float,
     blend: float,
     wide_tip_width: float = 22.0,
     wide_tip_length: float = 32.0,
@@ -394,11 +408,12 @@ def make_direct_transition_stilt(
     support_overhang_degrees: float | None = None,
 ) -> trimesh.Trimesh:
     """Fuse a side-specific replacement sole directly to one transition stilt."""
+    height = _height_stl_units(height_cm)
     carrier, _ = make_carrier(side, cartridge_interface=False)
     carrier.apply_translation((0.0, 0.0, height))
     if support_overhang_degrees is None:
         pod = make_transition_pod(
-            height,
+            height_cm,
             blend,
             wide_tip_width,
             wide_tip_length,
@@ -481,8 +496,9 @@ def make_direct_transition_stilt(
     return direct_stilt
 
 
-def make_bumper_adapter(height: float = 5.0) -> trimesh.Trimesh:
+def make_bumper_adapter(height_cm: float = 0.5) -> trimesh.Trimesh:
     """Make a cartridge accepting one central M3 male rubber bobbin."""
+    height = _height_stl_units(height_cm)
     flange = _rounded_loft(
         POD_FLANGE_WIDTH,
         POD_FLANGE_LENGTH,
@@ -495,7 +511,7 @@ def make_bumper_adapter(height: float = 5.0) -> trimesh.Trimesh:
     )
     boss = _rounded_loft(18.0, 24.0, 4.0, 18.0, 24.0, 4.0, 0.0, height - POD_FLANGE_THICKNESS + 0.25)
     adapter = _boolean_union([flange, boss])
-    cutters = _make_mounting_hole_cutters(height)
+    cutters = _make_mounting_hole_cutters(height_cm)
     # 4.2 mm is a conservative pilot for a common M3 heat-set insert. Measure
     # the chosen insert and override this in source before production printing.
     cutters.append(_cylinder(2.1, 4.2, (0.0, 0.0, 2.0)))
@@ -530,19 +546,22 @@ def render_preview(
     concept_title: str = "Microduck modular stilt concept",
     progression_title: str = "Same mount and footprint, increasing height",
     contact_note: str = "two captive M3 nuts per foot",
-    preview_target_height: float = 15.0,
+    preview_target_height_cm: float = 1.5,
 ) -> None:
     """Render an assembled foot and the generated height progression."""
-    preview_height, preview_pod = min(pods, key=lambda item: abs(item[0] - preview_target_height))
+    preview_height_cm, preview_pod = min(
+        pods, key=lambda item: abs(item[0] - preview_target_height_cm)
+    )
+    preview_height_stl = _height_stl_units(preview_height_cm)
     xy_center = np.asarray(carrier_meta["xy_center"])
     plate_bottom_raw = float(carrier_meta["plate_bottom_raw"])
     foot = _load_normalized_part("foot_left", xy_center, plate_bottom_raw)
     ankle = _load_normalized_part("ankle_left", xy_center, plate_bottom_raw)
 
     assembled_carrier = carrier.copy()
-    assembled_carrier.apply_translation([0.0, 0.0, preview_height])
-    foot.apply_translation([0.0, 0.0, preview_height])
-    ankle.apply_translation([0.0, 0.0, preview_height])
+    assembled_carrier.apply_translation([0.0, 0.0, preview_height_stl])
+    foot.apply_translation([0.0, 0.0, preview_height_stl])
+    ankle.apply_translation([0.0, 0.0, preview_height_stl])
 
     fig = plt.figure(figsize=(14, 8), dpi=180, facecolor="#f6f7f9")
     ax = fig.add_subplot(1, 2, 1, projection="3d", facecolor="#f6f7f9")
@@ -553,18 +572,29 @@ def render_preview(
     scene_meshes = [preview_pod, assembled_carrier, foot, ankle]
     _set_equal_bounds(ax, scene_meshes)
     ax.view_init(elev=24, azim=-43)
-    ax.set_title(f"Assembled left foot — {preview_height:g} mm cartridge", fontsize=15, pad=12)
+    ax.set_title(
+        f"Assembled left foot — {preview_height_cm:g} cm cartridge",
+        fontsize=15,
+        pad=12,
+    )
 
     ax2 = fig.add_subplot(1, 2, 2, projection="3d", facecolor="#f6f7f9")
     spaced: list[trimesh.Trimesh] = []
     x_step = 48.0
     x_origin = -x_step * (len(pods) - 1) / 2.0
-    for index, (height, pod) in enumerate(pods):
+    for index, (height_cm, pod) in enumerate(pods):
         shifted = pod.copy()
         shifted.apply_translation([x_origin + index * x_step, 0.0, 0.0])
         spaced.append(shifted)
         _add_mesh(ax2, shifted, "#7357d8")
-        ax2.text(x_origin + index * x_step, -31.0, 0.0, f"{height:g} mm", ha="center", fontsize=10)
+        ax2.text(
+            x_origin + index * x_step,
+            -31.0,
+            0.0,
+            f"{height_cm:g} cm",
+            ha="center",
+            fontsize=10,
+        )
     bounds = np.vstack([mesh.bounds for mesh in spaced])
     low, high = bounds.min(axis=0), bounds.max(axis=0)
     ax2.set_xlim(low[0] - 6.0, high[0] + 6.0)
@@ -595,20 +625,21 @@ def render_transition_preview(
     carrier: trimesh.Trimesh,
     carrier_meta: dict[str, np.ndarray | float],
     transition_pods: list[tuple[float, trimesh.Trimesh]],
-    height: float,
+    height_cm: float,
     wide_tip_width: float,
     wide_tip_length: float,
     peg_diameter: float,
 ) -> None:
     """Render the fixed-height platform-to-peg support-shape progression."""
     middle_blend, middle_pod = min(transition_pods, key=lambda item: abs(item[0] - 0.5))
+    height_stl = _height_stl_units(height_cm)
     xy_center = np.asarray(carrier_meta["xy_center"])
     plate_bottom_raw = float(carrier_meta["plate_bottom_raw"])
     foot = _load_normalized_part("foot_left", xy_center, plate_bottom_raw)
     ankle = _load_normalized_part("ankle_left", xy_center, plate_bottom_raw)
     assembled_carrier = carrier.copy()
     for mesh in (assembled_carrier, foot, ankle):
-        mesh.apply_translation([0.0, 0.0, height])
+        mesh.apply_translation([0.0, 0.0, height_stl])
 
     fig = plt.figure(figsize=(15, 8), dpi=180, facecolor="#f6f7f9")
     ax = fig.add_subplot(1, 2, 1, projection="3d", facecolor="#f6f7f9")
@@ -649,7 +680,11 @@ def render_transition_preview(
     ax2.set_proj_type("ortho")
     ax2.set_axis_off()
     ax2.view_init(elev=18, azim=-58)
-    ax2.set_title(f"Support shape changes; height stays fixed at {height:g} mm", fontsize=15, pad=12)
+    ax2.set_title(
+        f"Support shape changes; height stays fixed at {height_cm:g} cm",
+        fontsize=15,
+        pad=12,
+    )
 
     fig.suptitle("Microduck platform-to-peg curriculum cartridges", fontsize=20, y=0.97)
     fig.text(
@@ -668,13 +703,14 @@ def render_transition_preview(
 def render_robot_preview(
     output_path: Path,
     pod: trimesh.Trimesh,
-    height: float,
+    height_cm: float,
     carrier_metadata: dict[str, dict[str, np.ndarray | float]],
     *,
     title: str | None = None,
     contact_note: str = "22 × 32 mm contact patch shown",
 ) -> None:
     """Render the selected cartridge on the complete robot in its stand pose."""
+    height_stl = _height_stl_units(height_cm)
     robot_dir = ASSET_DIR.parent
     with tempfile.TemporaryDirectory(prefix="microduck_stilt_preview_") as temp_name:
         temp_dir = Path(temp_name)
@@ -696,7 +732,11 @@ def render_robot_preview(
             xy_center = np.asarray(metadata["xy_center"])
             plate_bottom_raw = float(metadata["plate_bottom_raw"])
             raw_pod.apply_translation(
-                [xy_center[0] / 1000.0, xy_center[1] / 1000.0, (plate_bottom_raw - height) / 1000.0]
+                [
+                    xy_center[0] / 1000.0,
+                    xy_center[1] / 1000.0,
+                    (plate_bottom_raw - height_stl) / 1000.0,
+                ]
             )
             mesh_path = temp_dir / f"stilt_{side}.stl"
             raw_pod.export(mesh_path)
@@ -727,7 +767,7 @@ def render_robot_preview(
         keyframe_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, "STAND")
         mujoco.mj_resetDataKeyframe(model, data, keyframe_id)
         # The replacement plate adds about 3 mm below the original sole.
-        data.qpos[2] += (height + SOLE_PLATE_EXTENSION) / 1000.0
+        data.qpos[2] += (height_stl + SOLE_PLATE_EXTENSION) / 1000.0
         mujoco.mj_forward(model, data)
 
         fig = plt.figure(figsize=(8, 10), dpi=180, facecolor="#f6f7f9")
@@ -766,7 +806,11 @@ def render_robot_preview(
         ax.set_proj_type("ortho")
         ax.set_axis_off()
         ax.view_init(elev=8, azim=145)
-        ax.set_title(title or f"Microduck with {height:g} mm stilts", fontsize=19, pad=15)
+        ax.set_title(
+            title or f"Microduck with {height_cm:g} cm stilts",
+            fontsize=19,
+            pad=15,
+        )
         ax.set_position([0.06, 0.11, 0.88, 0.80])
         fig.text(0.5, 0.04, contact_note, ha="center", fontsize=11, color="#374151")
         fig.savefig(output_path)
@@ -781,25 +825,27 @@ def _mesh_summary(mesh: trimesh.Trimesh) -> str:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--heights", type=float, nargs="+", default=[5.0, 10.0, 15.0, 20.0])
+    parser.add_argument(
+        "--heights-cm", type=float, nargs="+", default=[0.5, 1.0, 1.5, 2.0]
+    )
     parser.add_argument("--tip-width", type=float, default=22.0)
     parser.add_argument("--tip-length", type=float, default=32.0)
     parser.add_argument(
-        "--peg-heights",
+        "--peg-heights-cm",
         type=float,
         nargs="+",
-        default=[10.0, 15.0, 20.0, 25.0, 50.0, 250.0],
+        default=[1.0, 1.5, 2.0, 2.5, 5.0, 25.0],
     )
     parser.add_argument("--peg-diameter", type=float, default=12.0)
     parser.add_argument("--peg-root-diameter", type=float, default=22.0)
-    parser.add_argument("--transition-height", type=float, default=20.0)
+    parser.add_argument("--transition-height-cm", type=float, default=2.0)
     parser.add_argument("--transition-blends", type=float, nargs="+", default=[0.0, 0.25, 0.5, 0.75, 1.0])
     parser.add_argument(
-        "--direct-heights",
+        "--direct-heights-cm",
         type=float,
         nargs="+",
-        default=[100.0, 150.0, 200.0, 250.0, 500.0, 1000.0, 1400.0, 2000.0],
-        help="Heights for released fused sole-and-stilt meshes (mm)",
+        default=[10.0, 15.0, 20.0, 25.0, 50.0, 100.0, 140.0, 200.0],
+        help="Heights for released fused sole-and-stilt meshes (cm)",
     )
     parser.add_argument("--direct-blend", type=float, default=0.50)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
@@ -820,11 +866,11 @@ def main() -> None:
         print(f"carrier_{side}.stl: {_mesh_summary(carrier)}")
 
     pods: list[tuple[float, trimesh.Trimesh]] = []
-    for height in sorted(set(args.heights)):
-        pod = make_pod(height, args.tip_width, args.tip_length)
-        name = f"pod_{height:04.1f}mm".replace(".", "p") + ".stl"
+    for height_cm in sorted(set(args.heights_cm)):
+        pod = make_pod(height_cm, args.tip_width, args.tip_length)
+        name = f"pod_{_height_token(height_cm)}.stl"
         pod.export(args.output_dir / name)
-        pods.append((height, pod))
+        pods.append((height_cm, pod))
         print(f"{name}: {_mesh_summary(pod)}")
 
     bumper_adapter = make_bumper_adapter()
@@ -832,17 +878,20 @@ def main() -> None:
     print(f"pod_m3_rubber_bumper_adapter.stl: {_mesh_summary(bumper_adapter)}")
 
     peg_pods: list[tuple[float, trimesh.Trimesh]] = []
-    for height in sorted(set(args.peg_heights)):
-        peg_pod = make_peg_pod(height, args.peg_diameter, args.peg_root_diameter)
-        name = f"peg_{height:04.1f}mm_d{args.peg_diameter:04.1f}mm".replace(".", "p") + ".stl"
+    for height_cm in sorted(set(args.peg_heights_cm)):
+        peg_pod = make_peg_pod(
+            height_cm, args.peg_diameter, args.peg_root_diameter
+        )
+        diameter_token = f"{args.peg_diameter:.1f}".replace(".", "p")
+        name = f"peg_h{_height_token(height_cm)}_d{diameter_token}mm.stl"
         peg_pod.export(args.output_dir / name)
-        peg_pods.append((height, peg_pod))
+        peg_pods.append((height_cm, peg_pod))
         print(f"{name}: {_mesh_summary(peg_pod)}")
 
     transition_pods: list[tuple[float, trimesh.Trimesh]] = []
     for blend in sorted(set(args.transition_blends)):
         transition_pod = make_transition_pod(
-            args.transition_height,
+            args.transition_height_cm,
             blend,
             args.tip_width,
             args.tip_length,
@@ -850,7 +899,7 @@ def main() -> None:
             args.peg_root_diameter,
         )
         name = (
-            f"transition_b{blend:0.2f}_h{args.transition_height:04.1f}mm".replace(".", "p")
+            f"transition_b{blend:0.2f}_h{_height_token(args.transition_height_cm)}".replace(".", "p")
             + ".stl"
         )
         transition_pod.export(args.output_dir / name)
@@ -859,11 +908,11 @@ def main() -> None:
 
     release_dir = args.output_dir / "release"
     release_dir.mkdir(parents=True, exist_ok=True)
-    for height in sorted(set(args.direct_heights)):
+    for height_cm in sorted(set(args.direct_heights_cm)):
         released: dict[str, trimesh.Trimesh] = {}
-        stem = f"b{args.direct_blend:0.2f}_h{height:04.1f}mm".replace(".", "p")
+        stem = f"b{args.direct_blend:0.2f}_h{_height_token(height_cm)}".replace(".", "p")
         for side in ("left", "right"):
-            mesh = make_direct_transition_stilt(side, height, args.direct_blend)
+            mesh = make_direct_transition_stilt(side, height_cm, args.direct_blend)
             mesh.export(release_dir / f"direct_replacement_{side}_{stem}.stl")
             released[side] = mesh
         left = released["left"].copy()
@@ -876,7 +925,7 @@ def main() -> None:
 
     render_preview(args.output_dir / "preview.png", carriers["left"], carrier_metadata["left"], pods)
     print(f"preview.png: {args.output_dir / 'preview.png'}")
-    robot_height, robot_pod = min(pods, key=lambda item: abs(item[0] - 15.0))
+    robot_height, robot_pod = min(pods, key=lambda item: abs(item[0] - 1.5))
     render_robot_preview(args.output_dir / "robot_preview.png", robot_pod, robot_height, carrier_metadata)
     print(f"robot_preview.png: {args.output_dir / 'robot_preview.png'}")
 
@@ -889,7 +938,7 @@ def main() -> None:
         concept_title="Microduck narrow peg stilt concept",
         progression_title=f"Same {args.peg_diameter:g} mm circular tip, increasing height",
         contact_note=f"{args.peg_diameter:g} mm circular contact",
-        preview_target_height=tallest_peg_height,
+        preview_target_height_cm=tallest_peg_height,
     )
     print(f"peg_preview.png: {args.output_dir / 'peg_preview.png'}")
     render_robot_preview(
@@ -897,7 +946,7 @@ def main() -> None:
         tallest_peg,
         tallest_peg_height,
         carrier_metadata,
-        title=f"Microduck wearing {tallest_peg_height:g} mm peg stilts",
+        title=f"Microduck wearing {tallest_peg_height:g} cm peg stilts",
         contact_note=f"Tallest generated version • {args.peg_diameter:g} mm circular contact",
     )
     print(f"robot_peg_preview.png: {args.output_dir / 'robot_peg_preview.png'}")
@@ -906,7 +955,7 @@ def main() -> None:
         carriers["left"],
         carrier_metadata["left"],
         transition_pods,
-        args.transition_height,
+        args.transition_height_cm,
         args.tip_width,
         args.tip_length,
         args.peg_diameter,

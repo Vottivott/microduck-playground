@@ -36,12 +36,12 @@ and root shape all interpolate together.
 
 ```bash
 uv run hardware/stilts/generate_stilts.py
-uv run hardware/stilts/generate_stilts.py --heights 5 8 12 16 20
-uv run hardware/stilts/generate_stilts.py --heights 15 --tip-width 14 --tip-length 22
-uv run hardware/stilts/generate_stilts.py --peg-heights 10 20 50 250 --peg-diameter 12
-uv run hardware/stilts/generate_stilts.py --peg-heights 20 30 --peg-diameter 10 --peg-root-diameter 20
-uv run hardware/stilts/generate_stilts.py --transition-height 15 --transition-blends 0 .2 .4 .6 .8 1
-uv run hardware/stilts/generate_stilts.py --direct-heights 100 150 200 250 500 1000 1400 2000 --direct-blend .5
+uv run hardware/stilts/generate_stilts.py --heights-cm .5 .8 1.2 1.6 2
+uv run hardware/stilts/generate_stilts.py --heights-cm 1.5 --tip-width 14 --tip-length 22
+uv run hardware/stilts/generate_stilts.py --peg-heights-cm 1 2 5 25 --peg-diameter 12
+uv run hardware/stilts/generate_stilts.py --peg-heights-cm 2 3 --peg-diameter 10 --peg-root-diameter 20
+uv run hardware/stilts/generate_stilts.py --transition-height-cm 1.5 --transition-blends 0 .2 .4 .6 .8 1
+uv run hardware/stilts/generate_stilts.py --direct-heights-cm 10 15 20 25 50 100 140 200 --direct-blend .5
 ```
 
 The generator uses the checked-in `sole_left.stl` and `sole_right.stl` as its
@@ -55,14 +55,14 @@ meshes and a convenience pair file. STL units are millimetres.
 
 | Height | Left | Right | Pair | Policy |
 |---:|---|---|---|---|
-| 10 cm | [STL](generated/release/direct_replacement_left_b0p50_h100p0mm.stl) | [STL](generated/release/direct_replacement_right_b0p50_h100p0mm.stl) | [STL](generated/release/direct_replacement_pair_b0p50_h100p0mm.stl) | [ONNX](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/100mm) |
-| 15 cm | [STL](generated/release/direct_replacement_left_b0p50_h150p0mm.stl) | [STL](generated/release/direct_replacement_right_b0p50_h150p0mm.stl) | [STL](generated/release/direct_replacement_pair_b0p50_h150p0mm.stl) | [ONNX](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/150mm) |
-| 20 cm | [STL](generated/release/direct_replacement_left_b0p50_h200p0mm.stl) | [STL](generated/release/direct_replacement_right_b0p50_h200p0mm.stl) | [STL](generated/release/direct_replacement_pair_b0p50_h200p0mm.stl) | [ONNX](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/200mm) |
-| 25 cm | [STL](generated/release/direct_replacement_left_b0p50_h250p0mm.stl) | [STL](generated/release/direct_replacement_right_b0p50_h250p0mm.stl) | [STL](generated/release/direct_replacement_pair_b0p50_h250p0mm.stl) | [ONNX](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/250mm) |
-| 50 cm | [STL](generated/release/direct_replacement_left_b0p50_h500p0mm.stl) | [STL](generated/release/direct_replacement_right_b0p50_h500p0mm.stl) | [STL](generated/release/direct_replacement_pair_b0p50_h500p0mm.stl) | [ONNX](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/500mm) |
-| 1.0 m | [STL](generated/release/direct_replacement_left_b0p50_h1000p0mm.stl) | [STL](generated/release/direct_replacement_right_b0p50_h1000p0mm.stl) | [STL](generated/release/direct_replacement_pair_b0p50_h1000p0mm.stl) | [ONNX](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/1000mm) |
-| 1.4 m | [STL](generated/release/direct_replacement_left_b0p50_h1400p0mm.stl) | [STL](generated/release/direct_replacement_right_b0p50_h1400p0mm.stl) | [STL](generated/release/direct_replacement_pair_b0p50_h1400p0mm.stl) | [ONNX](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/1400mm) |
-| 2.0 m | [STL](generated/release/direct_replacement_left_b0p50_h2000p0mm.stl) | [STL](generated/release/direct_replacement_right_b0p50_h2000p0mm.stl) | [STL](generated/release/direct_replacement_pair_b0p50_h2000p0mm.stl) | [ONNX](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/2000mm) |
+| 10 cm | [STL](generated/release/direct_replacement_left_b0p50_h10p0cm.stl) | [STL](generated/release/direct_replacement_right_b0p50_h10p0cm.stl) | [STL](generated/release/direct_replacement_pair_b0p50_h10p0cm.stl) | [ONNX](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/10cm) |
+| 15 cm | [STL](generated/release/direct_replacement_left_b0p50_h15p0cm.stl) | [STL](generated/release/direct_replacement_right_b0p50_h15p0cm.stl) | [STL](generated/release/direct_replacement_pair_b0p50_h15p0cm.stl) | [ONNX](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/15cm) |
+| 20 cm | [STL](generated/release/direct_replacement_left_b0p50_h20p0cm.stl) | [STL](generated/release/direct_replacement_right_b0p50_h20p0cm.stl) | [STL](generated/release/direct_replacement_pair_b0p50_h20p0cm.stl) | [ONNX](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/20cm) |
+| 25 cm | [STL](generated/release/direct_replacement_left_b0p50_h25p0cm.stl) | [STL](generated/release/direct_replacement_right_b0p50_h25p0cm.stl) | [STL](generated/release/direct_replacement_pair_b0p50_h25p0cm.stl) | [ONNX](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/25cm) |
+| 50 cm | [STL](generated/release/direct_replacement_left_b0p50_h50p0cm.stl) | [STL](generated/release/direct_replacement_right_b0p50_h50p0cm.stl) | [STL](generated/release/direct_replacement_pair_b0p50_h50p0cm.stl) | [ONNX](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/50cm) |
+| 1.0 m | [STL](generated/release/direct_replacement_left_b0p50_h100p0cm.stl) | [STL](generated/release/direct_replacement_right_b0p50_h100p0cm.stl) | [STL](generated/release/direct_replacement_pair_b0p50_h100p0cm.stl) | [ONNX](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/100cm) |
+| 1.4 m | [STL](generated/release/direct_replacement_left_b0p50_h140p0cm.stl) | [STL](generated/release/direct_replacement_right_b0p50_h140p0cm.stl) | [STL](generated/release/direct_replacement_pair_b0p50_h140p0cm.stl) | [ONNX](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/140cm) |
+| 2.0 m | [STL](generated/release/direct_replacement_left_b0p50_h200p0cm.stl) | [STL](generated/release/direct_replacement_right_b0p50_h200p0cm.stl) | [STL](generated/release/direct_replacement_pair_b0p50_h200p0cm.stl) | [ONNX](https://huggingface.co/HannesVonEssen/microduck-stilts/tree/main/200cm) |
 
 The 50 cm–2.0 m meshes are simulation/reference geometry, not monolithic
 print recommendations. The 3.0 m demonstration was a zero-shot failure of
@@ -85,13 +85,13 @@ policy release.
 - 2 × 1–2 mm rubber or TPU tread pads, bonded to the pod tips
 
 For the 40 cm blend-0.50 simulation milestone, the experimental
-`generated/direct_replacement_pair_b0p50_h400p0mm.stl` contains both
+`generated/direct_replacement_pair_b0p50_h40p0cm.stl` contains both
 side-specific replacement soles fused directly to their stilts. It needs no
 cartridge screws or captive nuts. This extreme-height file is a geometry and
 simulation artifact, not a structurally approved printable hardware design.
 
 The corresponding 10 cm support-free experiment is
-`generated/direct_replacement_pair_b0p50_h100p0mm_supportfree45deg.stl`.
+`generated/direct_replacement_pair_b0p50_h10p0cm_supportfree45deg.stl`.
 Its flat stem-to-sole shelves are replaced by all-around chamfers whose measured
 worst overhang is 44.5 degrees when printed tip-down and upright. The exact
 robot-foot socket geometry above the chamfer is unchanged.
@@ -143,7 +143,7 @@ generated adapter uses a 4.2 mm pilot, which is common but not universal.
 ## Training geometry
 
 Train height independently of footprint first: 0.5 → 1 → 1.5 → 2 cm with the
-22 × 32 mm tip. Once 1.5 cm is reliable, randomize height by roughly ±2 mm and
+22 × 32 mm tip. Once 1.5 cm is reliable, randomize height by roughly ±0.2 cm and
 friction/compliance. Only then shrink the tip toward 14 × 22 mm or substitute
 the M3 rubber bobbin.
 

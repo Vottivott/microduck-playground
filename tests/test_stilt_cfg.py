@@ -22,8 +22,8 @@ from mjlab_microduck.tasks.microduck_velocity_env_cfg import (
 )
 
 
-def _compiled_stilt_model(height_mm: float = 20.0, blend: float = 0.0):
-    cfg = make_microduck_stilt_env_cfg(height_mm=height_mm, blend=blend)
+def _compiled_stilt_model(height_cm: float = 2.0, blend: float = 0.0):
+    cfg = make_microduck_stilt_env_cfg(height_cm=height_cm, blend=blend)
     robot_cfg = cfg.scene.entities["robot"]
     spec = robot_cfg.spec_fn()
     for collision_cfg in robot_cfg.collisions:
@@ -42,7 +42,7 @@ def test_profile_interpolates_platform_to_round_peg():
 
 
 def test_generated_loft_is_closed_and_reaches_exact_height():
-    vertices_flat, faces_flat = stilt_mesh_data(250.0, 1.0)
+    vertices_flat, faces_flat = stilt_mesh_data(25.0, 1.0)
     vertices = list(zip(*(iter(vertices_flat),) * 3, strict=True))
     faces = list(zip(*(iter(faces_flat),) * 3, strict=True))
     edge_counts: Counter[tuple[int, int]] = Counter()
@@ -56,47 +56,47 @@ def test_generated_loft_is_closed_and_reaches_exact_height():
 
 
 def test_morphology_validation_and_mass_schedule():
-    validate_stilt_morphology(8.0, 0.0)
-    validate_stilt_morphology(3000.0, 1.0)
+    validate_stilt_morphology(0.8, 0.0)
+    validate_stilt_morphology(300.0, 1.0)
     with pytest.raises(ValueError):
-        validate_stilt_morphology(3001.0, 1.0)
+        validate_stilt_morphology(300.1, 1.0)
     with pytest.raises(ValueError):
-        validate_stilt_morphology(20.0, 1.01)
-    assert default_stilt_mass_kg(20.0) == pytest.approx(0.014)
-    assert default_stilt_mass_kg(250.0) == pytest.approx(0.037)
-    assert default_stilt_mass_kg(500.0) == pytest.approx(0.062)
-    assert default_stilt_mass_kg(1000.0) == pytest.approx(0.112)
-    assert default_stilt_mass_kg(2000.0) == pytest.approx(0.212)
-    assert default_stilt_mass_kg(2100.0) == pytest.approx(0.222)
-    assert default_stilt_mass_kg(3000.0) == pytest.approx(0.312)
+        validate_stilt_morphology(2.0, 1.01)
+    assert default_stilt_mass_kg(2.0) == pytest.approx(0.014)
+    assert default_stilt_mass_kg(25.0) == pytest.approx(0.037)
+    assert default_stilt_mass_kg(50.0) == pytest.approx(0.062)
+    assert default_stilt_mass_kg(100.0) == pytest.approx(0.112)
+    assert default_stilt_mass_kg(200.0) == pytest.approx(0.212)
+    assert default_stilt_mass_kg(210.0) == pytest.approx(0.222)
+    assert default_stilt_mass_kg(300.0) == pytest.approx(0.312)
 
 
-def test_extended_height_mesh_reaches_500_mm_tip():
-    vertices_flat, _ = stilt_mesh_data(500.0, 0.5)
+def test_extended_height_mesh_reaches_50_cm_tip():
+    vertices_flat, _ = stilt_mesh_data(50.0, 0.5)
     z_values = vertices_flat[2::3]
     assert min(z_values) == pytest.approx(-0.500)
 
 
-def test_extended_height_mesh_reaches_1000_mm_tip():
-    vertices_flat, _ = stilt_mesh_data(1000.0, 0.5)
+def test_extended_height_mesh_reaches_100_cm_tip():
+    vertices_flat, _ = stilt_mesh_data(100.0, 0.5)
     z_values = vertices_flat[2::3]
     assert min(z_values) == pytest.approx(-1.000)
 
 
-def test_extended_height_mesh_reaches_2000_mm_tip():
-    vertices_flat, _ = stilt_mesh_data(2000.0, 0.5)
+def test_extended_height_mesh_reaches_200_cm_tip():
+    vertices_flat, _ = stilt_mesh_data(200.0, 0.5)
     z_values = vertices_flat[2::3]
     assert min(z_values) == pytest.approx(-2.000)
 
 
-def test_extended_height_mesh_reaches_2100_mm_tip():
-    vertices_flat, _ = stilt_mesh_data(2100.0, 0.5)
+def test_extended_height_mesh_reaches_210_cm_tip():
+    vertices_flat, _ = stilt_mesh_data(210.0, 0.5)
     z_values = vertices_flat[2::3]
     assert min(z_values) == pytest.approx(-2.100)
 
 
-def test_extended_height_mesh_reaches_3000_mm_tip():
-    vertices_flat, _ = stilt_mesh_data(3000.0, 0.5)
+def test_extended_height_mesh_reaches_300_cm_tip():
+    vertices_flat, _ = stilt_mesh_data(300.0, 0.5)
     z_values = vertices_flat[2::3]
     assert min(z_values) == pytest.approx(-3.000)
 
@@ -119,7 +119,7 @@ def test_compiled_robot_uses_stilts_not_original_soles_for_contact():
 
 
 def test_tip_sites_move_to_ground_contact_plane():
-    spec = get_stilt_walk_spec(height_mm=250.0, blend=1.0)
+    spec = get_stilt_walk_spec(height_cm=25.0, blend=1.0)
     model = spec.compile()
     for side in ("left", "right"):
         site_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, f"{side}_foot")
@@ -127,7 +127,7 @@ def test_tip_sites_move_to_ground_contact_plane():
 
 
 def test_env_raises_reset_height_and_keeps_obs_layout():
-    stilt = make_microduck_stilt_env_cfg(height_mm=20.0, blend=0.0)
+    stilt = make_microduck_stilt_env_cfg(height_cm=2.0, blend=0.0)
     velocity = make_microduck_velocity_env_cfg()
     assert stilt.events["reset_base"].params["pose_range"]["z"] == pytest.approx(
         (0.14, 0.15)
@@ -139,7 +139,7 @@ def test_env_raises_reset_height_and_keeps_obs_layout():
 
 
 def test_stage_zero_prioritizes_balance_and_gait_discovery():
-    cfg = make_microduck_stilt_env_cfg(height_mm=20.0, blend=0.0)
+    cfg = make_microduck_stilt_env_cfg(height_cm=2.0, blend=0.0)
     command = cfg.commands["twist"]
     assert command.rel_standing_envs == 0.25
     assert command.ranges.lin_vel_x == (-0.12, 0.25)
@@ -154,7 +154,7 @@ def test_stage_zero_prioritizes_balance_and_gait_discovery():
 
 
 def test_play_cfg_is_deterministic_and_has_no_training_curriculum():
-    cfg = make_microduck_stilt_env_cfg(play=True, height_mm=250.0, blend=1.0)
+    cfg = make_microduck_stilt_env_cfg(play=True, height_cm=25.0, blend=1.0)
     command = cfg.commands["twist"]
     assert command.ranges.lin_vel_x[0] == command.ranges.lin_vel_x[1] > 0.0
     assert command.ranges.lin_vel_y == (0.0, 0.0)
@@ -163,40 +163,40 @@ def test_play_cfg_is_deterministic_and_has_no_training_curriculum():
     assert cfg.viewer.distance >= 0.9
 
 
-def test_extended_play_cfg_tracks_500_mm_height():
-    cfg = make_microduck_stilt_env_cfg(play=True, height_mm=500.0, blend=0.5)
+def test_extended_play_cfg_tracks_50_cm_height():
+    cfg = make_microduck_stilt_env_cfg(play=True, height_cm=50.0, blend=0.5)
     assert cfg.events["reset_base"].params["pose_range"]["z"] == pytest.approx(
         (0.62, 0.63)
     )
     assert cfg.viewer.distance >= 1.4
 
 
-def test_extended_play_cfg_tracks_1000_mm_height():
-    cfg = make_microduck_stilt_env_cfg(play=True, height_mm=1000.0, blend=0.5)
+def test_extended_play_cfg_tracks_100_cm_height():
+    cfg = make_microduck_stilt_env_cfg(play=True, height_cm=100.0, blend=0.5)
     assert cfg.events["reset_base"].params["pose_range"]["z"] == pytest.approx(
         (1.12, 1.13)
     )
     assert cfg.viewer.distance >= 2.4
 
 
-def test_extended_play_cfg_tracks_2000_mm_height():
-    cfg = make_microduck_stilt_env_cfg(play=True, height_mm=2000.0, blend=0.5)
+def test_extended_play_cfg_tracks_200_cm_height():
+    cfg = make_microduck_stilt_env_cfg(play=True, height_cm=200.0, blend=0.5)
     assert cfg.events["reset_base"].params["pose_range"]["z"] == pytest.approx(
         (2.12, 2.13)
     )
     assert cfg.viewer.distance >= 4.4
 
 
-def test_extended_play_cfg_tracks_2100_mm_height():
-    cfg = make_microduck_stilt_env_cfg(play=True, height_mm=2100.0, blend=0.5)
+def test_extended_play_cfg_tracks_210_cm_height():
+    cfg = make_microduck_stilt_env_cfg(play=True, height_cm=210.0, blend=0.5)
     assert cfg.events["reset_base"].params["pose_range"]["z"] == pytest.approx(
         (2.22, 2.23)
     )
     assert cfg.viewer.distance >= 4.6
 
 
-def test_extended_play_cfg_tracks_3000_mm_height():
-    cfg = make_microduck_stilt_env_cfg(play=True, height_mm=3000.0, blend=0.5)
+def test_extended_play_cfg_tracks_300_cm_height():
+    cfg = make_microduck_stilt_env_cfg(play=True, height_cm=300.0, blend=0.5)
     assert cfg.events["reset_base"].params["pose_range"]["z"] == pytest.approx(
         (3.12, 3.13)
     )

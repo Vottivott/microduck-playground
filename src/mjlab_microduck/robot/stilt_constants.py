@@ -17,18 +17,18 @@ from mjlab.entity import EntityCfg
 
 from mjlab_microduck.robot.microduck_constants import MICRODUCK_WALK_ROBOT_CFG
 
-MIN_STILT_HEIGHT_MM = 8.0
-MAX_STILT_HEIGHT_MM = 3000.0
+MIN_STILT_HEIGHT_CM = 0.8
+MAX_STILT_HEIGHT_CM = 300.0
 DEFAULT_STILT_MASS_BASE_KG = 0.012
-DEFAULT_STILT_MASS_PER_MM_KG = 0.0001
+DEFAULT_STILT_MASS_PER_CM_KG = 0.001
 
 
-def validate_stilt_morphology(height_mm: float, blend: float) -> None:
+def validate_stilt_morphology(height_cm: float, blend: float) -> None:
     """Validate the fixed morphology selected for one compiled task."""
-    if not MIN_STILT_HEIGHT_MM <= height_mm <= MAX_STILT_HEIGHT_MM:
+    if not MIN_STILT_HEIGHT_CM <= height_cm <= MAX_STILT_HEIGHT_CM:
         raise ValueError(
-            f"Stilt height must be in [{MIN_STILT_HEIGHT_MM:g}, "
-            f"{MAX_STILT_HEIGHT_MM:g}] mm"
+            f"Stilt height must be in [{MIN_STILT_HEIGHT_CM:g}, "
+            f"{MAX_STILT_HEIGHT_CM:g}] cm"
         )
     if not 0.0 <= blend <= 1.0:
         raise ValueError("Stilt blend must be between 0 (platform) and 1 (peg)")
@@ -52,9 +52,9 @@ def stilt_profile_dimensions(blend: float) -> dict[str, float]:
     }
 
 
-def default_stilt_mass_kg(height_mm: float) -> float:
-    """Conservative stage mass: 14 g at 20 mm and 312 g at 3,000 mm."""
-    return DEFAULT_STILT_MASS_BASE_KG + height_mm * DEFAULT_STILT_MASS_PER_MM_KG
+def default_stilt_mass_kg(height_cm: float) -> float:
+    """Conservative stage mass: 14 g at 2 cm and 312 g at 300 cm."""
+    return DEFAULT_STILT_MASS_BASE_KG + height_cm * DEFAULT_STILT_MASS_PER_CM_KG
 
 
 def _rounded_rectangle_ring(
@@ -85,7 +85,7 @@ def _rounded_rectangle_ring(
 
 
 def stilt_mesh_data(
-    height_mm: float,
+    height_cm: float,
     blend: float,
 ) -> tuple[list[float], list[int]]:
     """Build a watertight convex loft in the foot-site frame.
@@ -93,7 +93,7 @@ def stilt_mesh_data(
     The top is at z=0 and the support surface is at z=-height.  Values passed
     to MuJoCo are metres.
     """
-    validate_stilt_morphology(height_mm, blend)
+    validate_stilt_morphology(height_cm, blend)
     dimensions = stilt_profile_dimensions(blend)
     millimetres = 0.001
     bottom_ring = _rounded_rectangle_ring(
@@ -107,7 +107,7 @@ def stilt_mesh_data(
         dimensions["root_radius_mm"] * millimetres,
     )
     count = len(bottom_ring)
-    height = height_mm * millimetres
+    height = height_cm * 0.01
     vertices: list[tuple[float, float, float]] = [
         (x, y, -height) for x, y in bottom_ring
     ] + [(x, y, 0.0) for x, y in top_ring]
@@ -133,19 +133,19 @@ def stilt_mesh_data(
 
 
 def get_stilt_walk_spec(
-    height_mm: float = 20.0,
+    height_cm: float = 2.0,
     blend: float = 0.0,
     mass_kg: float | None = None,
 ) -> mujoco.MjSpec:
     """Return the walk robot with explicit stilt contact and tip sites."""
-    validate_stilt_morphology(height_mm, blend)
+    validate_stilt_morphology(height_cm, blend)
     if mass_kg is None:
-        mass_kg = default_stilt_mass_kg(height_mm)
+        mass_kg = default_stilt_mass_kg(height_cm)
     if mass_kg <= 0.0:
         raise ValueError("Stilt mass must be positive")
 
     spec = MICRODUCK_WALK_ROBOT_CFG.spec_fn()
-    vertices, faces = stilt_mesh_data(height_mm, blend)
+    vertices, faces = stilt_mesh_data(height_cm, blend)
     mesh_name = "stilt_cartridge_mesh"
     spec.add_mesh(name=mesh_name, uservert=vertices, userface=faces)
 
@@ -182,23 +182,23 @@ def get_stilt_walk_spec(
         )
         stilt_body.add_site(
             name=f"{side}_foot",
-            pos=(0.0, 0.0, -height_mm * 0.001),
+            pos=(0.0, 0.0, -height_cm * 0.01),
         )
 
     return spec
 
 
 def make_stilt_walk_robot_cfg(
-    height_mm: float,
+    height_cm: float,
     blend: float,
     mass_kg: float | None = None,
 ) -> EntityCfg:
     """Clone the canonical BAM walk robot and replace only its morphology."""
-    validate_stilt_morphology(height_mm, blend)
+    validate_stilt_morphology(height_cm, blend)
     robot_cfg = deepcopy(MICRODUCK_WALK_ROBOT_CFG)
     robot_cfg.spec_fn = partial(
         get_stilt_walk_spec,
-        height_mm=height_mm,
+        height_cm=height_cm,
         blend=blend,
         mass_kg=mass_kg,
     )
