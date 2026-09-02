@@ -64,8 +64,19 @@ uv run python scripts/export.py Mjlab-SwingPump-MicroDuck \
   --device cpu
 ```
 
-Do not hand-convert the PyTorch checkpoint: the actor's observation normalizer
-must be embedded in the graph. The verified ONNX and its model card are hosted
+The exporter also bakes the training-time `[-1, 1]` action clamp into the graph.
+Verify checkpoint-versus-ONNX actions along the complete seed-27 rollout:
+
+```bash
+uv run python scripts/verify_swing_onnx_parity.py \
+  experiments/swing/checkpoints/alpha050.pt \
+  /tmp/microduck-swing.onnx \
+  --device cpu --duration 36 --seed 27
+```
+
+Do not hand-convert the PyTorch checkpoint: both the actor's observation
+normalizer and its training-time action clamp must be embedded in the graph.
+The verified ONNX and its model card are hosted
 on Hugging Face at
 [`HannesVonEssen/microduck-swing`](https://huggingface.co/HannesVonEssen/microduck-swing)
 rather than duplicated in this Git repository.

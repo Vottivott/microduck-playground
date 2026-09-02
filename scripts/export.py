@@ -9,11 +9,9 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Literal
 
+import numpy as np
 import torch
 import tyro
-import numpy as np
-from rsl_rl.runners import OnPolicyRunner
-
 from mjlab.envs import ManagerBasedRlEnv
 from mjlab.rl import RslRlVecEnvWrapper
 from mjlab.tasks.registry import list_tasks, load_env_cfg, load_rl_cfg, load_runner_cls
@@ -21,7 +19,9 @@ from mjlab.tasks.tracking.mdp import MotionCommandCfg
 from mjlab.utils.os import get_checkpoint_path, get_wandb_checkpoint_path
 from mjlab.utils.torch import configure_torch_backends
 from mjlab.utils.wrappers import VideoRecorder
-from mjlab.viewer import NativeMujocoViewer, ViserPlayViewer
+from rsl_rl.runners import OnPolicyRunner
+
+from mjlab_microduck.onnx_policy_contract import bake_action_clip
 
 
 @dataclass(frozen=True)
@@ -425,13 +425,18 @@ def run_export(task_id: str, cfg: ExportConfig):
     # submodule of the policy's MLPModel (obs_normalization=True in RslRlModelCfg),
     # so export_policy_to_onnx emits actor(normalizer(obs)). No manual normalizer
     # handling needed (the old export_velocity_policy_as_onnx path is gone).
-    from mjlab.rl.exporter_utils import get_base_metadata, attach_metadata_to_onnx
+    from mjlab.rl.exporter_utils import attach_metadata_to_onnx, get_base_metadata
 
     onnx_path = os.path.abspath(cfg.onnx_file)
     path = os.path.dirname(onnx_path)
     filename = os.path.basename(onnx_path)
 
     runner.export_policy_to_onnx(path, filename)
+
+    # Training steps through RslRlVecEnvWrapper, which clamps actor outputs.
+    # Deployment runtimes consume ONNX outputs directly, so preserve that
+    # behavior inside the graph rather than relying on each caller to know it.
+    bake_action_clip(onnx_path, agent_cfg.clip_actions)
 
     metadata = get_base_metadata(runner.env.unwrapped, run_path=cfg.checkpoint_file)
     attach_metadata_to_onnx(onnx_path, metadata)
