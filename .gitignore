@@ -29,6 +29,8 @@ src/mjlab_microduck/robot/microduck.bak/*
 src/mjlab_microduck/robot/microduck_test/*
 data/
 *.pt
+# Curated swing checkpoints are part of the reproducibility release.
+!experiments/swing/checkpoints/*.pt
 
 claude_experiments/
 

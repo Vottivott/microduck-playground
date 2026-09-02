@@ -12,7 +12,7 @@ Actor observation layout (61-dim flat tensor, concatenated in term insertion ord
     [6:20]  joint_pos_rel     (14 joints, relative to default pose)
     [20:34] joint_vel_rel     (14 joints)
     [34:48] last_action       (14 joints)
-    [48:51] twist command     (lin_vel_x, lin_vel_y, ang_vel_z)
+    [48:51] command/heading   (task-dependent; swing uses 0, body-y-x, body-y-z)
     [51:55] head command      (neck_pitch, head_pitch, head_yaw, head_roll deltas)
     [55:61] body command      (x, y, z, roll, pitch, yaw deltas)
 
@@ -34,7 +34,8 @@ Mirroring rules (left-right reflection about the sagittal plane):
     - neck_pitch, head_pitch: sagittal-plane joints, no sign change
 - base_ang_vel: negate roll ([0]) and yaw ([2]); pitch stays
 - projected_gravity: negate gy ([4]); gx and gz stay
-- twist command: negate lin_vel_y ([49]) and ang_vel_z ([50]); lin_vel_x stays
+- command/heading: first component stays; second and third negate. This is
+  both the locomotion twist transform and the swing-plane heading transform.
 - head command: negate head_yaw ([53]) and head_roll ([54]); pitches stay
 - body command: negate y ([56]), roll ([58]), yaw ([60]); x, z, pitch stay
 """
@@ -89,7 +90,7 @@ _OBS_SIGN: list[float] = (
     + _JOINT_SIGN       # joint_pos
     + _JOINT_SIGN       # joint_vel
     + _JOINT_SIGN       # last_action
-    + [1.0, -1.0, -1.0] # twist: negate lin_vel_y, ang_vel_z
+    + [1.0, -1.0, -1.0] # twist or swing-plane heading: latter two are odd
     + [1.0, 1.0, -1.0, -1.0]  # head: negate head_yaw, head_roll
     + [1.0, -1.0, 1.0, -1.0, 1.0, -1.0]  # body: negate y, roll, yaw
 )

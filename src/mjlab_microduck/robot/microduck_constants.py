@@ -27,6 +27,21 @@ MICRODUCK_ALLCOLLISIONS_BACKLASH_XML: Path = _ROBOT_DIR / "robot_allcollisions_b
 MICRODUCK_WALK_BACKLASH_XML: Path = _ROBOT_DIR / "robot_walk_backlash.xml"
 MICRODUCK_ALLCOLLISIONS_ROLLERS_BACKLASH_XML: Path = _ROBOT_DIR / "robot_allcollisions_rollers_backlash.xml"
 
+# Swing geometry and ideal-string parameters.  The attachment coordinates are
+# the eyelet centres of the retained seat designed in microduck_seat_render.
+SWING_STRING_LENGTH = 0.38
+# Real cord is not perfectly inextensible.  A tension-only dead-band spring
+# begins pulling at the nominal 380 mm length, while a soft 395 mm upper limit
+# is only a safety catch.  At the 895 g combined robot+seat mass, 2 kN/m per
+# string gives about 2.2 mm static extension.
+SWING_STRING_STIFFNESS = 2000.0
+SWING_STRING_LIMIT = 0.395
+SWING_HANG_LENGTH = 0.3822
+SWING_ANCHOR_HEIGHT = 0.75
+SWING_ATTACHMENT_Y = 0.088
+SWING_ATTACHMENT_Z = 0.085
+SWING_BOTTOM_TRUNK_Z = SWING_ANCHOR_HEIGHT - SWING_HANG_LENGTH - SWING_ATTACHMENT_Z
+
 assert MICRODUCK_WALK_XML.exists(), f"XML not found: {MICRODUCK_WALK_XML}"
 assert MICRODUCK_ALLCOLLISIONS_XML.exists(), f"XML not found: {MICRODUCK_ALLCOLLISIONS_XML}"
 assert MICRODUCK_BALL_XML.exists(), f"XML not found: {MICRODUCK_BALL_XML}"
@@ -70,6 +85,143 @@ def get_rollers_backlash_spec() -> mujoco.MjSpec:
     return mujoco.MjSpec.from_file(str(MICRODUCK_ALLCOLLISIONS_ROLLERS_BACKLASH_XML))
 
 
+def get_swing_spec() -> mujoco.MjSpec:
+    """Return MicroDuck rigidly retained in its seat on two ideal strings.
+
+    Each string is a MuJoCo spatial tendon with a tension-only elastic dead
+    band plus a soft upper safety limit. It can transmit tension but never
+    compression and is therefore a massless cord rather than a rod or a
+    decorative capsule.
+    The seat and retention kit are fixed to the trunk (the fitted strap model)
+    while every head and leg joint remains actuated and free to pump.
+    """
+    spec = mujoco.MjSpec.from_file(str(MICRODUCK_ALLCOLLISIONS_XML))
+
+    visual_meshes = (
+        "swing_seat_retained",
+        "swing_retention_strap",
+        "swing_retention_buckle",
+        "swing_retention_bumper_0",
+        "swing_retention_bumper_1",
+        "swing_retention_bumper_2",
+    )
+    for name in visual_meshes:
+        spec.add_mesh(name=name, file=f"{name}.stl")
+
+    spec.add_material(name="swing_seat_material", rgba=(0.055, 0.062, 0.068, 1.0))
+    spec.add_material(name="swing_strap_material", rgba=(0.075, 0.080, 0.085, 1.0))
+    spec.add_material(name="swing_bumper_material", rgba=(0.12, 0.13, 0.14, 1.0))
+    spec.add_material(name="swing_buckle_material", rgba=(0.24, 0.25, 0.26, 1.0))
+    spec.add_material(name="swing_frame_material", rgba=(0.28, 0.18, 0.11, 1.0))
+
+    # The training A-frame is visual-only so incidental stand strikes do not
+    # change the established swing task.  Frontier-failure evaluation can opt
+    # into the physically collidable real-stand geometry.  This makes a top-bar
+    # impact an actual MuJoCo contact/fall, rather than a scripted animation or
+    # a mesh interpenetration.
+    collidable_frame = os.environ.get(
+        "MICRODUCK_SWING_COLLIDABLE_FRAME", "0"
+    ).lower() in {"1", "true", "yes"}
+    frame_segments = {
+        "swing_frame_front_left": ((0.34, 0.34, 0.0), (0.0, 0.25, 0.755)),
+        "swing_frame_back_left": ((-0.34, 0.34, 0.0), (0.0, 0.25, 0.755)),
+        "swing_frame_front_right": ((0.34, -0.34, 0.0), (0.0, -0.25, 0.755)),
+        "swing_frame_back_right": ((-0.34, -0.34, 0.0), (0.0, -0.25, 0.755)),
+        "swing_frame_crossbar": ((0.0, -0.27, 0.755), (0.0, 0.27, 0.755)),
+    }
+    for name, fromto in frame_segments.items():
+        spec.worldbody.add_geom(
+            name=name,
+            type=mujoco.mjtGeom.mjGEOM_CAPSULE,
+            fromto=fromto[0] + fromto[1],
+            size=(0.009 if name == "swing_frame_crossbar" else 0.007,),
+            material="swing_frame_material",
+            contype=1 if collidable_frame else 0,
+            conaffinity=1 if collidable_frame else 0,
+            group=2,
+        )
+
+    trunk = next(body for body in spec.bodies if body.name == "trunk_base")
+    # Manager reset events use SWING_SEATED_FRAME, but mjlab exposes the raw
+    # compiled qpos0 before the first reset.  Keep the MJCF root at the same
+    # hanging equilibrium so rollout step 0 cannot begin with overstretched
+    # strings from robot_allcollisions.xml's standing z=0.12 pose.
+    trunk.pos = (0.0, 0.0, SWING_BOTTOM_TRUNK_Z)
+    payload = trunk.add_body(name="swing_seat_payload")
+    # 150 g seat + 8 g retention kit.  Giving the mesh geoms mass makes the
+    # payload's distributed inertia part of the actual articulated dynamics.
+    payload.add_geom(
+        name="swing_seat_visual",
+        type=mujoco.mjtGeom.mjGEOM_MESH,
+        meshname="swing_seat_retained",
+        material="swing_seat_material",
+        contype=0,
+        conaffinity=0,
+        mass=0.150,
+        group=2,
+    )
+    payload.add_geom(
+        name="swing_retention_strap_visual",
+        type=mujoco.mjtGeom.mjGEOM_MESH,
+        meshname="swing_retention_strap",
+        material="swing_strap_material",
+        contype=0,
+        conaffinity=0,
+        mass=0.004,
+        group=2,
+    )
+    payload.add_geom(
+        name="swing_retention_buckle_visual",
+        type=mujoco.mjtGeom.mjGEOM_MESH,
+        meshname="swing_retention_buckle",
+        material="swing_buckle_material",
+        contype=0,
+        conaffinity=0,
+        mass=0.002,
+        group=2,
+    )
+    for index in range(3):
+        payload.add_geom(
+            name=f"swing_retention_bumper_{index}_visual",
+            type=mujoco.mjtGeom.mjGEOM_MESH,
+            meshname=f"swing_retention_bumper_{index}",
+            material="swing_bumper_material",
+            contype=0,
+            conaffinity=0,
+            mass=0.002 / 3.0,
+            group=2,
+        )
+
+    for side, y in (("left", SWING_ATTACHMENT_Y), ("right", -SWING_ATTACHMENT_Y)):
+        spec.worldbody.add_site(
+            name=f"swing_anchor_{side}",
+            pos=(0.0, y, SWING_ANCHOR_HEIGHT),
+            size=(0.003,),
+            rgba=(0.55, 0.38, 0.22, 1.0),
+        )
+        trunk.add_site(
+            name=f"swing_attach_{side}",
+            pos=(0.0, y, SWING_ATTACHMENT_Z),
+            size=(0.003,),
+            rgba=(0.55, 0.38, 0.22, 1.0),
+        )
+        string = spec.add_tendon(
+            name=f"swing_string_{side}",
+            stiffness=SWING_STRING_STIFFNESS,
+            springlength=(0.0, SWING_STRING_LENGTH),
+            limited=True,
+            range=(0.0, SWING_STRING_LIMIT),
+            width=0.0016,
+            rgba=(0.92, 0.87, 0.70, 1.0),
+            solref_limit=(0.02, 1.0),
+            solimp_limit=(0.90, 0.95, 0.001, 0.5, 2.0),
+        )
+        string.wrap_site(f"swing_anchor_{side}")
+        string.wrap_site(f"swing_attach_{side}")
+
+    return spec
+
+
 HOME_FRAME = EntityCfg.InitialStateCfg(
     joint_pos={
         # Lower body — STAND2 pose: trunk shifted ~5mm forward over the feet so
@@ -88,6 +240,27 @@ HOME_FRAME = EntityCfg.InitialStateCfg(
         r".*left_ankle.*": 0.4530,
         r".*right_ankle.*": -0.4530,
         # Head
+        r".*neck_pitch.*": 0.3491,
+        r".*head_pitch.*": 0.3491,
+        r".*head_yaw.*": 0.0,
+        r".*head_roll.*": 0.0,
+    },
+    joint_vel={".*": 0.0},
+)
+
+SWING_SEATED_FRAME = EntityCfg.InitialStateCfg(
+    pos=(0.0, 0.0, SWING_BOTTOM_TRUNK_Z),
+    rot=(1.0, 0.0, 0.0, 0.0),
+    lin_vel=(0.0, 0.0, 0.0),
+    ang_vel=(0.0, 0.0, 0.0),
+    joint_pos={
+        r".*hip_yaw.*": 0.0,
+        r".*hip_roll.*": 0.0,
+        r".*left_hip_pitch.*": -0.4079,
+        r".*right_hip_pitch.*": 0.4079,
+        r".*left_knee.*": 1.35,
+        r".*right_knee.*": -1.35,
+        r".*ankle.*": 0.0,
         r".*neck_pitch.*": 0.3491,
         r".*head_pitch.*": 0.3491,
         r".*head_yaw.*": 0.0,
@@ -173,6 +346,16 @@ MICRODUCK_STANDUP_ROBOT_CFG = EntityCfg(
     articulation=EntityArticulationInfoCfg(
         actuators=(actuators,),
         soft_joint_pos_limit_factor=0.9,
+    ),
+)
+
+MICRODUCK_SWING_ROBOT_CFG = EntityCfg(
+    spec_fn=get_swing_spec,
+    init_state=SWING_SEATED_FRAME,
+    collisions=(FULL_COLLISION,),
+    articulation=EntityArticulationInfoCfg(
+        actuators=(actuators,),
+        soft_joint_pos_limit_factor=0.95,
     ),
 )
 

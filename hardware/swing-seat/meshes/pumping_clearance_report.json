@@ -1,0 +1,225 @@
+{
+  "retention_margin_mm": 0.0,
+  "scope": "full five-axis XML range for each leg independently; full neck/head pitch ranges with yaw and roll neutral",
+  "families": {
+    "left_leg": {
+      "structured_5d": {
+        "tested": 3125,
+        "baseline_valid": 1244,
+        "already_blocked_by_original": 938,
+        "already_blocked_by_fixed_robot_visuals": 0,
+        "self_colliding": 943,
+        "newly_blocked": 0,
+        "contacts_by_part": {},
+        "ranges": {
+          "left_hip_yaw": [
+            -0.4363323129985824,
+            0.5235987755982988
+          ],
+          "left_hip_roll": [
+            -0.3839724354387525,
+            0.3839724354387525
+          ],
+          "left_hip_pitch": [
+            -1.570796326795005,
+            1.5707963267947882
+          ],
+          "left_knee": [
+            -1.570796326795012,
+            1.570796326794781
+          ],
+          "left_ankle": [
+            -1.5707963267949019,
+            1.5707963267948912
+          ]
+        }
+      },
+      "sobol_5d": {
+        "tested": 32768,
+        "baseline_valid": 16955,
+        "already_blocked_by_original": 9553,
+        "already_blocked_by_fixed_robot_visuals": 0,
+        "self_colliding": 6260,
+        "newly_blocked": 0,
+        "contacts_by_part": {},
+        "ranges": {
+          "left_hip_yaw": [
+            -0.4363323129985824,
+            0.5235987755982988
+          ],
+          "left_hip_roll": [
+            -0.3839724354387525,
+            0.3839724354387525
+          ],
+          "left_hip_pitch": [
+            -1.570796326795005,
+            1.5707963267947882
+          ],
+          "left_knee": [
+            -1.570796326795012,
+            1.570796326794781
+          ],
+          "left_ankle": [
+            -1.5707963267949019,
+            1.5707963267948912
+          ]
+        }
+      },
+      "dense_sagittal": {
+        "tested": 4913,
+        "baseline_valid": 3719,
+        "already_blocked_by_original": 607,
+        "already_blocked_by_fixed_robot_visuals": 0,
+        "self_colliding": 587,
+        "newly_blocked": 0,
+        "contacts_by_part": {},
+        "ranges": {
+          "left_hip_yaw": [
+            -0.4363323129985824,
+            0.5235987755982988
+          ],
+          "left_hip_roll": [
+            -0.3839724354387525,
+            0.3839724354387525
+          ],
+          "left_hip_pitch": [
+            -1.570796326795005,
+            1.5707963267947882
+          ],
+          "left_knee": [
+            -1.570796326795012,
+            1.570796326794781
+          ],
+          "left_ankle": [
+            -1.5707963267949019,
+            1.5707963267948912
+          ]
+        }
+      }
+    },
+    "right_leg": {
+      "structured_5d": {
+        "tested": 3125,
+        "baseline_valid": 1235,
+        "already_blocked_by_original": 947,
+        "already_blocked_by_fixed_robot_visuals": 0,
+        "self_colliding": 943,
+        "newly_blocked": 0,
+        "contacts_by_part": {},
+        "ranges": {
+          "right_hip_yaw": [
+            -0.5235987755982988,
+            0.4363323129985824
+          ],
+          "right_hip_roll": [
+            -0.3839724354387525,
+            0.3839724354387525
+          ],
+          "right_hip_pitch": [
+            -1.5707963267949268,
+            1.5707963267948664
+          ],
+          "right_knee": [
+            -1.570796326794932,
+            1.570796326794861
+          ],
+          "right_ankle": [
+            -1.5707963267949054,
+            1.5707963267948877
+          ]
+        }
+      },
+      "sobol_5d": {
+        "tested": 32768,
+        "baseline_valid": 16857,
+        "already_blocked_by_original": 9649,
+        "already_blocked_by_fixed_robot_visuals": 0,
+        "self_colliding": 6262,
+        "newly_blocked": 0,
+        "contacts_by_part": {},
+        "ranges": {
+          "right_hip_yaw": [
+            -0.5235987755982988,
+            0.4363323129985824
+          ],
+          "right_hip_roll": [
+            -0.3839724354387525,
+            0.3839724354387525
+          ],
+          "right_hip_pitch": [
+            -1.5707963267949268,
+            1.5707963267948664
+          ],
+          "right_knee": [
+            -1.570796326794932,
+            1.570796326794861
+          ],
+          "right_ankle": [
+            -1.5707963267949054,
+            1.5707963267948877
+          ]
+        }
+      },
+      "dense_sagittal": {
+        "tested": 4913,
+        "baseline_valid": 3719,
+        "already_blocked_by_original": 607,
+        "already_blocked_by_fixed_robot_visuals": 0,
+        "self_colliding": 587,
+        "newly_blocked": 0,
+        "contacts_by_part": {},
+        "ranges": {
+          "right_hip_yaw": [
+            -0.5235987755982988,
+            0.4363323129985824
+          ],
+          "right_hip_roll": [
+            -0.3839724354387525,
+            0.3839724354387525
+          ],
+          "right_hip_pitch": [
+            -1.5707963267949268,
+            1.5707963267948664
+          ],
+          "right_knee": [
+            -1.570796326794932,
+            1.570796326794861
+          ],
+          "right_ankle": [
+            -1.5707963267949054,
+            1.5707963267948877
+          ]
+        }
+      }
+    },
+    "head": {
+      "dense_sagittal": {
+        "tested": 10201,
+        "baseline_valid": 8470,
+        "already_blocked_by_original": 196,
+        "already_blocked_by_fixed_robot_visuals": 339,
+        "self_colliding": 1196,
+        "newly_blocked": 0,
+        "contacts_by_part": {},
+        "ranges": {
+          "neck_pitch": [
+            -1.5707963267948966,
+            1.0471975511965976
+          ],
+          "head_pitch": [
+            -1.5707963267948974,
+            1.5707963267948957
+          ],
+          "head_yaw": [
+            -2.967059728390373,
+            2.967059728390348
+          ],
+          "head_roll": [
+            -0.43633231299859127,
+            0.4363323129985735
+          ]
+        }
+      }
+    }
+  }
+}

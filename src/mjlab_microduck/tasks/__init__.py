@@ -19,6 +19,15 @@ from .microduck_velocity_env_cfg import (
     make_microduck_velocity_env_cfg,
     MicroduckRlCfg,
 )
+from .microduck_running_env_cfg import (
+    make_microduck_running_env_cfg,
+    MicroduckRunningRlCfg,
+    MicroduckRunningFlightRlCfg,
+)
+from .microduck_stilt_env_cfg import (
+    make_microduck_stilt_env_cfg,
+    MicroduckStiltRlCfg,
+)
 from .microduck_standup_env_cfg import (
     make_microduck_standup_env_cfg,
     MicroduckStandUpRlCfg,
@@ -67,6 +76,10 @@ from .microduck_roulade_env_cfg import (
     make_microduck_roulade_env_cfg,
     MicroduckRouladeRlCfg,
 )
+from .microduck_swing_env_cfg import (
+    make_microduck_swing_env_cfg,
+    MicroduckSwingRlCfg,
+)
 from .backlash import make_backlash_variant
 
 # Standard velocity task
@@ -78,11 +91,50 @@ register_mjlab_task(
     runner_cls=MicroduckOnPolicyRunner,
 )
 
+# Self-pumped swing. The retained seat is suspended by two massless,
+# tension-only spatial tendons; there is no scripted swing phase or impulse.
+register_mjlab_task(
+    task_id="Mjlab-SwingPump-MicroDuck",
+    env_cfg=make_microduck_swing_env_cfg(),
+    play_env_cfg=make_microduck_swing_env_cfg(play=True),
+    rl_cfg=MicroduckSwingRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
 register_mjlab_task(
     task_id="Mjlab-Velocity-Rough-MicroDuck",
     env_cfg=make_microduck_velocity_env_cfg(rough=True),
     play_env_cfg=make_microduck_velocity_env_cfg(play=True, rough=True),
     rl_cfg=MicroduckRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# Forward-only max-speed task and a controlled-flight ablation.  Both preserve
+# the walking policy's 61D observation and 14D action contracts.
+register_mjlab_task(
+    task_id="Mjlab-Running-Flat-MicroDuck",
+    env_cfg=make_microduck_running_env_cfg(),
+    play_env_cfg=make_microduck_running_env_cfg(play=True),
+    rl_cfg=MicroduckRunningRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+register_mjlab_task(
+    task_id="Mjlab-RunningFlight-Flat-MicroDuck",
+    env_cfg=make_microduck_running_env_cfg(flight_reward_weight=1.5),
+    play_env_cfg=make_microduck_running_env_cfg(play=True, flight_reward_weight=1.5),
+    rl_cfg=MicroduckRunningFlightRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# Modular stilt locomotion. Morphology is selected at compile time through
+# MICRODUCK_STILT_HEIGHT_MM and MICRODUCK_STILT_BLEND so checkpoints can move
+# through a platform-to-peg, then short-to-tall curriculum.
+register_mjlab_task(
+    task_id="Mjlab-Stilt-Flat-MicroDuck",
+    env_cfg=make_microduck_stilt_env_cfg(),
+    play_env_cfg=make_microduck_stilt_env_cfg(play=True),
+    rl_cfg=MicroduckStiltRlCfg,
     runner_cls=MicroduckOnPolicyRunner,
 )
 
@@ -246,6 +298,8 @@ _BL_ROLLERS = MICRODUCK_ROLLERS_BACKLASH_ROBOT_CFG
 _BACKLASH_TASKS = (
     ("Mjlab-Velocity-Flat-Backlash-MicroDuck", make_microduck_velocity_env_cfg, {}, MicroduckRlCfg, _BL_WALK),
     ("Mjlab-Velocity-Rough-Backlash-MicroDuck", make_microduck_velocity_env_cfg, {"rough": True}, MicroduckRlCfg, _BL_WALK),
+    ("Mjlab-Running-Flat-Backlash-MicroDuck", make_microduck_running_env_cfg, {}, MicroduckRunningRlCfg, _BL_WALK),
+    ("Mjlab-RunningFlight-Flat-Backlash-MicroDuck", make_microduck_running_env_cfg, {"flight_reward_weight": 1.5}, MicroduckRunningFlightRlCfg, _BL_WALK),
     ("Mjlab-VelStand-Flat-Backlash-MicroDuck", make_microduck_velstand_env_cfg, {}, MicroduckVelStandRlCfg, _BL_ALLCOL),
     ("Mjlab-VelStand-Rough-Backlash-MicroDuck", make_microduck_velstand_env_cfg, {"rough": True}, MicroduckVelStandRlCfg, _BL_ALLCOL),
     ("Mjlab-StandUp-Flat-Backlash-MicroDuck", make_microduck_standup_env_cfg, {}, MicroduckStandUpRlCfg, _BL_ALLCOL),

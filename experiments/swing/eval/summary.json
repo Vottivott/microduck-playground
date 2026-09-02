@@ -1,0 +1,34 @@
+{
+  "policy": "alpha050",
+  "checkpoint_sha256": "49fb3599be519cb604ed65e1ba495fb9f5746e5bee1d4cb95107dcd165f47f9c",
+  "interpolation_source_sha256": "93837beb1acd31459a3f465f292cc82944f82344f7c9e319bb15a50353bad792",
+  "interpolation_target_sha256": "d993901db354edd91f63ccbb69ad9af14bd3b4d6f3dc2c5585e052667ef37dbd",
+  "evaluation": {
+    "seeds": 100,
+    "duration_s": 36.0,
+    "control_dt_s": 0.02,
+    "strict_full_horizon_passes": 71,
+    "geometry_debt_free_passes": 73,
+    "median_peak_to_peak_deg": 163.0279718838097,
+    "median_final_six_half_cycle_peak_to_peak_deg": 161.08761759344662,
+    "cord_overextension_seeds": 3,
+    "deep_slack_seeds": 15
+  },
+  "best_strict_seed": {
+    "seed": 27,
+    "peak_to_peak_deg": 173.19988233166998,
+    "max_positive_deg": 88.7283783753727,
+    "max_negative_deg": -84.47150395629727,
+    "final_six_half_cycle_peak_to_peak_deg": 171.67248924707994,
+    "max_abs_lateral_m": 0.010354727506637573,
+    "max_attachment_alignment_penalty": 0.020374774932861328,
+    "min_string_length_m": 0.370378702878952,
+    "max_string_length_m": 0.392024964094162
+  },
+  "strict_gates": {
+    "deep_slack_below_m": 0.37,
+    "overextension_above_m": 0.394,
+    "lateral_above_m": 0.02,
+    "alignment_penalty_above": 0.05
+  }
+}

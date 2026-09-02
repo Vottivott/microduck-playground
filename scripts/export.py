@@ -1,5 +1,7 @@
 """Script to play RL agent with RSL-RL."""
 
+import json
+import math
 import os
 import re
 import sys
@@ -9,6 +11,7 @@ from typing import Literal
 
 import torch
 import tyro
+import numpy as np
 from rsl_rl.runners import OnPolicyRunner
 
 from mjlab.envs import ManagerBasedRlEnv
@@ -29,6 +32,7 @@ class ExportConfig:
     wandb_run_path: str | None = None
     checkpoint: int | None = None      # Select checkpoint by iteration number (e.g. 3000)
     checkpoint_file: str | None = None
+    seed: int | None = None
     motion_file: str | None = None
     num_envs: int | None = None
     device: str | None = None
@@ -36,8 +40,17 @@ class ExportConfig:
     video_length: int = 200
     video_height: int | None = None
     video_width: int | None = None
+    episode_length_s: float | None = None
     camera: int | str | None = None
     viewer: Literal["auto", "native", "viser"] = "auto"
+    running_speed: float | None = None
+    camera_azimuth_offset_deg: float = 0.0
+    camera_follow_yaw_tau_s: float | None = None
+    camera_follow_position_tau_s: float | None = None
+    camera_follow_position_gain: float = 1.0
+    camera_follow_shadow_light: bool = False
+    disable_shadows: bool = False
+    contact_log_file: str | None = None
 
     # Internal flag used by demo script.
     _demo_mode: tyro.conf.Suppress[bool] = False
@@ -46,10 +59,52 @@ class ExportConfig:
 def run_export(task_id: str, cfg: ExportConfig):
     configure_torch_backends()
 
+    if cfg.camera_follow_yaw_tau_s is not None:
+        if cfg.camera_follow_yaw_tau_s <= 0.0:
+            raise ValueError("camera_follow_yaw_tau_s must be positive")
+        if not cfg.video:
+            raise ValueError("camera_follow_yaw_tau_s requires video recording")
+    if cfg.camera_follow_shadow_light and not cfg.video:
+        raise ValueError("camera_follow_shadow_light requires video recording")
+    if cfg.camera_follow_position_tau_s is not None:
+        if cfg.camera_follow_position_tau_s <= 0.0:
+            raise ValueError("camera_follow_position_tau_s must be positive")
+        if not cfg.video:
+            raise ValueError("camera_follow_position_tau_s requires video recording")
+        if cfg.camera_follow_position_gain < 0.0:
+            raise ValueError("camera_follow_position_gain must be non-negative")
+    if cfg.contact_log_file is not None and not cfg.video:
+        raise ValueError("contact_log_file requires video recording")
+
     device = cfg.device or ("cuda:0" if torch.cuda.is_available() else "cpu")
 
     env_cfg = load_env_cfg(task_id, play=True)
     agent_cfg = load_rl_cfg(task_id)
+    if cfg.episode_length_s is not None:
+        if cfg.episode_length_s <= 0.0:
+            raise ValueError("episode_length_s must be positive")
+        env_cfg.episode_length_s = cfg.episode_length_s
+    if cfg.seed is not None:
+        env_cfg.seed = cfg.seed
+
+    # Keep the configured follow-camera orbit intact while allowing recordings
+    # from the opposite side of the tracked body.
+    env_cfg.viewer.azimuth = (
+        env_cfg.viewer.azimuth + cfg.camera_azimuth_offset_deg
+    ) % 360.0
+
+    if cfg.running_speed is not None:
+        if cfg.running_speed < 0.0:
+            raise ValueError("running_speed must be non-negative")
+        if env_cfg.commands is None or "twist" not in env_cfg.commands:
+            raise ValueError("running_speed requires a twist command")
+        command = env_cfg.commands["twist"]
+        command.ranges.lin_vel_x = (cfg.running_speed, cfg.running_speed)
+        command.ranges.lin_vel_y = (0.0, 0.0)
+        command.ranges.ang_vel_z = (0.0, 0.0)
+        command.rel_standing_envs = 0.0
+        if hasattr(command, "rel_turn_in_place_envs"):
+            command.rel_turn_in_place_envs = 0.0
 
     DUMMY_MODE = cfg.agent in {"zero", "random"}
     TRAINED_MODE = not DUMMY_MODE
@@ -222,6 +277,147 @@ def run_export(task_id: str, cfg: ExportConfig):
         runner = runner_cls(env, asdict(agent_cfg), device=device)
         runner.load(str(resume_path), map_location=device)
         policy = runner.get_inference_policy(device=device)
+
+    if TRAINED_MODE and cfg.video:
+        # VideoRecorder captures only while stepping.  Keep rollout separate
+        # from ONNX export so --video produces a real checkpoint video.
+        obs = env.get_observations()
+        camera_azimuth: float | None = None
+        base_env = env.unwrapped
+        renderer = base_env._offline_renderer
+        assert renderer is not None
+        if cfg.disable_shadows:
+            # Mesa/OSMesa can intermittently corrupt MuJoCo's shadow map into
+            # long black bars during large articulated motion.  Disabling only
+            # shadow casting preserves scene lighting/materials while removing
+            # that unstable render pass for deterministic artifact-free video.
+            renderer._model.light_castshadow[:] = False
+        tracked_entity = None
+        if (
+            cfg.camera_follow_yaw_tau_s is not None
+            or cfg.camera_follow_position_tau_s is not None
+            or cfg.camera_follow_shadow_light
+        ):
+            entity_name = env_cfg.viewer.entity_name
+            if entity_name is None:
+                raise ValueError("camera following requires a viewer entity_name")
+            tracked_entity = base_env.scene[entity_name]
+
+        position_initial_root: np.ndarray | None = None
+        position_base_lookat: np.ndarray | None = None
+        position_smoothed_lookat: np.ndarray | None = None
+        if cfg.camera_follow_position_tau_s is not None:
+            assert tracked_entity is not None
+            position_initial_root = (
+                tracked_entity.data.root_link_pos_w[env_cfg.viewer.env_idx]
+                .detach()
+                .cpu()
+                .numpy()
+                .copy()
+            )
+            position_base_lookat = np.asarray(renderer._cam.lookat).copy()
+            position_smoothed_lookat = position_base_lookat.copy()
+
+        frame_contact_samples: list[dict[str, object]] = []
+
+        for video_step in range(cfg.video_length):
+            if cfg.camera_follow_position_tau_s is not None:
+                assert tracked_entity is not None
+                assert position_initial_root is not None
+                assert position_base_lookat is not None
+                assert position_smoothed_lookat is not None
+                root_pos_np = (
+                    tracked_entity.data.root_link_pos_w[env_cfg.viewer.env_idx]
+                    .detach()
+                    .cpu()
+                    .numpy()
+                )
+                target_lookat = position_base_lookat + cfg.camera_follow_position_gain * (
+                    root_pos_np - position_initial_root
+                )
+                alpha = 1.0 - math.exp(
+                    -base_env.step_dt / cfg.camera_follow_position_tau_s
+                )
+                position_smoothed_lookat += alpha * (
+                    target_lookat - position_smoothed_lookat
+                )
+                renderer._cam.lookat[:] = position_smoothed_lookat
+
+            if cfg.camera_follow_yaw_tau_s is not None:
+                assert tracked_entity is not None
+                quat = tracked_entity.data.root_link_quat_w[
+                    env_cfg.viewer.env_idx
+                ]
+                qw, qx, qy, qz = (float(value) for value in quat)
+                yaw = math.degrees(
+                    math.atan2(
+                        2.0 * (qw * qz + qx * qy),
+                        1.0 - 2.0 * (qy * qy + qz * qz),
+                    )
+                )
+                target_azimuth = yaw + env_cfg.viewer.azimuth
+                if camera_azimuth is None:
+                    camera_azimuth = target_azimuth
+                else:
+                    alpha = 1.0 - math.exp(
+                        -base_env.step_dt / cfg.camera_follow_yaw_tau_s
+                    )
+                    delta = (
+                        target_azimuth - camera_azimuth + 180.0
+                    ) % 360.0 - 180.0
+                    camera_azimuth += alpha * delta
+                renderer._cam.azimuth = camera_azimuth % 360.0
+
+            if cfg.camera_follow_shadow_light:
+                assert tracked_entity is not None
+                root_pos = tracked_entity.data.root_link_pos_w[
+                    env_cfg.viewer.env_idx
+                ]
+                # The directional light's position still anchors MuJoCo's
+                # finite shadow-map region. Keep that region centered on the
+                # tracked robot without changing light direction or intensity.
+                renderer._model.light_pos[:, 0] = float(root_pos[0])
+                renderer._model.light_pos[:, 1] = float(root_pos[1])
+
+            with torch.inference_mode():
+                actions = policy(obs)
+            obs, _, _, _ = env.step(actions)
+
+            if cfg.contact_log_file is not None:
+                render_model = renderer._model
+                render_data = renderer._data
+                contacts: list[dict[str, object]] = []
+                for contact_index in range(render_data.ncon):
+                    contact = render_data.contact[contact_index]
+                    geom1 = render_model.geom(int(contact.geom1)).name
+                    geom2 = render_model.geom(int(contact.geom2)).name
+                    if not (
+                        geom1.startswith("swing_frame_")
+                        or geom2.startswith("swing_frame_")
+                    ):
+                        continue
+                    contacts.append(
+                        {
+                            "geom1": geom1,
+                            "geom2": geom2,
+                            "distance_m": float(contact.dist),
+                        }
+                    )
+                if contacts:
+                    frame_contact_samples.append(
+                        {
+                            "step": video_step + 1,
+                            "time_s": (video_step + 1) * base_env.step_dt,
+                            "contacts": contacts,
+                        }
+                    )
+
+        if cfg.contact_log_file is not None:
+            contact_log_path = Path(cfg.contact_log_file)
+            contact_log_path.parent.mkdir(parents=True, exist_ok=True)
+            contact_log_path.write_text(
+                json.dumps(frame_contact_samples, indent=2) + "\n"
+            )
 
     # mjlab 1.3.0: ONNX export + metadata moved to mjlab.rl.exporter_utils and
     # the runner's built-in export_policy_to_onnx. Observation normalization is

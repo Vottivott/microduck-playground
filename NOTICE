@@ -1,0 +1,16 @@
+MicroDuck Playground
+Copyright 2026 Hannes von Essen / Vottivott
+
+This repository is derived from pollen-robotics/microduck_rl. Its public
+history begins with a curated release snapshot; subsequent development uses
+ordinary commits. The upstream project and MicroDuck robot assets are
+copyright their respective contributors and are used under their published
+licenses.
+
+The swing-seat generator, retention components, and experiment-specific
+training/evaluation additions were developed for this playground repository.
+
+Software: Apache License 2.0.
+3D hardware design files: Creative Commons Attribution-NonCommercial-
+ShareAlike 4.0 International (CC BY-NC-SA 4.0), following the upstream
+repository's hardware-file licensing convention. See LICENSE-HARDWARE.

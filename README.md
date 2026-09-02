@@ -1,195 +1,170 @@
-# Microduck RL
+# MicroDuck Playground
 
-<img width="2215" height="884" alt="image" src="https://github.com/user-attachments/assets/5db7cc83-b3ce-4f7c-83f0-0572a63baed7" />
+Reproducible reinforcement-learning experiments, policy demonstrations, and
+printable hardware add-ons for
+[Pollen Robotics' MicroDuck](https://github.com/pollen-robotics/microduck).
 
+This is an independent experimental continuation of
+[`pollen-robotics/microduck_rl`](https://github.com/pollen-robotics/microduck_rl),
+not an official Pollen Robotics release. For the initial public release, all
+playground-specific work is consolidated into one commit on top of upstream
+commit [`d424a0c`](https://github.com/pollen-robotics/microduck_rl/commit/d424a0c899f6b33cbd3daeb279913134349c0b63),
+preserving the original project history and attribution. Development after the
+release uses ordinary commits. The upstream project can be added as a Git
+remote when preparing focused contributions.
 
-RL training environments for [Microduck](https://github.com/pollen-robotics/microduck) —
-a ~800 g, ~25 cm tall bipedal robot — built on
-[mjlab](https://github.com/mujocolab/mjlab) (MuJoCo Warp) with PPO.
-Policies are trained here at 50 Hz, exported to ONNX, and deployed on the real
-robot by the runtime in [pollen-robotics/microduck](https://github.com/pollen-robotics/microduck).
+## Experiments
 
-<!-- HERO VIDEO — real robot montage: walking, standup, roulade, roller skating.
-     Keep it short (~30 s) and real-robot-first: this is the "why should I care" shot. -->
+Animated previews play directly in the table. Click one—or use its explicit
+full-video link—to open the complete silent MP4.
 
-https://github.com/user-attachments/assets/50c3d537-8db2-4005-9d9c-3472faeec4d0
+<table>
+  <thead>
+    <tr>
+      <th>Experiment</th>
+      <th>Preview</th>
+      <th>Result and artifacts</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Self-pumped swing</strong></td>
+      <td>
+        <a href="experiments/swing/media/alpha050_seed27.mp4">
+          <img src="experiments/swing/media/preview.gif" width="280" alt="Animated preview of MicroDuck pumping itself on a swing">
+        </a>
+      </td>
+      <td>
+        Starts still and reaches a 173.20° strict full span.<br>
+        <a href="experiments/swing/media/alpha050_seed27.mp4">Full video</a> ·
+        <a href="experiments/swing/README.md">Experiment</a> ·
+        <a href="https://huggingface.co/HannesVonEssen/microduck-swing">ONNX on Hugging Face</a>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Fast running</strong></td>
+      <td>
+        <a href="experiments/running/media/preview.mp4">
+          <img src="experiments/running/media/preview.gif" width="280" alt="Animated preview of MicroDuck running on flat ground">
+        </a>
+      </td>
+      <td>
+        Robustified 1.6 m/s simulated running policy.<br>
+        <a href="experiments/running/media/preview.mp4">Full video</a> ·
+        <a href="experiments/running/README.md">Experiment</a> ·
+        <a href="https://huggingface.co/HannesVonEssen/microduck-running">ONNX on Hugging Face</a>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Stilt walking</strong></td>
+      <td>
+        <a href="experiments/stilts/media/preview.mp4">
+          <img src="experiments/stilts/media/preview.gif" width="280" alt="Animated preview of MicroDuck walking on green 10 cm stilts">
+        </a>
+      </td>
+      <td>
+        Blend-0.50 policies for 10, 15, 20, 25, and 50 cm, plus
+        1.0, 1.4, and 2.0 m simulation stilts (10 cm shown).<br>
+        <a href="experiments/stilts/media/preview.mp4">Full video</a> ·
+        <a href="experiments/stilts/README.md">Experiment</a> ·
+        <a href="hardware/stilts/README.md">Hardware</a> ·
+        <a href="https://huggingface.co/HannesVonEssen/microduck-stilts">Policies and videos</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-The repo encodes the full sim2real recipe: [BAM](https://github.com/Rhoban/bam)
-actuator physics, domain randomization, backlash simulation, and the
-reward-design lessons that made it work
-(see [AGENTS.md](AGENTS.md) for the distilled playbook).
+Each preview is a direct simulation policy demonstration.
 
-## Quickstart
+## Hardware galleries
 
-Requires a CUDA GPU (training runs through MuJoCo Warp) and [uv](https://docs.astral.sh/uv/).
+The retained swing seat keeps the battery centered without occupying the
+head-and-leg pumping corridors. It includes compliant locating pads, a padded
+strap, and a removable buckle. The source generators, printable millimetre
+meshes, MuJoCo collision hulls, and clearance reports are under
+[`hardware/swing-seat`](hardware/swing-seat/README.md).
 
-> **On ARM boxes (DGX Spark / GB10, Jetson):** `uv sync` pulls ~2 GB of CUDA
-> wheels on first run and uv's default 30 s HTTP timeout can abort mid-download.
-> Export `UV_HTTP_TIMEOUT=600` for the first sync. 
+<table>
+  <tr>
+    <td align="center"><img src="hardware/swing-seat/renders/seat_front.png" width="300" alt="Retained swing seat, front view"><br><sub>Front</sub></td>
+    <td align="center"><img src="hardware/swing-seat/renders/seat_three_quarter.png" width="300" alt="Retained swing seat, three-quarter view"><br><sub>Three-quarter</sub></td>
+    <td align="center"><img src="hardware/swing-seat/renders/seat_side.png" width="300" alt="Retained swing seat, side view"><br><sub>Side</sub></td>
+  </tr>
+</table>
 
-```bash
-git clone https://github.com/pollen-robotics/microduck_rl
-cd microduck_rl
+The stilt system replaces the removable soles and preserves explicit tip
+contact geometry. The gallery uses the demonstrated green 10 cm blend-0.50
+configuration. Parametric generators and printable meshes are under
+[`hardware/stilts`](hardware/stilts/README.md).
 
-# train the walking policy (uses your GPU; ~1-2 h for a usable gait at 4096 envs)
-uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096
+<table>
+  <tr>
+    <td align="center"><img src="hardware/stilts/renders/stilts_front.png" width="230" alt="MicroDuck green stilts, front view"><br><sub>Front</sub></td>
+    <td align="center"><img src="hardware/stilts/renders/stilts_three_quarter.png" width="230" alt="MicroDuck green stilts, three-quarter view"><br><sub>Three-quarter</sub></td>
+    <td align="center"><img src="hardware/stilts/renders/stilts_side.png" width="230" alt="MicroDuck green stilts, side view"><br><sub>Side</sub></td>
+    <td align="center"><img src="hardware/stilts/renders/printed_stilt.jpg" width="230" alt="Green 3D-printed MicroDuck replacement sole and stilt prototype"><br><sub>3D-printed prototype</sub></td>
+  </tr>
+</table>
 
-# watch a trained policy in the viewer
-uv run play Mjlab-Velocity-Flat-MicroDuck --wandb-run-path <entity/project/run_id>
+## Quick start
 
-# export to ONNX for deployment
-uv run scripts/export.py Mjlab-Velocity-Flat-MicroDuck --wandb-run-path <...>
-
-# drive the exported policy in CPU MuJoCo with the keyboard
-uv run scripts/infer_policy.py --walking output.onnx
-```
-
-Resume from a checkpoint:
-
-```bash
-uv run train Mjlab-Velocity-Flat-MicroDuck --env.scene.num-envs 4096 \
-    --agent.run-name resume --agent.load-checkpoint model_29999.pt --agent.resume True
-```
-
-No GPU? Add `--hf-jobs` to any train command to run it on Hugging Face Jobs
-instead of locally (see [scripts/hf/README.md](scripts/hf/README.md)).
-
-## Tasks
-
-`uv run list-envs` prints the live registry. Flat/Rough variants exist where noted.
-
-<!-- SHOWCASE GRID — one short GIF per task family (sim or real), 3 per row.
-     Priority order if you only record a few: Velocity, VelStand (fall+recover),
-     Roulade, SitStand, Rollers/Swizzle, BallKick. -->
-
-| Task id | Terrain | Description |
-|---|---|---|
-| `Mjlab-Velocity-{Flat,Rough}-MicroDuck` | flat/rough | **The main task**: walking with velocity commands + head-pose commands |
-| `Mjlab-VelStand-{Flat,Rough}-MicroDuck` | flat/rough | Walking + fall recovery in one policy |
-| `Mjlab-StandUp-{Flat,Rough}-MicroDuck` | flat/rough | Stand up from face-down/face-up/sitting, then hold the stand + body-pose control |
-| `Mjlab-SitStand-{Flat,Rough}-MicroDuck` | flat/rough | Commanded sit ↔ stand in one policy, gently, head commandable |
-| `Mjlab-GroundPick-{Flat,Rough}-MicroDuck` | flat/rough | Crouch and touch the ground with the mouth tip, return to stand |
-| `Mjlab-BallKick-Flat-MicroDuck` | flat | Kick a 70 mm / 15 g ball forward (actor is ball-blind) |
-| `Mjlab-Roulade-Flat-MicroDuck` | flat | Forward roll over the head, land back on the feet |
-| `Mjlab-Velocity-Flat-MicroDuck-Rollers` | flat | Roller-skate velocity tracking (passive wheels under the feet) |
-| `Mjlab-Velocity-Swizzle-MicroDuck` | flat | Classic symmetric swizzle skating |
-| `Mjlab-RollerCrouch-Flat-MicroDuck` | flat | Crouch while gliding on rollers |
-| `Mjlab-RollerSlope-Flat-MicroDuck` | slope | Glide down slopes on rollers |
-| `Mjlab-RollerStandUp-Flat-MicroDuck` | flat | Stand up from the ground onto the wheels |
-| `Mjlab-Spin-Flat-MicroDuck` | flat | Fast spin in place on rollers |
-
-At deployment the runtime hot-swaps these policies (walk / recover / trick)
-behind a shared 61-dimensional observation contract, so any of them can take
-over the robot at any moment. `scripts/infer_policy.py` rehearses exactly that:
-
-```bash
-uv run scripts/infer_policy.py --walking walk.onnx --standing stand.onnx \
-    --sitstand sitstand.onnx --roulade roulade.onnx --new-cmd-obs
-```
-
-Keyboard-driven (velocity commands, `G` ground pick, `Y` sit/stand, `R` roulade,
-`K`/`L` kicks); `--debug`, `--save-csv`, `--record` support sim2real comparisons.
-
-### Backlash variants
-
-Every main task has a **Backlash** twin that trains on a model with ±1° of gear
-play (2° total) in series with each of the 14 servo joints: insert `-Backlash`
-before `MicroDuck` in the task id, e.g. `Mjlab-Velocity-Flat-Backlash-MicroDuck`.
-
-The backlash is modeled properly for sim2real: each servo gets an unactuated
-`passive_<joint>_backlash` hinge, and because the real encoder sits on the
-output side of the play, both the firmware PD emulation
-(`BacklashEncoderBamActuator`) and the `joint_pos`/`joint_vel` observations
-read *through* the backlash (`qpos[servo] + qpos[backlash]`). Observation and
-action dims are unchanged, so ONNX export and the runtime need no changes.
-See `src/mjlab_microduck/tasks/backlash.py`.
-
-## Actuator model
-
-All tasks use the [BAM](https://github.com/Rhoban/bam) M6 actuator model for
-the Dynamixel XL330 (voltage control law, back-EMF, Coulomb/Stribeck/load-dependent
-friction), with per-env domain randomization on battery voltage, voltage sag
-under load, command delay, and friction magnitude
-(`FrictionDRBamActuator` in `src/mjlab_microduck/actuator/`).
-
-At this scale — tiny servos driving a ~800 g biped — actuator fidelity is most
-of the sim2real gap, which is why the actuator is modeled down to its voltage
-control law instead of an ideal PD.
-
-## Robot models
-
-MJCF models live in `src/mjlab_microduck/robot/microduck/` and are exported
-from Onshape with [onshape-to-robot](https://github.com/Rhoban/onshape-to-robot),
-one `config_mjcf_*.json` per model:
-
-| XML | Used by |
-|---|---|
-| `robot_walk.xml` | Velocity (stripped trunk/head contacts — falling is cheap) |
-| `robot_allcollisions.xml` | VelStand, StandUp, SitStand, GroundPick, BallKick, Roulade (body can physically lie on the ground) |
-| `robot_allcollisions_rollers.xml` | Roller tasks (passive wheels) |
-| `robot_*_backlash.xml` | Backlash task variants (generated by `add_backlash.py`) |
-
-`scene*.xml` files wrap the robots with a floor + keyframes (STAND/SIT/FOLD)
-for quick viewing and for `infer_policy.py`.
-
-<!-- IMAGE — side-by-side render: walk model vs rollers model (or a collision-geom
-     visualization). One image here makes the model-variant story instant. -->
-
-## Project structure
-
-```
-src/mjlab_microduck/
-├── robot/
-│   ├── microduck/                    # MJCF exports, export configs, scenes, add_backlash.py
-│   └── microduck_constants.py        # robot cfgs, HOME frame, BAM actuator cfg
-├── actuator/friction_dr_bam.py       # BAM + friction DR + backlash encoder feedback
-├── tasks/
-│   ├── __init__.py                   # task registration (base + backlash variants)
-│   ├── mdp.py                        # rewards, events, observations, custom classes
-│   ├── backlash.py                   # make_backlash_variant() env-cfg wrapper
-│   └── microduck_*_env_cfg.py        # one cfg module per task family
-├── train_cli.py                      # `train` entry point (+ --hf-jobs)
-└── hf_jobs.py                        # Hugging Face Jobs submission
-```
-
-Conventions worth knowing:
-
-- The observation layout is shared across every policy (61-dim actor obs:
-  48 proprioception + commands `[twist(3), head_pose(4), body_pose(6)]`), which
-  is what makes runtime policy hot-swapping possible. Envs that don't use a
-  command slot zero-pad it rather than dropping it.
-- Unactuated joints are all named `passive_*` (roller wheels, backlash
-  hinges); actuators, joint observations and pose rewards select servo joints
-  with `^(?!passive_).*`.
-- Domain-randomization toggles are `ENABLE_*` booleans at the top of each
-  env cfg file.
-- Joint layout (14 servos): 0–4 left leg (hip_yaw, hip_roll, hip_pitch, knee,
-  ankle), 5–8 neck/head (neck_pitch, head_pitch, head_yaw, head_roll),
-  9–13 right leg.
-- The exporter bakes the observation normalizer into the ONNX graph — always
-  deploy ONNX produced by `scripts/export.py`, never a hand-converted
-  checkpoint, or the policy sees unnormalized observations at runtime.
-
-[AGENTS.md](AGENTS.md) documents the env-building workflow and the reward-design
-rules learned across the project (also aimed at AI coding agents working in
-this repo).
-
-## Tests
+A CUDA GPU and [`uv`](https://docs.astral.sh/uv/) are recommended. Training
+uses MuJoCo Warp through `mjlab`.
 
 ```bash
-uv run --with pytest pytest tests/
+git clone https://github.com/Vottivott/microduck-playground
+cd microduck-playground
+uv sync
+
+# Cheap configuration/training smoke test first.
+uv run train Mjlab-SwingPump-MicroDuck \
+  --env.scene.num-envs 64 \
+  --agent.max-iterations 5
+
+# Full swing training configuration.
+uv run train Mjlab-SwingPump-MicroDuck \
+  --env.scene.num-envs 4096
 ```
 
-CPU-only config-invariant and reward-function regression tests — they lock in
-joint-index mappings, reward sign conventions, and NaN guards.
+## Repository layout
 
-## Related projects
+```text
+experiments/
+  running/               clean policy preview and result summary
+  stilts/                policy index, executed curriculum, continuation guide
+  swing/                 selected checkpoints, evaluation, media, methodology
+hardware/
+  stilts/                parametric stilt generator and printable meshes
+  swing-seat/            retained-seat generator, meshes, clearance reports
+src/mjlab_microduck/     tasks, robot models, actuator model, rewards
+scripts/                 evaluation, export, rendering, and selection tools
+tests/                   CPU configuration and invariant tests
+docs/                    supporting research and training notes
+```
 
-- [microduck](https://github.com/pollen-robotics/microduck) — the Microduck project home, including the onboard runtime that runs the exported policies
-- [mjlab](https://github.com/mujocolab/mjlab) — the training framework (MuJoCo Warp + rsl_rl)
-- [BAM](https://github.com/Rhoban/bam) — better actuator models, by Rhoban
+## Scope and safety
+
+These are simulation experiments, not hardware safety certifications. The
+swing model simulates two elastic tension-only cords and randomized actuator
+and sensor dynamics, but real cord knots, frame flex, textile contact, servo
+temperature, and assembly tolerances remain. Extreme-height stilts require an
+engineered load path and fall protection. Use a safety tether, current limits,
+an emergency stop, a clear exclusion zone, and conservative incremental tests.
+
+## Upstream and contributions
+
+To compare against or prepare a focused pull request for Pollen's project:
+
+```bash
+git remote add upstream https://github.com/pollen-robotics/microduck_rl.git
+git fetch upstream
+```
 
 ## License
 
-This project is licensed under the Apache 2.0 License. See the [LICENSE](LICENSE) file for details.
-3D model files are licensed under Creative Commons BY-SA-NC.
+Software is licensed under Apache-2.0; see [`LICENSE`](LICENSE). As in the
+upstream project, 3D hardware design files are licensed under Creative Commons
+Attribution-NonCommercial-ShareAlike 4.0 International; see
+[`LICENSE-HARDWARE`](LICENSE-HARDWARE). Third-party MicroDuck assets retain
+their original attribution and terms. See [`NOTICE`](NOTICE) and the
+hardware-specific READMEs.
