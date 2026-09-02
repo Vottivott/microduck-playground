@@ -7,9 +7,13 @@ validated on hardware.
 ## Source provenance
 
 - Base commit: `d424a0c899f6b33cbd3daeb279913134349c0b63`
-- Running environment and evaluator: `7d9a555`
-- Continuation sweep controls: `c73b256`
-- Higher-speed curriculum: `3828282`
+- Public experiment implementation: initial playground release `7a75253`
+- Running environment: `src/mjlab_microduck/tasks/microduck_running_env_cfg.py`
+- Evaluator: `scripts/evaluate_running_checkpoint.py`
+
+The pre-release development hashes for the continuation controls and
+higher-speed curriculum were consolidated into the initial public release and
+are intentionally not presented as public commits.
 - Task: `Mjlab-Running-Flat-MicroDuck`
 - Actor observation layout: 61D
 - Action layout: 14D
@@ -92,7 +96,12 @@ baked observation-normalizer mean.
 
 ## Verification
 
-- Full CPU test suite: 167 passed, 1 skipped
+- Full CPU test suite passed at the selected release revision (run the command
+  below for the current count):
+
+  ```bash
+  uv run --with pytest pytest -q
+  ```
 - Smoke training: 64 environments, 5 iterations, 61D observations, no NaNs
 - Milestone comparisons: all six branches at iterations 9,000, 9,750, 10,250,
   10,750, and 11,250

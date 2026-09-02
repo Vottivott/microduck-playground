@@ -2154,37 +2154,6 @@ def phase_height_track(
     return torch.exp(-((z - target_z) / std) ** 2)
 
 
-def pose_target_match(
-    env: ManagerBasedRlEnv,
-    asset_cfg: SceneEntityCfg = _DEFAULT_ASSET_CFG,
-    std: float = 0.3,
-    joint_indices: Optional[list] = None,
-    target_overrides: Optional[dict] = None,
-) -> torch.Tensor:
-    """Always-on Gaussian on joint positions vs a target pose.
-
-    Non-phase analog of ``phase_pose_match``: useful for episodic tasks (e.g.
-    the sit env) where there's no cyclic command to weight the reward by, and
-    the target pose is constant for the whole episode.
-
-    Args:
-        std: Gaussian std per joint (rad).
-        joint_indices: Optional subset of joints to evaluate.
-        target_overrides: ``{joint_index: angle_rad}``. Joints not listed default
-            to ``asset.data.default_joint_pos`` (the home/standing pose).
-    """
-    asset = env.scene[asset_cfg.name]
-    joint_pos = _servo_joint_pos(env, asset)
-    target = _servo_default_joint_pos(env, asset).clone()
-    if target_overrides:
-        for idx, val in target_overrides.items():
-            target[:, idx] = val
-    if joint_indices is not None:
-        joint_pos = joint_pos[:, joint_indices]
-        target = target[:, joint_indices]
-    return torch.exp(-((joint_pos - target) / std) ** 2).mean(dim=-1)
-
-
 def interpolated_pose_target_match(
     env: ManagerBasedRlEnv,
     asset_cfg: SceneEntityCfg = _DEFAULT_ASSET_CFG,
