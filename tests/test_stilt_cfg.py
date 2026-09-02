@@ -118,6 +118,14 @@ def test_compiled_robot_uses_stilts_not_original_soles_for_contact():
     assert model.nu == 14
 
 
+def test_compiled_robot_accepts_measured_10cm_print_mass():
+    spec = get_stilt_walk_spec(height_cm=10.0, blend=0.5, mass_kg=0.029)
+    model = spec.compile()
+    for side in ("left", "right"):
+        body_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, f"stilt_{side}")
+        assert model.body_mass[body_id] == pytest.approx(0.029)
+
+
 def test_tip_sites_move_to_ground_contact_plane():
     spec = get_stilt_walk_spec(height_cm=25.0, blend=1.0)
     model = spec.compile()

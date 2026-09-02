@@ -47,6 +47,14 @@ uv run hardware/stilts/generate_stilts.py --direct-heights-cm 10 15 20 25 50 100
 The generator uses the checked-in `sole_left.stl` and `sole_right.stl` as its
 exact attachment surfaces. It adds rather than approximates that geometry.
 
+The simulation mass law is `12 g + 1 g/cm` per stilt. At 10 cm this is 22 g
+per stilt (44 g per pair), while the prototype slicer estimate is 58 g per
+pair, approximately 29 g per stilt. The released actor passed an initial
+64-environment simulation check at the heavier value; see the
+[`10 cm printed-mass audit`](../../experiments/stilts/README.md#10-cm-printed-mass-audit).
+That check is not a substitute for mass-randomized training or hardware
+validation.
+
 ## Released policy geometry
 
 These are the exact blend-0.50 fused replacement sole-and-stilt geometries

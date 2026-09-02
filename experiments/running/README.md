@@ -1,18 +1,19 @@
 # Fast running
 
-The selected policy runs at approximately 1.6 m/s body-forward speed in the
-robustified simulation battery—about four times the 0.4 m/s walking-training
-ceiling. The clean 10-second policy rollout is
-[`media/preview.mp4`](media/preview.mp4).
+The later iteration-11,748 continuation shown in the clean 10-second
+[`media/preview.mp4`](media/preview.mp4) reaches 1.687 m/s mean body-forward
+speed in its randomized simulation battery—about four times the 0.4 m/s
+walking-training ceiling. It is a documented simulation result, not the
+downloadable policy linked below and not a hardware-robustified release.
 
-The ONNX package for iteration 8,749—the checkpoint used in the run-into-mat
-demonstration—its manifest, checksums, runtime contract, and sim-to-real
+The ONNX package for iteration 8,749—the approximately 1.607 m/s checkpoint
+used in the run-into-mat demonstration—its manifest, checksums, runtime contract, and sim-to-real
 boundary are published separately at
 [`HannesVonEssen/microduck-running`](https://huggingface.co/HannesVonEssen/microduck-running).
-The cleaner preview here and the metrics below document the later iteration
-11,748 continuation. The two checkpoints are deliberately identified rather
-than presented as the same artifact. Training code and continuation controls
-remain in this repository.
+The clean preview here and the metrics below document iteration 11,748. The
+two checkpoints are deliberately identified rather than presented as the same
+artifact. No hardware-robustified running policy is currently published.
+Training code and continuation controls remain in this repository.
 
 The Hugging Face package includes the complete iteration-8,749 PPO
 `checkpoint.pt` (actor, critic, optimizer, observation normalizers, and

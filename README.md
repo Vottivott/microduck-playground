@@ -49,7 +49,9 @@ full-video link—to open the complete silent MP4.
         </a>
       </td>
       <td>
-        Robustified 1.6 m/s simulated running policy.<br>
+        Later iteration-11,748 simulation preview (1.687 m/s mean); the linked
+        ONNX is the earlier iteration-8,749, approximately 1.607 m/s
+        run-into-mat policy.<br>
         <a href="experiments/running/media/preview.mp4">Full video</a> ·
         <a href="experiments/running/README.md">Experiment</a> ·
         <a href="https://huggingface.co/HannesVonEssen/microduck-running">ONNX on Hugging Face</a>

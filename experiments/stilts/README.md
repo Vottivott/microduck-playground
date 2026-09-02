@@ -50,3 +50,32 @@ Matching left, right, and paired STL geometry is indexed in the
 These are simulation policies, not hardware candidates. Extreme simulated
 heights do not validate a monolithic printed part, the mounting interface, or
 the stock robot structure.
+
+## 10 cm printed-mass audit
+
+The training morphology uses the explicit law `12 g + 1 g/cm` per stilt, so
+the released 10 cm policy was trained with 22 g per stilt (44 g per pair). The
+prototype slicer estimate is 58 g per pair, or approximately 29 g per stilt:
+32% heavier than training nominal.
+
+As a first sensitivity check, the released actor was evaluated unchanged with
+29 g per stilt over 64 randomized environments for 10 seconds at the trained
+0.15 m/s command. All environments survived; mean body-forward speed was
+0.141 m/s and median maximum tilt was 3.28°. The exact result is saved in
+[`eval/10cm_29g_seed123.json`](eval/10cm_29g_seed123.json). This small
+simulation battery is encouraging, but it does not turn the policy into a
+hardware candidate. A broader mass-randomized continuation and tethered,
+low-speed hardware validation are still required.
+
+Reproduce the audit with:
+
+```bash
+MICRODUCK_STILT_HEIGHT_CM=10 \
+MICRODUCK_STILT_BLEND=0.5 \
+MICRODUCK_STILT_MASS_KG=0.029 \
+uv run python scripts/evaluate_running_checkpoint.py \
+  --checkpoint-file checkpoint.pt \
+  --task-id Mjlab-Stilt-Flat-MicroDuck \
+  --speed 0.15 --num-envs 64 --duration-s 10 --warmup-s 1 \
+  --seed 123 --output-file experiments/stilts/eval/10cm_29g_seed123.json
+```
