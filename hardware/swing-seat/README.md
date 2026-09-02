@@ -29,10 +29,25 @@ pads, and a removable padded retention strap with buckle.
 python -m venv .venv-seat
 .venv-seat/bin/pip install -r hardware/swing-seat/source/requirements.txt
 cd hardware/swing-seat/source
+../../../.venv-seat/bin/python verify_all.py
+```
+
+`verify_all.py` generates the base, padded, and retained seat variants before
+running the complete retention and pumping-clearance checks. This ordering is
+important because the clearance verifiers compare against the generated base
+seat as well as the retained design. To run the release checks separately, use:
+
+```bash
+../../../.venv-seat/bin/python generate_seat.py
+../../../.venv-seat/bin/python generate_padded_seat.py
 ../../../.venv-seat/bin/python generate_retained_seat.py
 ../../../.venv-seat/bin/python verify_retention_clearance.py
 ../../../.venv-seat/bin/python verify_pumping_clearance.py
 ```
+
+`verify_locator_clearance.py` is retained as a design-development diagnostic
+for the earlier padded-seat variant. The complete retained-seat check supersedes
+it for the released design.
 
 The generators use millimetres for printable meshes. The simulation copy is
 scaled to metres and decomposed into convex collision hulls using

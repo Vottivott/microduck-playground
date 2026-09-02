@@ -36,6 +36,11 @@ claude_experiments/
 
 backup_onnx/
 
+# Generated swing-seat work products (released meshes live one level up).
+hardware/swing-seat/source/output/
+hardware/swing-seat/source/output_padded/
+hardware/swing-seat/source/output_retained/
+
 
 logdir/.claude/
 logdir/
