@@ -14,14 +14,24 @@ def _load(path: str) -> dict:
     return json.loads((ROOT / path).read_text())
 
 
-def test_running_preview_is_the_released_policy_media() -> None:
-    record = _load("experiments/running/eval/released_8749.json")
+def test_running_preview_is_the_default_released_policy_media() -> None:
+    record = _load("experiments/running/eval/released_12195.json")
     media = ROOT / "experiments/running/media/preview.mp4"
 
-    assert record["policy"]["checkpoint_iteration"] == 8749
-    assert record["evaluation"]["num_envs"] == 256
-    assert record["evaluation"]["survival_fraction"] == 0.9921875
+    assert record["policy"]["checkpoint_iteration"] == 12195
+    assert record["evaluation"]["cases"][0]["num_envs"] == 512
+    assert record["evaluation"]["cases"][0]["survival_fraction"] == 0.9921875
     assert hashlib.sha256(media.read_bytes()).hexdigest() == record["media"]["sha256"]
+
+
+def test_running_robust_release_preserves_legacy_video_provenance() -> None:
+    default = _load("experiments/running/eval/released_12195.json")
+    legacy = _load("experiments/running/eval/released_8749.json")
+
+    assert default["policy"]["resumed_from_iteration"] == 11748
+    assert default["checkpoint_onnx_parity"]["action_clipping_during_training"] is False
+    assert legacy["policy"]["checkpoint_iteration"] == 8749
+    assert legacy["status"] == "simulation-only"
 
 
 def test_every_released_stilt_height_has_a_rollout_record() -> None:

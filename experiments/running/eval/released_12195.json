@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "experiment": "running",
+  "policy": {
+    "huggingface_repo": "HannesVonEssen/microduck-running",
+    "checkpoint_iteration": 12195,
+    "resumed_from_iteration": 11748,
+    "policy_onnx_sha256": "007707dd7779b2756ded67c58b2e9f94fe5071794a48c2b5a20d5f8d841efbeb",
+    "checkpoint_pt_sha256": "052f6df6683fdae83deb369b7f2c7d13e45f87ed2907adee6e23b1ebf9dfe973"
+  },
+  "training": {
+    "task_id": "Mjlab-Running-Flat-MicroDuck",
+    "simulator": "mjlab / MuJoCo Warp",
+    "algorithm": "PPO (rsl_rl)",
+    "seed": 42,
+    "num_envs": 4096,
+    "common": {
+      "target_max_speed_m_s": 2.2,
+      "speed_reward_cap_m_s": 2.4,
+      "high_speed_stage_interval_iterations": 750,
+      "action_rate_reward_weight": -0.1,
+      "forward_progress_reward_weight": 5.0,
+      "symmetry_enabled": false,
+      "heading_feedback_enabled": false,
+      "push_interval_s": [3.0, 6.0],
+      "foot_friction_range": [0.7, 1.3]
+    },
+    "stages": [
+      {
+        "iterations": 100,
+        "push_velocity_m_s": 0.03,
+        "trunk_com_offset_m": 0.003,
+        "head_com_offset_m": 0.003,
+        "initial_pitch_roll_deg": 1.0
+      },
+      {
+        "iterations": 150,
+        "push_velocity_m_s": 0.06,
+        "trunk_com_offset_m": 0.005,
+        "head_com_offset_m": 0.005,
+        "initial_pitch_roll_deg": 1.5
+      },
+      {
+        "iterations": 200,
+        "push_velocity_m_s": 0.1,
+        "trunk_com_offset_m": 0.008,
+        "head_com_offset_m": 0.006,
+        "initial_pitch_roll_deg": 2.0
+      }
+    ]
+  },
+  "evaluation": {
+    "command_forward_m_s": 2.2,
+    "duration_s": 10.0,
+    "warmup_s": 1.0,
+    "cases": [
+      {
+        "name": "nominal",
+        "task_id": "Mjlab-Running-Flat-MicroDuck",
+        "num_envs": 512,
+        "survival_fraction": 0.9921875,
+        "mean_body_forward_speed_m_s": 1.6510932445526123,
+        "mean_initial_heading_displacement_speed_m_s": 1.2437968254089355,
+        "mean_absolute_heading_error_deg": 31.326498703723402
+      },
+      {
+        "name": "push-com-tilt-stress",
+        "task_id": "Mjlab-Running-Flat-MicroDuck",
+        "num_envs": 512,
+        "survival_fraction": 0.98828125,
+        "mean_body_forward_speed_m_s": 1.6349653005599976,
+        "mean_initial_heading_displacement_speed_m_s": 1.0107059478759766,
+        "mean_absolute_heading_error_deg": 43.2924983559655
+      },
+      {
+        "name": "backlash-nominal",
+        "task_id": "Mjlab-Running-Flat-Backlash-MicroDuck",
+        "num_envs": 256,
+        "survival_fraction": 0.98828125,
+        "mean_body_forward_speed_m_s": 1.6362495422363281,
+        "mean_initial_heading_displacement_speed_m_s": 1.1968926191329956,
+        "mean_absolute_heading_error_deg": 32.83215926473935
+      },
+      {
+        "name": "backlash-push-com-tilt-stress",
+        "task_id": "Mjlab-Running-Flat-Backlash-MicroDuck",
+        "num_envs": 256,
+        "survival_fraction": 0.984375,
+        "mean_body_forward_speed_m_s": 1.6121970415115356,
+        "mean_initial_heading_displacement_speed_m_s": 0.9829199910163879,
+        "mean_absolute_heading_error_deg": 43.80756975146533
+      },
+      {
+        "name": "high-grip-push-com-tilt-stress",
+        "task_id": "Mjlab-Running-Flat-MicroDuck",
+        "num_envs": 512,
+        "survival_fraction": 0.966796875,
+        "mean_body_forward_speed_m_s": 1.6424154043197632,
+        "mean_initial_heading_displacement_speed_m_s": 1.0247559547424316,
+        "mean_absolute_heading_error_deg": 42.492167524874674,
+        "foot_friction_range": [0.7, 1.8]
+      }
+    ],
+    "stress_definition": {
+      "push_velocity_m_s": 0.1,
+      "trunk_com_offset_m": 0.01,
+      "head_com_offset_m": 0.006,
+      "initial_pitch_roll_deg": 2.0
+    }
+  },
+  "checkpoint_onnx_parity": {
+    "observation_shape": [1, 61],
+    "action_shape": [1, 14],
+    "samples": "zero plus deterministic random observations",
+    "maximum_absolute_error": 0.00000762939453125,
+    "mean_absolute_error": 0.000000862,
+    "action_clipping_during_training": false,
+    "observation_normalizer_embedded": true
+  },
+  "media": {
+    "path": "../media/preview.mp4",
+    "sha256": "942f0802cc0c6795769bd99a9991f866fee682890ea9ea6d71077f7d4eb5492b",
+    "duration_s": 10.0,
+    "fps": 50,
+    "audio": false
+  },
+  "known_limit": "Heading and lateral drift remain substantial; this has not been validated on hardware.",
+  "status": "simulation-only-hardware-candidate"
+}

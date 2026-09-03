@@ -16,6 +16,7 @@ from mjlab_microduck.tasks.microduck_running_env_cfg import (
     RUNNING_TARGET_MAX_SPEED,
     MicroduckRunningFlightRlCfg,
     MicroduckRunningRlCfg,
+    _apply_running_robustness,
     _running_speed_stages,
     make_microduck_running_env_cfg,
 )
@@ -77,6 +78,41 @@ def test_running_reward_stack_allows_dynamic_motion():
     assert cfg.rewards["head_pose_bias"].weight == 0.0
     assert "push_robot" not in cfg.events
     assert "flight_event" not in cfg.rewards
+
+
+def test_opt_in_running_robustness_sets_fixed_stage_ranges():
+    cfg = make_microduck_running_env_cfg()
+    _apply_running_robustness(
+        cfg,
+        push_mps=0.06,
+        trunk_com_m=0.005,
+        head_com_m=0.004,
+        initial_tilt_deg=1.5,
+        friction_range=(0.7, 1.3),
+    )
+    assert cfg.events["push_robot"].params["velocity_range"] == {
+        "x": (-0.06, 0.06),
+        "y": (-0.06, 0.06),
+    }
+    assert cfg.events["push_robot"].interval_range_s == (3.0, 6.0)
+    assert cfg.events["randomize_com"].params["ranges"] == (-0.005, 0.005)
+    assert cfg.events["randomize_head_com"].params["ranges"] == (-0.004, 0.004)
+    tilt = cfg.events["randomize_base_orientation"].params
+    assert tilt["max_pitch_deg"] == 1.5
+    assert tilt["max_roll_deg"] == 1.5
+
+
+def test_running_robustness_rejects_invalid_ranges():
+    cfg = make_microduck_running_env_cfg()
+    with pytest.raises(ValueError, match="non-negative"):
+        _apply_running_robustness(
+            cfg,
+            push_mps=-0.01,
+            trunk_com_m=0.0,
+            head_com_m=0.0,
+            initial_tilt_deg=0.0,
+            friction_range=(0.7, 1.3),
+        )
 
 
 def test_flight_ablation_changes_only_the_intended_objective():

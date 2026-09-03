@@ -16,11 +16,18 @@ import math
 import os
 from copy import deepcopy
 
-from mjlab.managers import CurriculumTermCfg, RewardTermCfg, SceneEntityCfg
+from mjlab.managers import (
+    CurriculumTermCfg,
+    EventTermCfg,
+    RewardTermCfg,
+    SceneEntityCfg,
+)
+from mjlab.tasks.velocity import mdp as velocity_mdp
 
 from mjlab_microduck.tasks import mdp as microduck_mdp
 from mjlab_microduck.tasks.microduck_velocity_env_cfg import (
     NUM_STEPS_PER_ENV,
+    VELOCITY_PUSH_INTERVAL_S,
     MicroduckRlCfg,
     make_microduck_velocity_env_cfg,
 )
@@ -47,6 +54,30 @@ RUNNING_ENABLE_HEADING_FEEDBACK = (
 RUNNING_STANDING_FRACTION = 0.03
 RUNNING_CURRICULUM_START_ITERATION = int(
     os.environ.get("MICRODUCK_RUNNING_CURRICULUM_START_ITERATION", "0")
+)
+RUNNING_ROBUST_PUSH_MPS = float(
+    os.environ.get("MICRODUCK_RUNNING_ROBUST_PUSH_MPS", "0")
+)
+RUNNING_ROBUST_TRUNK_COM_M = float(
+    os.environ.get("MICRODUCK_RUNNING_ROBUST_TRUNK_COM_M", "0")
+)
+RUNNING_ROBUST_HEAD_COM_M = float(
+    os.environ.get("MICRODUCK_RUNNING_ROBUST_HEAD_COM_M", "0")
+)
+RUNNING_ROBUST_INITIAL_TILT_DEG = float(
+    os.environ.get("MICRODUCK_RUNNING_ROBUST_INITIAL_TILT_DEG", "0")
+)
+RUNNING_ROBUST_FRICTION_MIN = float(
+    os.environ.get("MICRODUCK_RUNNING_ROBUST_FRICTION_MIN", "0.7")
+)
+RUNNING_ROBUST_FRICTION_MAX = float(
+    os.environ.get("MICRODUCK_RUNNING_ROBUST_FRICTION_MAX", "1.3")
+)
+RUNNING_ROBUST_PUSH_INTERVAL_MIN_S = float(
+    os.environ.get("MICRODUCK_RUNNING_ROBUST_PUSH_INTERVAL_MIN_S", "3.0")
+)
+RUNNING_ROBUST_PUSH_INTERVAL_MAX_S = float(
+    os.environ.get("MICRODUCK_RUNNING_ROBUST_PUSH_INTERVAL_MAX_S", "6.0")
 )
 
 # The lower edge rises too: zero-command behavior comes from the explicit
@@ -120,6 +151,69 @@ def _running_speed_stages(
 RUNNING_SPEED_STAGES = _running_speed_stages(
     RUNNING_TARGET_MAX_SPEED, RUNNING_HIGH_SPEED_STAGE_INTERVAL
 )
+
+
+def _apply_running_robustness(
+    cfg,
+    *,
+    push_mps: float,
+    trunk_com_m: float,
+    head_com_m: float,
+    initial_tilt_deg: float,
+    friction_range: tuple[float, float],
+    push_interval_s: tuple[float, float] = VELOCITY_PUSH_INTERVAL_S,
+) -> None:
+    """Apply one fixed continuation stage without resume-step ambiguity."""
+    values = (push_mps, trunk_com_m, head_com_m, initial_tilt_deg)
+    if any(value < 0.0 for value in values):
+        raise ValueError("running robustness magnitudes must be non-negative")
+    if not 0.0 < friction_range[0] <= friction_range[1]:
+        raise ValueError("running robustness friction range must be positive and ordered")
+    if not 0.0 < push_interval_s[0] <= push_interval_s[1]:
+        raise ValueError("running robustness push interval must be positive and ordered")
+
+    cfg.events["foot_friction"].params["ranges"] = friction_range
+    if push_mps > 0.0:
+        velocity_range = {
+            "x": (-push_mps, push_mps),
+            "y": (-push_mps, push_mps),
+        }
+        if "push_robot" in cfg.events:
+            cfg.events["push_robot"].params["velocity_range"] = velocity_range
+            cfg.events["push_robot"].interval_range_s = push_interval_s
+        else:
+            cfg.events["push_robot"] = EventTermCfg(
+                func=velocity_mdp.push_by_setting_velocity,
+                mode="interval",
+                interval_range_s=push_interval_s,
+                params={
+                    "velocity_range": velocity_range,
+                    "asset_cfg": SceneEntityCfg("robot"),
+                },
+            )
+    else:
+        cfg.events.pop("push_robot", None)
+
+    if trunk_com_m > 0.0:
+        cfg.events["randomize_com"].params["ranges"] = (
+            -trunk_com_m,
+            trunk_com_m,
+        )
+    if head_com_m > 0.0:
+        cfg.events["randomize_head_com"].params["ranges"] = (
+            -head_com_m,
+            head_com_m,
+        )
+    if initial_tilt_deg > 0.0:
+        cfg.events["randomize_base_orientation"] = EventTermCfg(
+            func=microduck_mdp.randomize_base_orientation,
+            mode="reset",
+            params={
+                "asset_cfg": SceneEntityCfg("robot"),
+                "max_pitch_deg": initial_tilt_deg,
+                "max_roll_deg": initial_tilt_deg,
+            },
+        )
 
 
 def make_microduck_running_env_cfg(
@@ -225,7 +319,21 @@ def make_microduck_running_env_cfg(
     # A clean speed-discovery phase: no random velocity kicks and no scheduled
     # widening of CoM/head commands or precision taxes.  Fixed initial DR stays
     # active, so the result is not a deterministic-sim-only policy.
-    cfg.events.pop("push_robot", None)
+    _apply_running_robustness(
+        cfg,
+        push_mps=RUNNING_ROBUST_PUSH_MPS,
+        trunk_com_m=RUNNING_ROBUST_TRUNK_COM_M,
+        head_com_m=RUNNING_ROBUST_HEAD_COM_M,
+        initial_tilt_deg=RUNNING_ROBUST_INITIAL_TILT_DEG,
+        friction_range=(
+            RUNNING_ROBUST_FRICTION_MIN,
+            RUNNING_ROBUST_FRICTION_MAX,
+        ),
+        push_interval_s=(
+            RUNNING_ROBUST_PUSH_INTERVAL_MIN_S,
+            RUNNING_ROBUST_PUSH_INTERVAL_MAX_S,
+        ),
+    )
     for name in (
         "standing_envs",
         "head_pose_range",

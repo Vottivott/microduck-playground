@@ -52,8 +52,8 @@ full-video link—to open the complete silent MP4.
         </a>
       </td>
       <td>
-        Released iteration-8,749 simulation policy: 1.607 m/s mean
-        body-forward speed at a 1.80 m/s command.<br>
+        Robustified iteration-12,195 simulation candidate: 1.651 m/s nominal,
+        and 1.612 m/s under backlash plus disturbance stress.<br>
         <a href="experiments/running/media/preview.mp4">Full video</a> ·
         <a href="experiments/running/README.md">Experiment</a> ·
         <a href="https://huggingface.co/HannesVonEssen/microduck-running">ONNX on Hugging Face</a>
