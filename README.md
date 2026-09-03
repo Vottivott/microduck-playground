@@ -40,6 +40,7 @@ full-video link—to open the complete silent MP4.
         Starts still and reaches a 173.20° strict full span.<br>
         <a href="experiments/swing/media/alpha050_seed27.mp4">Full video</a> ·
         <a href="experiments/swing/README.md">Experiment</a> ·
+        <a href="integrations/pollen-microduck/README.md">Runtime adapter</a> ·
         <a href="https://huggingface.co/HannesVonEssen/microduck-swing">ONNX on Hugging Face</a>
       </td>
     </tr>
@@ -51,9 +52,8 @@ full-video link—to open the complete silent MP4.
         </a>
       </td>
       <td>
-        Later iteration-11,748 simulation preview (1.687 m/s mean); the linked
-        ONNX is the earlier iteration-8,749, approximately 1.607 m/s
-        run-into-mat policy.<br>
+        Released iteration-8,749 simulation policy: 1.607 m/s mean
+        body-forward speed at a 1.80 m/s command.<br>
         <a href="experiments/running/media/preview.mp4">Full video</a> ·
         <a href="experiments/running/README.md">Experiment</a> ·
         <a href="https://huggingface.co/HannesVonEssen/microduck-running">ONNX on Hugging Face</a>
@@ -78,7 +78,8 @@ full-video link—to open the complete silent MP4.
   </tbody>
 </table>
 
-Each preview is a direct simulation policy demonstration.
+Each preview is a direct simulation demonstration of the policy linked in its
+row. Compact machine-readable evaluation records live beside each experiment.
 
 ## Hardware galleries
 
@@ -142,6 +143,7 @@ hardware/
   swing-seat/            retained-seat generator, meshes, clearance reports
 src/mjlab_microduck/     tasks, robot models, actuator model, rewards
 scripts/                 evaluation, export, rendering, and selection tools
+integrations/            policy-specific deployment adapters
 tests/                   CPU configuration and invariant tests
 docs/                    supporting research and training notes
 ```

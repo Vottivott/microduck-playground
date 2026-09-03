@@ -51,6 +51,12 @@ These are simulation policies, not hardware candidates. Extreme simulated
 heights do not validate a monolithic printed part, the mounting interface, or
 the stock robot structure.
 
+The machine-readable
+[`eval/released_rollouts.json`](eval/released_rollouts.json) records the exact
+checkpoint, seed, duration, reset state, root trajectory envelope, and artifact
+hash for every released height. Each record is one controlled demonstration;
+it should not be read as a multi-seed robustness claim.
+
 ## 10 cm printed-mass audit
 
 The training morphology uses the explicit law `12 g + 1 g/cm` per stilt, so

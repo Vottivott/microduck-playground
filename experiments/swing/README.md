@@ -76,6 +76,10 @@ uv run python scripts/verify_swing_onnx_parity.py \
 
 Do not hand-convert the PyTorch checkpoint: both the actor's observation
 normalizer and its training-time action clamp must be embedded in the graph.
+The official controller also needs the swing-specific still-frame IMU cue,
+0.7 action scale, and unfiltered target path. A tested Rust reference adapter
+and exact integration contract are in
+[`../../integrations/pollen-microduck`](../../integrations/pollen-microduck/README.md).
 The verified ONNX and its model card are hosted
 on Hugging Face at
 [`HannesVonEssen/microduck-swing`](https://huggingface.co/HannesVonEssen/microduck-swing)
