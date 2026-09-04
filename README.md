@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/Vottivott/microduck-playground/actions/workflows/ci.yml/badge.svg)](https://github.com/Vottivott/microduck-playground/actions/workflows/ci.yml)
 
+<img src="docs/media/playground.png" align="right" width="320" alt="Watercolor illustration of MicroDuck pumping on its swing">
+
 Reproducible reinforcement-learning experiments, policy demonstrations, and
 printable hardware add-ons for
 [Pollen Robotics' MicroDuck](https://github.com/pollen-robotics/microduck).
@@ -14,6 +16,8 @@ commit [`d424a0c`](https://github.com/pollen-robotics/microduck_rl/commit/d424a0
 preserving the original project history and attribution. Development after the
 release uses ordinary commits. The upstream project can be added as a Git
 remote when preparing focused contributions.
+
+<br clear="right">
 
 ## Experiments
 
