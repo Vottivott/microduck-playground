@@ -1,5 +1,6 @@
 """Script to play RL agent with RSL-RL."""
 
+import json
 import math
 import os
 import re
@@ -49,6 +50,7 @@ class ExportConfig:
     camera_follow_position_gain: float = 1.0
     camera_follow_shadow_light: bool = False
     disable_shadows: bool = False
+    contact_log_file: str | None = None
 
     # Internal flag used by demo script.
     _demo_mode: tyro.conf.Suppress[bool] = False
@@ -71,6 +73,8 @@ def run_export(task_id: str, cfg: ExportConfig):
             raise ValueError("camera_follow_position_tau_s requires video recording")
         if cfg.camera_follow_position_gain < 0.0:
             raise ValueError("camera_follow_position_gain must be non-negative")
+    if cfg.contact_log_file is not None and not cfg.video:
+        raise ValueError("contact_log_file requires video recording")
 
     device = cfg.device or ("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -330,6 +334,8 @@ def run_export(task_id: str, cfg: ExportConfig):
             position_base_lookat = np.asarray(renderer._cam.lookat).copy()
             position_smoothed_lookat = position_base_lookat.copy()
 
+        frame_contact_samples: list[dict[str, object]] = []
+
         for video_step in range(cfg.video_length):
             if cfg.camera_follow_position_tau_s is not None:
                 assert tracked_entity is not None
@@ -394,6 +400,42 @@ def run_export(task_id: str, cfg: ExportConfig):
             obs, _, dones, _ = env.step(actions)
             if hasattr(policy, "reset"):
                 policy.reset(dones)
+
+            if cfg.contact_log_file is not None:
+                render_model = renderer._model
+                render_data = renderer._data
+                contacts: list[dict[str, object]] = []
+                for contact_index in range(render_data.ncon):
+                    contact = render_data.contact[contact_index]
+                    geom1 = render_model.geom(int(contact.geom1)).name
+                    geom2 = render_model.geom(int(contact.geom2)).name
+                    if not (
+                        geom1.startswith("swing_frame_")
+                        or geom2.startswith("swing_frame_")
+                    ):
+                        continue
+                    contacts.append(
+                        {
+                            "geom1": geom1,
+                            "geom2": geom2,
+                            "distance_m": float(contact.dist),
+                        }
+                    )
+                if contacts:
+                    frame_contact_samples.append(
+                        {
+                            "step": video_step + 1,
+                            "time_s": (video_step + 1) * base_env.step_dt,
+                            "contacts": contacts,
+                        }
+                    )
+
+        if cfg.contact_log_file is not None:
+            contact_log_path = Path(cfg.contact_log_file)
+            contact_log_path.parent.mkdir(parents=True, exist_ok=True)
+            contact_log_path.write_text(
+                json.dumps(frame_contact_samples, indent=2) + "\n"
+            )
 
     # mjlab 1.3.0: ONNX export + metadata moved to mjlab.rl.exporter_utils and
     # the runner's built-in export_policy_to_onnx. Observation normalization is

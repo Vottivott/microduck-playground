@@ -53,6 +53,12 @@ The generators use millimetres for printable meshes. The simulation copy is
 scaled to metres and decomposed into convex collision hulls using
 `scripts/generate_swing_seat_collision_hulls.py`.
 
+Recreate the studio gallery from the checked-in simulation geometry:
+
+```bash
+MUJOCO_GL=egl uv run python scripts/render_hardware_gallery.py
+```
+
 ## Design intent
 
 The locating pads and strap resist sideways translation and yaw without

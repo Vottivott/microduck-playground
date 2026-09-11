@@ -10,19 +10,19 @@ printable hardware add-ons for
 
 This is an independent experimental continuation of
 [`pollen-robotics/microduck_rl`](https://github.com/pollen-robotics/microduck_rl),
-not an official Pollen Robotics release. The tagged `v0.1.0` release is a
-curated snapshot commit directly on
-[`d424a0c`](https://github.com/pollen-robotics/microduck_rl/commit/d424a0c899f6b33cbd3daeb279913134349c0b63),
-its upstream base. Post-release maintenance and new experiments use ordinary,
-focused commits; attribution and source details remain in the repository. Add
-the upstream project as a Git remote when preparing focused contributions.
+not an official Pollen Robotics release. For the initial public release, all
+playground-specific work is consolidated into one commit on top of upstream
+commit [`d424a0c`](https://github.com/pollen-robotics/microduck_rl/commit/d424a0c899f6b33cbd3daeb279913134349c0b63),
+preserving the original project history and attribution. Development after the
+release uses ordinary commits. The upstream project can be added as a Git
+remote when preparing focused contributions.
 
 <br clear="right">
 
 ## Experiments
 
-Animated GIF previews play directly in the table. Click one—or use its explicit
-play link—to open the browser-ready, silent MP4.
+Animated previews play directly in the table. Click one—or use its explicit
+full-video link—to open the complete silent MP4.
 
 <table>
   <thead>
@@ -36,13 +36,13 @@ play link—to open the browser-ready, silent MP4.
     <tr>
       <td><strong>Self-pumped swing</strong></td>
       <td>
-        <a href="experiments/swing/media/alpha050_seed27.mp4?raw=1">
+        <a href="experiments/swing/media/alpha050_seed27.mp4">
           <img src="experiments/swing/media/preview.gif" width="280" alt="Animated preview of Microduck pumping itself on a swing">
         </a>
       </td>
       <td>
         Starts still and reaches a 173.20° strict full span.<br>
-        <a href="experiments/swing/media/alpha050_seed27.mp4?raw=1">Play MP4</a> ·
+        <a href="experiments/swing/media/alpha050_seed27.mp4">Full video</a> ·
         <a href="experiments/swing/README.md">Experiment</a> ·
         <a href="integrations/pollen-microduck/README.md">Runtime adapter</a> ·
         <a href="https://huggingface.co/HannesVonEssen/microduck-swing">ONNX on Hugging Face</a>
@@ -50,9 +50,9 @@ play link—to open the browser-ready, silent MP4.
     </tr>
     <tr>
       <td><strong>Blind basketball balance</strong></td>
-      <td><a href="experiments/basketball/media/preview.mp4?raw=1"><img src="experiments/basketball/media/preview.gif" width="280" alt="Animated preview of Microduck balancing and moving on a basketball"></a></td>
+      <td><a href="experiments/basketball/media/preview.mp4"><img src="experiments/basketball/media/preview.gif" width="280" alt="Microduck balancing and moving on a basketball"></a></td>
       <td>LSTM policy with no ball-state input: 97.01% survival over 60 seconds in 3,072 simulation trials. Experimental hardware-test candidate; hardware untested.<br>
-      <a href="experiments/basketball/media/preview.mp4?raw=1">Play MP4</a> ·
+      <a href="experiments/basketball/media/preview.mp4">Full video</a> ·
       <a href="experiments/basketball/README.md">Experiment and training</a> ·
       <a href="https://huggingface.co/HannesVonEssen/microduck-basketball">ONNX and checkpoint</a> ·
       <a href="https://github.com/pollen-robotics/microduck/pull/231">LSTM runtime PR</a></td>
@@ -60,14 +60,14 @@ play link—to open the browser-ready, silent MP4.
     <tr>
       <td><strong>Fast running</strong></td>
       <td>
-        <a href="experiments/running/media/preview.mp4?raw=1">
+        <a href="experiments/running/media/preview.mp4">
           <img src="experiments/running/media/preview.gif" width="280" alt="Animated preview of Microduck running on flat ground">
         </a>
       </td>
       <td>
         Robustified iteration-12,195 simulation candidate: 1.651 m/s nominal,
         and 1.612 m/s under backlash plus disturbance stress.<br>
-        <a href="experiments/running/media/preview.mp4?raw=1">Play MP4</a> ·
+        <a href="experiments/running/media/preview.mp4">Full video</a> ·
         <a href="experiments/running/README.md">Experiment</a> ·
         <a href="https://huggingface.co/HannesVonEssen/microduck-running">ONNX on Hugging Face</a>
       </td>
@@ -75,14 +75,14 @@ play link—to open the browser-ready, silent MP4.
     <tr>
       <td><strong>Stilt walking</strong></td>
       <td>
-        <a href="experiments/stilts/media/preview.mp4?raw=1">
-          <img src="experiments/stilts/media/preview.gif" width="280" alt="Animated preview of Microduck walking on 10 cm stilts">
+        <a href="experiments/stilts/media/preview.mp4">
+          <img src="experiments/stilts/media/preview.gif" width="280" alt="Animated preview of Microduck walking on green 10 cm stilts">
         </a>
       </td>
       <td>
-        Eight height-specific blend-0.50 policies: 10, 15, 20, 25, 50,
-        100, 140, and 200 cm stilts (10 cm shown).<br>
-        <a href="experiments/stilts/media/preview.mp4?raw=1">Play MP4</a> ·
+        Blend-0.50 policies for 10, 15, 20, 25, and 50 cm, plus
+        1.0, 1.4, and 2.0 m simulation stilts (10 cm shown).<br>
+        <a href="experiments/stilts/media/preview.mp4">Full video</a> ·
         <a href="experiments/stilts/README.md">Experiment</a> ·
         <a href="hardware/stilts/README.md">Hardware</a> ·
         <a href="https://huggingface.co/HannesVonEssen/microduck-stilts">Policies and videos</a>
@@ -129,10 +129,6 @@ configuration. Parametric generators and printable meshes are under
 A CUDA GPU and [`uv`](https://docs.astral.sh/uv/) are recommended. Training
 uses MuJoCo Warp through `mjlab`.
 
-See [`CONTINUING_TRAINING.md`](CONTINUING_TRAINING.md) for the artifact to
-download, the level of training state preserved, and the exact continuation
-guide for each released policy.
-
 ```bash
 git clone https://github.com/Vottivott/microduck-playground
 cd microduck-playground
@@ -147,10 +143,6 @@ uv run train Mjlab-SwingPump-MicroDuck \
 uv run train Mjlab-SwingPump-MicroDuck \
   --env.scene.num-envs 4096
 ```
-
-The default swing run stops at the preserved 3,600-update endpoint. The
-released actor is then selected by the documented alpha-0.50 endpoint
-interpolation in [`experiments/swing/TRAINING.md`](experiments/swing/TRAINING.md).
 
 ## Repository layout
 

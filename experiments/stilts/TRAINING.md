@@ -50,35 +50,25 @@ revision you trust.
 
 ## Continue one released height
 
-Download one complete height from the single model repository, place its
-checkpoint in the ordinary RSL-RL run layout, and keep the matching morphology
-fixed. This example selects the 25 cm policy:
+Download one height directory, place its checkpoint in the ordinary RSL-RL
+run layout, and keep the matching morphology fixed:
 
 ```bash
-hf download HannesVonEssen/microduck-stilts \
-  25cm/policy.onnx 25cm/checkpoint.pt 25cm/manifest.json \
-  config.json index.json SHA256SUMS \
-  --local-dir artifacts/stilts
-
 mkdir -p logs/rsl_rl/stilt_locomotion/release-25cm
-cp artifacts/stilts/25cm/checkpoint.pt \
-  logs/rsl_rl/stilt_locomotion/release-25cm/model_2800.pt
+cp checkpoint.pt logs/rsl_rl/stilt_locomotion/release-25cm/model_2800.pt
 
 MICRODUCK_STILT_HEIGHT_CM=25 MICRODUCK_STILT_BLEND=0.5 \
   uv run train Mjlab-Stilt-Flat-MicroDuck \
-    --env.scene.num-envs 64 \
     --agent.resume True \
     --agent.load-run release-25cm \
     --agent.load-checkpoint model_2800.pt \
-    --agent.max-iterations 5
+    --agent.max-iterations 100
 ```
 
 Because the critic and optimizer are fresh, begin with a short run and inspect
 value loss, termination rate, contact identity, and rollout video before
-increasing the environment count or number of updates. Restart from the
-downloaded checkpoint for the longer continuation so the smoke test does not
-become part of the experiment lineage. To continue the height curriculum,
-first stabilize the downloaded morphology; then change only
+raising the learning rate. To continue the height curriculum, first stabilize
+the downloaded morphology; then change only
 `MICRODUCK_STILT_HEIGHT_CM`, leaving blend at `0.5`.
 
 ## Start from scratch

@@ -13,6 +13,9 @@ height cartridges to that carrier.
   </tr>
 </table>
 
+Recreate this gallery with
+`MUJOCO_GL=egl uv run python scripts/render_hardware_gallery.py`.
+
 ## What is parametric
 
 `generate_stilts.py` generates both exact-fit replacement soles and the
@@ -138,6 +141,8 @@ male M3 rubber vibration bobbin. An 8 mm diameter × 8 mm tall bobbin is a usefu
 later-stage narrow tip, not the first training foot. Examples in the right size
 class include:
 
+- [RS PRO 8 × 8 mm M3 male/female mount](https://uk.rs-online.com/web/p/anti-vibration-mounts/1264282)
+- [MISUMI 8 × 8 mm M3 anti-vibration mount family](https://my.misumi-ec.com/pr/vona/free_download_misumi_economy_catalog/pdf/misumi_economy_anti_vibration_rubber_mounts_trims.pdf)
 - [Essentra 10 × 10 mm M3 vibration mount](https://www.essentracomponents.com/en-gb/p/sandwich-stud-mounts/497721)
 
 Measure the actual insert and bobbin stud before production printing. The

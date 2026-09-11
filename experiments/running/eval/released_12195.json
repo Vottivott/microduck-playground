@@ -119,7 +119,7 @@
   },
   "media": {
     "path": "../media/preview.mp4",
-    "sha256": "ae4ba81814c0e4273ce0bf5aa24169b1d9e9f132ea9a0cbd1aeec772ff83c2a9",
+    "sha256": "942f0802cc0c6795769bd99a9991f866fee682890ea9ea6d71077f7d4eb5492b",
     "duration_s": 10.0,
     "fps": 50,
     "audio": false

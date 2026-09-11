@@ -1,9 +1,5 @@
 # Swing training and selection notes
 
-This is the complete release lineage and stops at the alpha-0.50 actor shown
-in the published seed-27 video. The runnable task, evaluator, selection
-endpoints, and documentation intentionally exclude later exploratory branches.
-
 ## Reproducible baseline
 
 The environment task is `Mjlab-SwingPump-MicroDuck`. It starts every simulated
@@ -38,8 +34,6 @@ of the objective, rather than maximizing angle first and filtering afterward:
 The stage boundaries are encoded directly in
 `make_microduck_swing_env_cfg()` and its curricula; the physical audit script
 reports the exact hard gates used for promotion.
-The default runner stops at the preserved 3,600-update endpoint, and no
-curriculum transitions are scheduled beyond it.
 
 ## Selected checkpoint construction
 
@@ -81,13 +75,8 @@ moments are intentionally empty at a conservative `1e-7` learning rate with
 exploration standard deviation `0.02`.
 
 ```bash
-hf download HannesVonEssen/microduck-swing \
-  checkpoint.pt policy.onnx config.json manifest.json SHA256SUMS \
-  --local-dir artifacts/swing
-
 mkdir -p logs/rsl_rl/microduck_swing/release-alpha050
-cp artifacts/swing/checkpoint.pt \
-  logs/rsl_rl/microduck_swing/release-alpha050/model_3500.pt
+cp checkpoint.pt logs/rsl_rl/microduck_swing/release-alpha050/model_3500.pt
 
 uv run train Mjlab-SwingPump-MicroDuck \
   --agent.resume True \
@@ -102,9 +91,10 @@ revision you trust.
 
 ## Release boundary
 
-This history stops at the alpha-0.50 swing-pumping policy used in the published
-173.20° video. Work beyond that selected checkpoint is outside this repository
-and model release.
+This history stops at the alpha-0.50 policy used in the published 173.20°
+video. Later exploratory work on directional/single-sided release, intentional
+falls, crash rendering, shortened cords, and full loops is intentionally not
+included in this repository or model release.
 
 ## Reproducibility boundary
 

@@ -9,7 +9,7 @@ evaluation-only.
 ![Retained swing seat](../../hardware/swing-seat/renders/hero_front.png)
 
 The representative rollout is
-[`media/alpha050_seed27.mp4`](media/alpha050_seed27.mp4?raw=1). It is silent, uses a
+[`media/alpha050_seed27.mp4`](media/alpha050_seed27.mp4). It is silent, uses a
 fixed camera, includes physically cast shadows, and displays the running
 maximum full-span angle.
 
@@ -34,7 +34,8 @@ utility are included so this selection step is reproducible.
 | Seed-27 maximum attachment-alignment penalty | 0.02037 |
 
 The full sampled seed-27 audit is in `eval/seed27_full.json`; the compact
-aggregate is in `eval/summary.json`.
+aggregate is in `eval/summary.json`. A later 60-second replay reached 180.20°
+only after leaving the exact geometry envelope, so that number is rejected.
 
 ## Install and verify
 
@@ -101,13 +102,11 @@ The default task is the randomized sim-to-real-oriented configuration. The
 selected policy was developed through staged physical-constraint training and
 low-learning-rate final-layer correction; see `TRAINING.md` for the selection
 recipe and the limits of exact reproduction from stochastic PPO.
-The default run stops at the preserved 3,600-update endpoint; reproduce the
-released alpha-0.50 actor with the documented endpoint interpolation rather
-than training beyond that boundary.
 
 The Hugging Face release also contains the selected `checkpoint.pt` and exact
-resume instructions. The released training lineage ends at this selected
-swing-pumping policy.
+resume instructions. The public training lineage ends at this video policy;
+later directional-release, intentional-fall, and full-loop experiments are not
+part of this release.
 
 ## What is randomized
 
@@ -121,6 +120,10 @@ mechanism explicitly. The relevant envelope includes:
 - encoder/IMU noise and small mounting variation;
 - robot inertial variation inherited from the Microduck base task;
 - two independent elastic, tension-only cords.
+
+The default is not the nominal-actuator mechanism-limit mode. Environment
+variable switches intended for audits are documented in the source and should
+not be enabled accidentally when claiming randomized performance.
 
 ## Physical validity gates
 

@@ -14,10 +14,9 @@ not been validated on a physical robot.
 - Action layout: 14D
 - Algorithm: PPO (`rsl_rl`)
 
-The `v0.1.0` release is anchored by one curated snapshot commit. Later
-repository maintenance uses ordinary focused commits and does not change this
-checkpoint's training lineage. Exact training and upstream provenance remain
-recorded here and in the machine-readable release metadata.
+The pre-release development hashes were consolidated into the initial public
+release and are intentionally not presented as public commits. Development
+after that release uses ordinary commits.
 
 ## Speed frontier
 
@@ -96,7 +95,9 @@ configured ceiling; this is not a matched measured walking-policy comparison.
 contains:
 
 - root `policy.onnx`, `checkpoint.pt`, and `media/preview.mp4`: iteration 12,195;
-- `lineage/iteration-11748/`: the speed-focused parent.
+- `lineage/iteration-11748/`: the speed-focused parent;
+- `legacy/iteration-8749/`: the earlier exact-video release;
+- `media/run-into-mat.mp4`: a scripted edit driven by iteration 8,749.
 
 The root ONNX accepts `[1, 61]`, returns `[1, 14]`, and includes the observation
 normalizer. Running training did not clip actor outputs, so no output clamp is

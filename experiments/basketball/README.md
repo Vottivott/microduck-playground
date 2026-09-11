@@ -11,7 +11,7 @@ simulation and export checks passed; onboard timing and real-robot behavior are 
 
 ## Video and measured performance
 
-[Full 30-second simulation video](media/preview.mp4?raw=1), seed 0, with a free ball,
+[Full 30-second simulation video](media/preview.mp4), seed 0, with a free ball,
 velocity commands and disturbances. The selected take runs without a termination.
 
 Matched evaluation: 1,024 environments per seed (101, 202, 303), 3,072 trials per

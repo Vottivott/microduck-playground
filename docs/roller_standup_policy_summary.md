@@ -136,8 +136,8 @@ corrigé lui aussi avec un poids positif, et le test de signe couvre les deux
 configurations.
 Ça explique la série de tentatives d'amortissement infructueuses documentées dans ses
 commentaires (« *violent / shaky / overshoot-tip-repeat on the real robot* ») : elles
-combattaient un terme qui poussait activement dans l'autre sens. Cette note précédait la
-correction du `standup` du marcheur décrite ci-dessus.
+combattaient un terme qui poussait activement dans l'autre sens. **Non corrigé ici** — c'est
+un autre env, à trancher séparément.
 
 **Problème structurel associé.** À convergence les récompenses de tâche totalisaient **≈ +41.6**
 saturées à 95–99 %, contre **≈ −1.2** pour tous les amortisseurs réunis — dont

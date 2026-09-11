@@ -1,10 +1,6 @@
 {
   "policy": "alpha050",
   "checkpoint_sha256": "49fb3599be519cb604ed65e1ba495fb9f5746e5bee1d4cb95107dcd165f47f9c",
-  "video": {
-    "path": "experiments/swing/media/alpha050_seed27.mp4",
-    "sha256": "558651776cd5798e73c69048d8496b44d776606612ce888a2bc79e7c9f46a289"
-  },
   "interpolation_source_sha256": "93837beb1acd31459a3f465f292cc82944f82344f7c9e319bb15a50353bad792",
   "interpolation_target_sha256": "d993901db354edd91f63ccbb69ad9af14bd3b4d6f3dc2c5585e052667ef37dbd",
   "evaluation": {

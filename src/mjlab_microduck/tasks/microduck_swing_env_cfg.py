@@ -8,6 +8,7 @@ kinematics are privileged to the critic and rewards only.
 """
 
 import math
+import os
 from copy import deepcopy
 
 from mjlab.envs import ManagerBasedRlEnvCfg
@@ -23,7 +24,12 @@ from mjlab.rl import RslRlModelCfg, RslRlOnPolicyRunnerCfg
 from mjlab.tasks.velocity import mdp
 from mjlab.utils.noise import UniformNoiseCfg as Unoise
 
-from mjlab_microduck.robot.microduck_constants import MICRODUCK_SWING_ROBOT_CFG
+from mjlab_microduck.robot.microduck_constants import (
+    MICRODUCK_SWING_ROBOT_CFG,
+    SWING_ANCHOR_HEIGHT,
+    SWING_ATTACHMENT_Z,
+    SWING_HANG_LENGTH,
+)
 from mjlab_microduck.tasks import mdp as microduck_mdp
 from mjlab_microduck.tasks.microduck_velocity_env_cfg import make_microduck_velocity_env_cfg
 from mjlab_microduck.tasks.symmetry import PpoWithSymmetryCfg, SYMMETRY_CFG
@@ -36,7 +42,19 @@ NUM_STEPS_PER_ENV = 48
 def make_microduck_swing_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
     cfg = make_microduck_velocity_env_cfg()
 
-    cfg.scene.entities = {"robot": MICRODUCK_SWING_ROBOT_CFG}
+    swing_robot_cfg = MICRODUCK_SWING_ROBOT_CFG
+    if os.environ.get("MICRODUCK_SWING_NOMINAL_ACTUATOR") == "1":
+        # Simulation-only mechanism-limit mode: fix ordinary actuator DR at
+        # conservative midpoint values. Masses, BAM electrical dynamics,
+        # current limits, friction, control delay, strings and contacts remain
+        # unchanged. The default task remains fully randomized.
+        swing_robot_cfg = deepcopy(MICRODUCK_SWING_ROBOT_CFG)
+        actuator_cfg = swing_robot_cfg.articulation.actuators[0]
+        actuator_cfg.vin_range = (7.35, 7.35)
+        actuator_cfg.vin_drop_gain_range = (0.10, 0.10)
+        actuator_cfg.delay_min_lag = 5
+        actuator_cfg.delay_max_lag = 5
+    cfg.scene.entities = {"robot": swing_robot_cfg}
     cfg.scene.sensors = ()
     cfg.scene.num_envs = 4096
     cfg.scene.terrain.terrain_type = "plane"
@@ -56,8 +74,10 @@ def make_microduck_swing_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
 
     joint_action = cfg.actions["joint_pos"]
     assert isinstance(joint_action, JointPositionActionCfg)
-    # Fixed contract used throughout training and by the released actor.
-    joint_action.scale = 0.7
+    # Keep the trained 0.7-rad contract by default.  The explicit environment
+    # override supports bounded physical-limit audits and staged continuation
+    # without silently changing exported policies or ordinary evaluations.
+    joint_action.scale = float(os.environ.get("MICRODUCK_SWING_ACTION_SCALE", "0.7"))
 
     # Task objective. Convex frontier progress makes genuinely large new arcs
     # worth much more than repeated small motion; height remains dense while
@@ -261,6 +281,7 @@ def make_microduck_swing_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
                 "weight_stages": [
                     {"step": 0, "weight": 224.0},
                     {"step": 2500 * NUM_STEPS_PER_ENV, "weight": 192.0},
+                    {"step": 4000 * NUM_STEPS_PER_ENV, "weight": 160.0},
                 ],
             },
         ),
@@ -292,6 +313,7 @@ def make_microduck_swing_env_cfg(play: bool = False) -> ManagerBasedRlEnvCfg:
                 "weight_stages": [
                     {"step": 0, "weight": -0.03},
                     {"step": 3000 * NUM_STEPS_PER_ENV, "weight": -0.04},
+                    {"step": 4000 * NUM_STEPS_PER_ENV, "weight": -0.05},
                 ],
             },
         ),
@@ -385,7 +407,5 @@ MicroduckSwingRlCfg = RslRlOnPolicyRunnerCfg(
     clip_actions=1.0,
     save_interval=250,
     num_steps_per_env=NUM_STEPS_PER_ENV,
-    # The released lineage ends at the preserved 3,600-update endpoint; the
-    # selected actor is the documented alpha-0.50 interpolation with model 3,500.
-    max_iterations=3_600,
+    max_iterations=10_000,
 )

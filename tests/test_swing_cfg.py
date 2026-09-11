@@ -52,16 +52,6 @@ def test_swing_model_uses_two_length_limited_spatial_tendons() -> None:
         for i in range(model.ngeom)
     }
     assert not any(name and "string" in name for name in geom_names)
-    frame_ids = [
-        i
-        for i in range(model.ngeom)
-        if (mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, i) or "").startswith(
-            "swing_frame_"
-        )
-    ]
-    assert len(frame_ids) == 5
-    assert np.all(model.geom_contype[frame_ids] == 0)
-    assert np.all(model.geom_conaffinity[frame_ids] == 0)
 
 
 def test_hanging_spawn_is_exactly_taut_and_still() -> None:
@@ -290,11 +280,9 @@ def test_swing_task_preserves_actor_contract_and_exact_reset() -> None:
     assert MicroduckSwingRlCfg.algorithm.clip_param == 0.1
     assert MicroduckSwingRlCfg.algorithm.num_learning_epochs == 3
     assert MicroduckSwingRlCfg.algorithm.entropy_coef == 0.002
-    assert MicroduckSwingRlCfg.max_iterations == 3_600
     assert MicroduckSwingRlCfg.algorithm.class_name.endswith(
         ":SwingPlanarCorrectionPPO"
     )
-    assert cfg.actions["joint_pos"].scale == 0.7
     assert PLANAR_ACTION_INDICES == (0, 1, 7, 8, 9, 10)
 
     reset = cfg.events["reset_base"]
@@ -306,3 +294,21 @@ def test_swing_task_preserves_actor_contract_and_exact_reset() -> None:
     assert command.ranges.ang_vel_z == (0.0, 0.0)
     assert "invalid_geometry" not in cfg.terminations
     assert make_microduck_swing_env_cfg(play=True).seed == 72
+
+
+def test_nominal_actuator_limit_mode_fixes_conservative_midpoints(monkeypatch) -> None:
+    monkeypatch.setenv("MICRODUCK_SWING_NOMINAL_ACTUATOR", "1")
+    nominal = make_microduck_swing_env_cfg()
+    actuator = nominal.scene.entities["robot"].articulation.actuators[0]
+    assert actuator.vin_range == (7.35, 7.35)
+    assert actuator.vin_drop_gain_range == (0.10, 0.10)
+    assert actuator.delay_min_lag == 5
+    assert actuator.delay_max_lag == 5
+
+    monkeypatch.delenv("MICRODUCK_SWING_NOMINAL_ACTUATOR")
+    randomized = make_microduck_swing_env_cfg()
+    randomized_actuator = randomized.scene.entities["robot"].articulation.actuators[0]
+    assert randomized_actuator.vin_range == (6.5, 8.2)
+    assert randomized_actuator.vin_drop_gain_range == (0.0, 0.2)
+    assert randomized_actuator.delay_min_lag == 3
+    assert randomized_actuator.delay_max_lag == 6

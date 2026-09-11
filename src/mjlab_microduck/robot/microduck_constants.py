@@ -114,7 +114,14 @@ def get_swing_spec() -> mujoco.MjSpec:
     spec.add_material(name="swing_buckle_material", rgba=(0.24, 0.25, 0.26, 1.0))
     spec.add_material(name="swing_frame_material", rgba=(0.28, 0.18, 0.11, 1.0))
 
-    # The A-frame is visual-only in the released training task.
+    # The training A-frame is visual-only so incidental stand strikes do not
+    # change the established swing task.  Frontier-failure evaluation can opt
+    # into the physically collidable real-stand geometry.  This makes a top-bar
+    # impact an actual MuJoCo contact/fall, rather than a scripted animation or
+    # a mesh interpenetration.
+    collidable_frame = os.environ.get(
+        "MICRODUCK_SWING_COLLIDABLE_FRAME", "0"
+    ).lower() in {"1", "true", "yes"}
     frame_segments = {
         "swing_frame_front_left": ((0.34, 0.34, 0.0), (0.0, 0.25, 0.755)),
         "swing_frame_back_left": ((-0.34, 0.34, 0.0), (0.0, 0.25, 0.755)),
@@ -129,8 +136,8 @@ def get_swing_spec() -> mujoco.MjSpec:
             fromto=fromto[0] + fromto[1],
             size=(0.009 if name == "swing_frame_crossbar" else 0.007,),
             material="swing_frame_material",
-            contype=0,
-            conaffinity=0,
+            contype=1 if collidable_frame else 0,
+            conaffinity=1 if collidable_frame else 0,
             group=2,
         )
 

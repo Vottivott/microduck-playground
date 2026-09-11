@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "experiment": "running",
+  "policy": {
+    "huggingface_repo": "HannesVonEssen/microduck-running",
+    "checkpoint_iteration": 8749,
+    "policy_onnx_sha256": "b4e285fb3671f52c28f671bd4733a4e11fa17c21f40d25f52eaf2614f9e2e02a",
+    "checkpoint_pt_sha256": "ce7707c985d84affda1befec172a8c0a72fafaa4d3476a26bec11dde9199907f"
+  },
+  "evaluation": {
+    "simulator": "mjlab / MuJoCo Warp",
+    "task_id": "Mjlab-Running-Flat-MicroDuck",
+    "command_forward_m_s": 1.8,
+    "num_envs": 256,
+    "duration_s": 8.0,
+    "seed": null,
+    "seed_note": "The original aggregate retained the metrics but not the evaluation seed.",
+    "survival_fraction": 0.9921875,
+    "mean_body_forward_speed_m_s": 1.6072514057159424,
+    "mean_initial_heading_displacement_speed_m_s": 1.3276939392089844,
+    "mean_absolute_heading_error_deg": 25.215665057096395,
+    "mean_absolute_lateral_displacement_m": 3.8727223873138428,
+    "flight_fraction": 0.6572428941726685
+  },
+  "media": {
+    "path": "../media/preview.mp4",
+    "sha256": "69ce8b5f8855ac76d2413d90b176e770d22d22a72766dcc2dacf34ccbded58d6",
+    "duration_s": 10.0,
+    "fps": 50,
+    "audio": false
+  },
+  "status": "simulation-only"
+}

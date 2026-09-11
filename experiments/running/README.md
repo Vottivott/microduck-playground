@@ -3,7 +3,7 @@
 The default release is the iteration-12,195 robustified simulation candidate.
 It was continued from the faster iteration-11,748 policy through progressively
 wider velocity pushes, trunk/head centre-of-mass offsets, and initial tilt. Its
-clean 10-second [`media/preview.mp4`](media/preview.mp4?raw=1) and the root ONNX on
+clean 10-second [`media/preview.mp4`](media/preview.mp4) and the root ONNX on
 [`HannesVonEssen/microduck-running`](https://huggingface.co/HannesVonEssen/microduck-running)
 are this same checkpoint.
 
@@ -13,12 +13,13 @@ backlash-plus-disturbance battery measured 1.612 m/s and 98.44% survival. This
 is a **simulation-only hardware candidate**, not a hardware-validated policy.
 Heading and lateral drift remain substantial.
 
-The Hugging Face repository keeps the selected policy and its direct training
-lineage:
+The Hugging Face repository is deliberately versioned:
 
 - root `policy.onnx` and `checkpoint.pt`: robust iteration 12,195;
 - `lineage/iteration-11748/`: the speed-focused parent used to start
-  robustification.
+  robustification;
+- `legacy/iteration-8749/`: the earlier controller shown in the run-into-mat
+  edit.
 
 The complete PPO checkpoints contain the actor, critic, optimizer, observation
 normalizers, and curriculum counter. PyTorch checkpoints use pickle internally;
@@ -45,7 +46,8 @@ cross-evaluated on the backlash model; a separately backlash-trained
 continuation performed worse and was not selected.
 
 The compact, machine-readable release record is
-[`eval/released_12195.json`](eval/released_12195.json).
+[`eval/released_12195.json`](eval/released_12195.json). The previous exact-video
+record remains at [`eval/released_8749.json`](eval/released_8749.json).
 
 ## Continue training
 

@@ -1,9 +1,9 @@
 # Stilt walking
 
 This track learns locomotion while explicitly changing both support shape and
-height. The showcased policy uses 10 cm replacement sole-and-stilt parts with
-blend 0.50 support: a rounded 17 × 22 mm tip. The clean 10-second
-[`media/preview.mp4`](media/preview.mp4?raw=1) shows that exact controlled policy
+height. The showcased policy uses green 10 cm replacement sole-and-stilt
+parts with blend 0.50 support: a rounded 17 × 22 mm tip. The clean 10-second
+[`media/preview.mp4`](media/preview.mp4) shows the complete controlled policy
 rollout. It completed without fall, reset, or auxiliary body contact. This is
 a simulation milestone, not a printable hardware recommendation.
 
