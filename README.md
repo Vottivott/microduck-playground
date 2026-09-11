@@ -10,12 +10,12 @@ printable hardware add-ons for
 
 This is an independent experimental continuation of
 [`pollen-robotics/microduck_rl`](https://github.com/pollen-robotics/microduck_rl),
-not an official Pollen Robotics release. The playground is maintained as one
-curated snapshot commit so the visible history stays focused on the release.
-Its upstream base is
+not an official Pollen Robotics release. The tagged `v0.1.0` release is a
+curated snapshot commit directly on
 [`d424a0c`](https://github.com/pollen-robotics/microduck_rl/commit/d424a0c899f6b33cbd3daeb279913134349c0b63),
-with attribution and source details retained in the repository. Add the
-upstream project as a Git remote when preparing focused contributions.
+its upstream base. Post-release maintenance and new experiments use ordinary,
+focused commits; attribution and source details remain in the repository. Add
+the upstream project as a Git remote when preparing focused contributions.
 
 <br clear="right">
 

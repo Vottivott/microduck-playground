@@ -14,9 +14,10 @@ not been validated on a physical robot.
 - Action layout: 14D
 - Algorithm: PPO (`rsl_rl`)
 
-The release is maintained as one curated snapshot commit. Exact training and
-upstream provenance remain recorded here and in the machine-readable release
-metadata.
+The `v0.1.0` release is anchored by one curated snapshot commit. Later
+repository maintenance uses ordinary focused commits and does not change this
+checkpoint's training lineage. Exact training and upstream provenance remain
+recorded here and in the machine-readable release metadata.
 
 ## Speed frontier
 
