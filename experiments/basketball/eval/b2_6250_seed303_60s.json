@@ -1,0 +1,178 @@
+{
+  "checkpoint": "model_6250.pt",
+  "sha256": "97cc1ee60dceb2d24c9ff2c7ab0f907550e23d05c1108f75bdae1cf608d95e30",
+  "seed": 303,
+  "reset_seed": 10303,
+  "blind": false,
+  "command_scale": 2.0,
+  "num_envs": 1024,
+  "horizon_s": 60.0,
+  "survival": {
+    "10": {
+      "survived": 1024,
+      "fraction": 1.0
+    },
+    "20": {
+      "survived": 1022,
+      "fraction": 0.998046875
+    },
+    "30": {
+      "survived": 1022,
+      "fraction": 0.998046875
+    },
+    "60": {
+      "survived": 1019,
+      "fraction": 0.9951171875
+    }
+  },
+  "survival_fraction": 0.9951171875,
+  "fell_only_survival_fraction": 0.9951171875,
+  "first_termination_counts": {
+    "time_out": 0,
+    "out_of_terrain_bounds": 0,
+    "nan_state": 0,
+    "fell": 5
+  },
+  "alive_time_weighted_metrics": {
+    "forward_mae_mps": 0.17263199388980865,
+    "lateral_mae_mps": 0.07903175801038742,
+    "yaw_mae_radps": 0.7550556659698486,
+    "tilt_rad": 0.0478186160326004,
+    "offset_m": 0.007861827500164509,
+    "root_above_ball_m": 0.23518972098827362,
+    "ball_speed_mps": 0.12090934067964554,
+    "action_delta_rms": 0.13634200394153595
+  },
+  "per_environment_mean_metrics": {
+    "forward_mae_mps": 0.17267140746116638,
+    "lateral_mae_mps": 0.07903008162975311,
+    "yaw_mae_radps": 0.7548484802246094,
+    "tilt_rad": 0.04784047603607178,
+    "offset_m": 0.007865889929234982,
+    "root_above_ball_m": 0.23518837988376617,
+    "ball_speed_mps": 0.12097002565860748,
+    "action_delta_rms": 0.13639576733112335
+  },
+  "failures": [
+    {
+      "env": 20,
+      "time_s": 38.980000000000004,
+      "command": [
+        0.08697567135095596,
+        0.011956358328461647,
+        -0.17054718732833862
+      ],
+      "actual_twist": [
+        -0.657921314239502,
+        0.42342931032180786,
+        0.0474085807800293
+      ],
+      "tilt_rad": 0.9800697565078735,
+      "offset_m": 0.09950659424066544,
+      "root_above_ball_m": 0.22016102075576782,
+      "ball_speed_mps": 0.3092043697834015,
+      "action_delta_rms": 0.16038140654563904,
+      "causes": {
+        "low_height": false,
+        "offset": false,
+        "tilt": true
+      }
+    },
+    {
+      "env": 244,
+      "time_s": 14.780000000000001,
+      "command": [
+        0.0,
+        0.0,
+        -0.8632794618606567
+      ],
+      "actual_twist": [
+        -0.39715850353240967,
+        -1.026360273361206,
+        0.8320218324661255
+      ],
+      "tilt_rad": 0.6547932624816895,
+      "offset_m": 0.16707490384578705,
+      "root_above_ball_m": 0.1690596342086792,
+      "ball_speed_mps": 0.4256715476512909,
+      "action_delta_rms": 0.08407295495271683,
+      "causes": {
+        "low_height": true,
+        "offset": true,
+        "tilt": false
+      }
+    },
+    {
+      "env": 362,
+      "time_s": 39.76,
+      "command": [
+        0.2437906712293625,
+        0.15788312256336212,
+        0.5678575038909912
+      ],
+      "actual_twist": [
+        0.18661531805992126,
+        0.7423248887062073,
+        -0.18630144000053406
+      ],
+      "tilt_rad": 0.5123363137245178,
+      "offset_m": 0.10123802721500397,
+      "root_above_ball_m": 0.16755861043930054,
+      "ball_speed_mps": 0.3102015554904938,
+      "action_delta_rms": 0.21894986927509308,
+      "causes": {
+        "low_height": true,
+        "offset": false,
+        "tilt": false
+      }
+    },
+    {
+      "env": 925,
+      "time_s": 13.06,
+      "command": [
+        -0.28469425439834595,
+        0.07364368438720703,
+        -0.3326687216758728
+      ],
+      "actual_twist": [
+        -0.6745939254760742,
+        0.32902222871780396,
+        -10.274687767028809
+      ],
+      "tilt_rad": 0.8542731404304504,
+      "offset_m": 0.09519808739423752,
+      "root_above_ball_m": 0.1587352752685547,
+      "ball_speed_mps": 0.06696635484695435,
+      "action_delta_rms": 0.165455624461174,
+      "causes": {
+        "low_height": true,
+        "offset": false,
+        "tilt": false
+      }
+    },
+    {
+      "env": 944,
+      "time_s": 32.1,
+      "command": [
+        0.04359487444162369,
+        0.1704850196838379,
+        -0.5755103826522827
+      ],
+      "actual_twist": [
+        -1.0589791536331177,
+        0.2644774913787842,
+        -3.0866477489471436
+      ],
+      "tilt_rad": 0.9224385619163513,
+      "offset_m": 0.16997568309307098,
+      "root_above_ball_m": 0.1821010410785675,
+      "ball_speed_mps": 0.417522132396698,
+      "action_delta_rms": 0.067003533244133,
+      "causes": {
+        "low_height": false,
+        "offset": true,
+        "tilt": false
+      }
+    }
+  ]
+}

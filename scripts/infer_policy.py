@@ -997,7 +997,7 @@ def main():
         print()
 
     print("\n" + "="*80)
-    print("MicroDuck Policy Inference")
+    print("Microduck Policy Inference")
     print("="*80)
     print(f"Control frequency: 50 Hz (decimation: 4)")
     print(f"Simulation timestep: {model.opt.timestep}s")

@@ -1,0 +1,32 @@
+{
+  "checkpoint": "b11 model_6999.pt",
+  "actor_inputs": 61,
+  "ball_state_input": false,
+  "lstm_hidden": 256,
+  "lstm_layers": 1,
+  "policy_hz": 50,
+  "model_api_required": 2,
+  "head_body_command_slots": "51:61 zero",
+  "onnx_sha256": "e105148b160b3a86170621648215be38dd5018e955930ce182394f4513c7569b",
+  "pytorch_onnx_parity_max_error": 1.430511474609375e-06,
+  "rust_python_onnx_parity_steps": 80,
+  "rust_python_onnx_parity_max_error": 0.0,
+  "hardware_tested": false,
+  "checkpoint_sha256": "57a322eff092cb71e7cba831791232f0cc4fd45ede0441cad6d87813b0033e41",
+  "three_seed_survival_60s": 0.9700520833333334,
+  "three_seed_eval_seeds": [
+    101,
+    202,
+    303
+  ],
+  "release_validation": {
+    "fresh_uv_sync_locked": true,
+    "cpu_tests_passed": 16,
+    "resume_smoke_envs": 64,
+    "resume_smoke_iterations": 5,
+    "resume_learning_rate": 2e-05,
+    "reexport_parity_max_error": 1.430511474609375e-06,
+    "source_port_seed101_survival_60s": 0.9677734375,
+    "source_port_eval_file": "eval/release_port_seed101_60s.json"
+  }
+}

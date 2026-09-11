@@ -1,0 +1,71 @@
+{
+  "checkpoint": "model_6250.pt",
+  "sha256": "97cc1ee60dceb2d24c9ff2c7ab0f907550e23d05c1108f75bdae1cf608d95e30",
+  "seed": 101,
+  "reset_seed": 10101,
+  "blind": false,
+  "command_scale": 2.0,
+  "num_envs": 1024,
+  "horizon_s": 60.0,
+  "survival": {
+    "10": {
+      "survived": 1024,
+      "fraction": 1.0
+    },
+    "20": {
+      "survived": 1024,
+      "fraction": 1.0
+    },
+    "30": {
+      "survived": 1024,
+      "fraction": 1.0
+    },
+    "60": {
+      "survived": 1024,
+      "fraction": 1.0
+    }
+  },
+  "push_velocity_range": {
+    "x": [
+      -0.0,
+      0.0
+    ],
+    "y": [
+      -0.0,
+      0.0
+    ]
+  },
+  "push_interval_s": [
+    0.5,
+    1.0
+  ],
+  "survival_fraction": 1.0,
+  "fell_only_survival_fraction": 1.0,
+  "first_termination_counts": {
+    "time_out": 0,
+    "out_of_terrain_bounds": 0,
+    "nan_state": 0,
+    "fell": 0
+  },
+  "alive_time_weighted_metrics": {
+    "forward_mae_mps": 0.16920049488544464,
+    "lateral_mae_mps": 0.07142676413059235,
+    "yaw_mae_radps": 0.5901486873626709,
+    "tilt_rad": 0.03832778334617615,
+    "offset_m": 0.0055903843604028225,
+    "root_above_ball_m": 0.23533542454242706,
+    "ball_speed_mps": 0.0972665324807167,
+    "action_delta_rms": 0.11885356903076172
+  },
+  "per_environment_mean_metrics": {
+    "forward_mae_mps": 0.16920049488544464,
+    "lateral_mae_mps": 0.07142676413059235,
+    "yaw_mae_radps": 0.5901486277580261,
+    "tilt_rad": 0.03832778334617615,
+    "offset_m": 0.0055903843604028225,
+    "root_above_ball_m": 0.23533542454242706,
+    "ball_speed_mps": 0.09726652503013611,
+    "action_delta_rms": 0.11885356158018112
+  },
+  "failures": []
+}

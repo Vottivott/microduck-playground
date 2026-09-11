@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: >-
+  If you use Microduck Playground, its policies, or its hardware designs in
+  your work, please cite this repository and the relevant Hugging Face model.
+title: "Microduck Playground"
+type: software
+abstract: >-
+  Reproducible reinforcement-learning experiments, trained policies,
+  simulation assets, and printable hardware add-ons for Pollen Robotics'
+  Microduck biped robot.
+authors:
+  - family-names: "von Essen"
+    given-names: "Hannes"
+    alias: "Vottivott"
+repository-code: "https://github.com/Vottivott/microduck-playground"
+url: "https://github.com/Vottivott/microduck-playground"
+license: Apache-2.0
+version: "0.1.0"
+date-released: "2026-09-11"
+keywords:
+  - bipedal robotics
+  - reinforcement learning
+  - robot learning
+  - locomotion
+  - MuJoCo
+  - MJLab
+  - ONNX
+  - 3D printing
+references:
+  - type: software
+    title: "microduck_rl"
+    authors:
+      - name: "Pollen Robotics"
+    repository-code: "https://github.com/pollen-robotics/microduck_rl"

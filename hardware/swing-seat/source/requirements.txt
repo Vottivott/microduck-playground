@@ -1,0 +1,8 @@
+numpy
+scipy
+trimesh
+shapely
+manifold3d
+mujoco
+networkx
+python-fcl

@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: "3.12"
+
+      - name: Install frozen environment
+        run: uv sync --frozen
+
+      - name: Run CPU tests
+        run: uv run --with pytest pytest -q
+
+      - name: Build wheel and source distribution
+        run: uv build
+
+      - name: Check task-specific CLI discovery
+        run: uv run train Mjlab-SwingPump-MicroDuck --help
+
+      - name: Export swing policy with its deployment contract
+        run: |
+          uv run python scripts/export.py Mjlab-SwingPump-MicroDuck \
+            --checkpoint-file experiments/swing/checkpoints/alpha050.pt \
+            --onnx-file "$RUNNER_TEMP/microduck-swing.onnx" \
+            --num-envs 1 \
+            --device cpu
+
+      - name: Check checkpoint-to-ONNX rollout parity
+        run: |
+          uv run python scripts/verify_swing_onnx_parity.py \
+            experiments/swing/checkpoints/alpha050.pt \
+            "$RUNNER_TEMP/microduck-swing.onnx" \
+            --device cpu \
+            --duration 0.2 \
+            --seed 27
+
+      - name: Smoke-test stilt generation
+        run: |
+          uv run hardware/stilts/generate_stilts.py \
+            --heights-cm 1 \
+            --peg-heights-cm 1 \
+            --transition-height-cm 1 \
+            --transition-blends 0.5 \
+            --direct-heights-cm 10 \
+            --output-dir "$RUNNER_TEMP/stilts"
+
+      - name: Generate and verify the retained swing seat
+        run: |
+          uv run \
+            --with-requirements hardware/swing-seat/source/requirements.txt \
+            python hardware/swing-seat/source/verify_all.py
+
+      - name: Check relative documentation links
+        run: uv run python scripts/check_relative_links.py

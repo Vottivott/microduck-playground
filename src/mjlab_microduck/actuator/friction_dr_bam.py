@@ -33,6 +33,60 @@ class FrictionDRBamActuator(BamActuator):
         # kp_scale is (num_envs, 1); mirror it for a per-env friction multiplier.
         self.friction_scale = torch.ones_like(self.kp_scale)
         self.default_friction_scale = self.friction_scale.clone()
+        # Opt-in instrumentation for physical-limit audits.  Keeping this off
+        # by default avoids any allocations in large training batches.  The
+        # checkpoint evaluator enables it on its single environment and reads
+        # the exact delayed command seen by the firmware model.
+        self.diagnostics_enabled = False
+        self.last_diagnostics: dict[str, torch.Tensor] | None = None
+
+    def compute(self, cmd: ActuatorCmd) -> torch.Tensor:
+        diagnostics: dict[str, torch.Tensor] | None = None
+        if self.diagnostics_enabled:
+            bam = self._bam_model
+            act = bam.actuator
+            assert self.vin_tensor is not None
+            assert self.kp_scale is not None and self.kd_scale is not None
+
+            effective_vin = self.vin_tensor
+            if self.vin_drop_gain is not None and self._prev_motor_torque is not None:
+                load = self._prev_motor_torque.abs().sum(dim=-1, keepdim=True)
+                effective_vin = effective_vin - self.vin_drop_gain * load
+                if self.cfg.vin_min is not None:
+                    effective_vin = torch.clamp(effective_vin, min=self.cfg.vin_min)
+
+            scaled_vel = cmd.vel * self.kd_scale
+            position_error = cmd.position_target - cmd.pos
+            duty_unclipped = (
+                position_error * (self._base_kp * self.kp_scale) * act.error_gain
+            )
+            duty_current_limited = duty_unclipped
+            if act.max_current is not None:
+                back_emf = bam.kt.value * scaled_vel
+                duty_span = bam.R.value * act.max_current / effective_vin
+                duty_center = back_emf / effective_vin
+                duty_current_limited = torch.clamp(
+                    duty_current_limited,
+                    duty_center - duty_span,
+                    duty_center + duty_span,
+                )
+            duty_applied = torch.clamp(
+                duty_current_limited, -act.max_pwm, act.max_pwm
+            )
+            diagnostics = {
+                "effective_vin": effective_vin.detach().clone(),
+                "position_error": position_error.detach().clone(),
+                "joint_velocity": cmd.vel.detach().clone(),
+                "duty_unclipped": duty_unclipped.detach().clone(),
+                "duty_current_limited": duty_current_limited.detach().clone(),
+                "duty_applied": duty_applied.detach().clone(),
+            }
+
+        motor_torque = super().compute(cmd)
+        if diagnostics is not None:
+            diagnostics["motor_torque"] = motor_torque.detach().clone()
+            self.last_diagnostics = diagnostics
+        return motor_torque
 
     def _compute_friction_budget(
         self,

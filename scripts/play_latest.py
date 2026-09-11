@@ -17,7 +17,7 @@ from wandb_utils import resolve_run, run_command
 # flag -> sous-chaîne recherchée dans le task_id (metadata args[0])
 TYPE_SUBSTR = {
     "crouch": "Crouch",     # Mjlab-RollerCrouch-Flat-MicroDuck
-    "roller": "MicroDuck-Rollers",  # Mjlab-Velocity-Flat-MicroDuck-Rollers (≠ RollerSlope/RollerCrouch)
+    "roller": "Microduck-Rollers",  # Mjlab-Velocity-Flat-MicroDuck-Rollers (≠ RollerSlope/RollerCrouch)
     "swizzle": "Swizzle",   # Mjlab-Velocity-Swizzle-MicroDuck
     "slope": "Slope",       # Mjlab-RollerSlope-Flat-MicroDuck
 }

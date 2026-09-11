@@ -1,5 +1,6 @@
 """Script to play RL agent with RSL-RL."""
 
+import math
 import os
 import re
 import sys
@@ -7,10 +8,9 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Literal
 
+import numpy as np
 import torch
 import tyro
-from rsl_rl.runners import OnPolicyRunner
-
 from mjlab.envs import ManagerBasedRlEnv
 from mjlab.rl import RslRlVecEnvWrapper
 from mjlab.tasks.registry import list_tasks, load_env_cfg, load_rl_cfg, load_runner_cls
@@ -18,7 +18,9 @@ from mjlab.tasks.tracking.mdp import MotionCommandCfg
 from mjlab.utils.os import get_checkpoint_path, get_wandb_checkpoint_path
 from mjlab.utils.torch import configure_torch_backends
 from mjlab.utils.wrappers import VideoRecorder
-from mjlab.viewer import NativeMujocoViewer, ViserPlayViewer
+from rsl_rl.runners import OnPolicyRunner
+
+from mjlab_microduck.onnx_policy_contract import bake_action_clip
 
 
 @dataclass(frozen=True)
@@ -29,6 +31,7 @@ class ExportConfig:
     wandb_run_path: str | None = None
     checkpoint: int | None = None      # Select checkpoint by iteration number (e.g. 3000)
     checkpoint_file: str | None = None
+    seed: int | None = None
     motion_file: str | None = None
     num_envs: int | None = None
     device: str | None = None
@@ -36,8 +39,16 @@ class ExportConfig:
     video_length: int = 200
     video_height: int | None = None
     video_width: int | None = None
+    episode_length_s: float | None = None
     camera: int | str | None = None
     viewer: Literal["auto", "native", "viser"] = "auto"
+    running_speed: float | None = None
+    camera_azimuth_offset_deg: float = 0.0
+    camera_follow_yaw_tau_s: float | None = None
+    camera_follow_position_tau_s: float | None = None
+    camera_follow_position_gain: float = 1.0
+    camera_follow_shadow_light: bool = False
+    disable_shadows: bool = False
 
     # Internal flag used by demo script.
     _demo_mode: tyro.conf.Suppress[bool] = False
@@ -46,10 +57,60 @@ class ExportConfig:
 def run_export(task_id: str, cfg: ExportConfig):
     configure_torch_backends()
 
+    if cfg.camera_follow_yaw_tau_s is not None:
+        if cfg.camera_follow_yaw_tau_s <= 0.0:
+            raise ValueError("camera_follow_yaw_tau_s must be positive")
+        if not cfg.video:
+            raise ValueError("camera_follow_yaw_tau_s requires video recording")
+    if cfg.camera_follow_shadow_light and not cfg.video:
+        raise ValueError("camera_follow_shadow_light requires video recording")
+    if cfg.camera_follow_position_tau_s is not None:
+        if cfg.camera_follow_position_tau_s <= 0.0:
+            raise ValueError("camera_follow_position_tau_s must be positive")
+        if not cfg.video:
+            raise ValueError("camera_follow_position_tau_s requires video recording")
+        if cfg.camera_follow_position_gain < 0.0:
+            raise ValueError("camera_follow_position_gain must be non-negative")
+
     device = cfg.device or ("cuda:0" if torch.cuda.is_available() else "cpu")
 
     env_cfg = load_env_cfg(task_id, play=True)
     agent_cfg = load_rl_cfg(task_id)
+    basketball_checkpoint = None
+    if task_id == "Mjlab-Basketball-MicroDuck" and cfg.checkpoint_file:
+        from mjlab.rl import RslRlModelCfg
+        from mjlab_microduck.basketball_distillation import actor_model_cfg, make_distillation_env_cfg
+
+        basketball_checkpoint = torch.load(cfg.checkpoint_file, map_location="cpu", weights_only=False)
+        agent_cfg.actor = RslRlModelCfg(**actor_model_cfg(basketball_checkpoint))
+        if "student_state_dict" in basketball_checkpoint:
+            # A distilled checkpoint must never silently export a ball-state actor.
+            env_cfg = make_distillation_env_cfg(play=True)
+    if cfg.episode_length_s is not None:
+        if cfg.episode_length_s <= 0.0:
+            raise ValueError("episode_length_s must be positive")
+        env_cfg.episode_length_s = cfg.episode_length_s
+    if cfg.seed is not None:
+        env_cfg.seed = cfg.seed
+
+    # Keep the configured follow-camera orbit intact while allowing recordings
+    # from the opposite side of the tracked body.
+    env_cfg.viewer.azimuth = (
+        env_cfg.viewer.azimuth + cfg.camera_azimuth_offset_deg
+    ) % 360.0
+
+    if cfg.running_speed is not None:
+        if cfg.running_speed < 0.0:
+            raise ValueError("running_speed must be non-negative")
+        if env_cfg.commands is None or "twist" not in env_cfg.commands:
+            raise ValueError("running_speed requires a twist command")
+        command = env_cfg.commands["twist"]
+        command.ranges.lin_vel_x = (cfg.running_speed, cfg.running_speed)
+        command.ranges.lin_vel_y = (0.0, 0.0)
+        command.ranges.ang_vel_z = (0.0, 0.0)
+        command.rel_standing_envs = 0.0
+        if hasattr(command, "rel_turn_in_place_envs"):
+            command.rel_turn_in_place_envs = 0.0
 
     DUMMY_MODE = cfg.agent in {"zero", "random"}
     TRAINED_MODE = not DUMMY_MODE
@@ -219,9 +280,120 @@ def run_export(task_id: str, cfg: ExportConfig):
             policy = PolicyRandom()
     else:
         runner_cls = load_runner_cls(task_id) or OnPolicyRunner
+        if basketball_checkpoint is not None:
+            from mjlab.rl import MjlabOnPolicyRunner
+            runner_cls = MjlabOnPolicyRunner
         runner = runner_cls(env, asdict(agent_cfg), device=device)
-        runner.load(str(resume_path), map_location=device)
+        if basketball_checkpoint is not None and "student_state_dict" in basketball_checkpoint:
+            runner.alg.actor.load_state_dict(basketball_checkpoint["student_state_dict"], strict=True)
+        else:
+            runner.load(str(resume_path), map_location=device)
         policy = runner.get_inference_policy(device=device)
+
+    if TRAINED_MODE and cfg.video:
+        # VideoRecorder captures only while stepping.  Keep rollout separate
+        # from ONNX export so --video produces a real checkpoint video.
+        obs = env.get_observations()
+        camera_azimuth: float | None = None
+        base_env = env.unwrapped
+        renderer = base_env._offline_renderer
+        assert renderer is not None
+        if cfg.disable_shadows:
+            # Mesa/OSMesa can intermittently corrupt MuJoCo's shadow map into
+            # long black bars during large articulated motion.  Disabling only
+            # shadow casting preserves scene lighting/materials while removing
+            # that unstable render pass for deterministic artifact-free video.
+            renderer._model.light_castshadow[:] = False
+        tracked_entity = None
+        if (
+            cfg.camera_follow_yaw_tau_s is not None
+            or cfg.camera_follow_position_tau_s is not None
+            or cfg.camera_follow_shadow_light
+        ):
+            entity_name = env_cfg.viewer.entity_name
+            if entity_name is None:
+                raise ValueError("camera following requires a viewer entity_name")
+            tracked_entity = base_env.scene[entity_name]
+
+        position_initial_root: np.ndarray | None = None
+        position_base_lookat: np.ndarray | None = None
+        position_smoothed_lookat: np.ndarray | None = None
+        if cfg.camera_follow_position_tau_s is not None:
+            assert tracked_entity is not None
+            position_initial_root = (
+                tracked_entity.data.root_link_pos_w[env_cfg.viewer.env_idx]
+                .detach()
+                .cpu()
+                .numpy()
+                .copy()
+            )
+            position_base_lookat = np.asarray(renderer._cam.lookat).copy()
+            position_smoothed_lookat = position_base_lookat.copy()
+
+        for video_step in range(cfg.video_length):
+            if cfg.camera_follow_position_tau_s is not None:
+                assert tracked_entity is not None
+                assert position_initial_root is not None
+                assert position_base_lookat is not None
+                assert position_smoothed_lookat is not None
+                root_pos_np = (
+                    tracked_entity.data.root_link_pos_w[env_cfg.viewer.env_idx]
+                    .detach()
+                    .cpu()
+                    .numpy()
+                )
+                target_lookat = position_base_lookat + cfg.camera_follow_position_gain * (
+                    root_pos_np - position_initial_root
+                )
+                alpha = 1.0 - math.exp(
+                    -base_env.step_dt / cfg.camera_follow_position_tau_s
+                )
+                position_smoothed_lookat += alpha * (
+                    target_lookat - position_smoothed_lookat
+                )
+                renderer._cam.lookat[:] = position_smoothed_lookat
+
+            if cfg.camera_follow_yaw_tau_s is not None:
+                assert tracked_entity is not None
+                quat = tracked_entity.data.root_link_quat_w[
+                    env_cfg.viewer.env_idx
+                ]
+                qw, qx, qy, qz = (float(value) for value in quat)
+                yaw = math.degrees(
+                    math.atan2(
+                        2.0 * (qw * qz + qx * qy),
+                        1.0 - 2.0 * (qy * qy + qz * qz),
+                    )
+                )
+                target_azimuth = yaw + env_cfg.viewer.azimuth
+                if camera_azimuth is None:
+                    camera_azimuth = target_azimuth
+                else:
+                    alpha = 1.0 - math.exp(
+                        -base_env.step_dt / cfg.camera_follow_yaw_tau_s
+                    )
+                    delta = (
+                        target_azimuth - camera_azimuth + 180.0
+                    ) % 360.0 - 180.0
+                    camera_azimuth += alpha * delta
+                renderer._cam.azimuth = camera_azimuth % 360.0
+
+            if cfg.camera_follow_shadow_light:
+                assert tracked_entity is not None
+                root_pos = tracked_entity.data.root_link_pos_w[
+                    env_cfg.viewer.env_idx
+                ]
+                # The directional light's position still anchors MuJoCo's
+                # finite shadow-map region. Keep that region centered on the
+                # tracked robot without changing light direction or intensity.
+                renderer._model.light_pos[:, 0] = float(root_pos[0])
+                renderer._model.light_pos[:, 1] = float(root_pos[1])
+
+            with torch.inference_mode():
+                actions = policy(obs)
+            obs, _, dones, _ = env.step(actions)
+            if hasattr(policy, "reset"):
+                policy.reset(dones)
 
     # mjlab 1.3.0: ONNX export + metadata moved to mjlab.rl.exporter_utils and
     # the runner's built-in export_policy_to_onnx. Observation normalization is
@@ -229,7 +401,7 @@ def run_export(task_id: str, cfg: ExportConfig):
     # submodule of the policy's MLPModel (obs_normalization=True in RslRlModelCfg),
     # so export_policy_to_onnx emits actor(normalizer(obs)). No manual normalizer
     # handling needed (the old export_velocity_policy_as_onnx path is gone).
-    from mjlab.rl.exporter_utils import get_base_metadata, attach_metadata_to_onnx
+    from mjlab.rl.exporter_utils import attach_metadata_to_onnx, get_base_metadata
 
     onnx_path = os.path.abspath(cfg.onnx_file)
     path = os.path.dirname(onnx_path)
@@ -237,7 +409,15 @@ def run_export(task_id: str, cfg: ExportConfig):
 
     runner.export_policy_to_onnx(path, filename)
 
+    # Training steps through RslRlVecEnvWrapper, which clamps actor outputs.
+    # Deployment runtimes consume ONNX outputs directly, so preserve that
+    # behavior inside the graph rather than relying on each caller to know it.
+    bake_action_clip(onnx_path, agent_cfg.clip_actions)
+
     metadata = get_base_metadata(runner.env.unwrapped, run_path=cfg.checkpoint_file)
+    if basketball_checkpoint is not None and "student_state_dict" in basketball_checkpoint:
+        metadata.update({"actor_ball_state": "false", "actor_observations": "61",
+                         "recurrent_state": "Carry h_out/c_out into h_in/c_in; zero on activation/reset"})
     attach_metadata_to_onnx(onnx_path, metadata)
 
     print(f"Written {onnx_path}")

@@ -1,0 +1,28 @@
+{
+  "actor_observation_dim": 61,
+  "checkpoint": "HannesVonEssen/microduck-stilts/10cm/checkpoint.pt",
+  "command_speed_mps": 0.15,
+  "duration_s": 10.0,
+  "evaluation_environment": {
+    "height_cm": 10.0,
+    "mass_kg_per_stilt": 0.029,
+    "num_envs": 64,
+    "seed": 123,
+    "support_blend": 0.5,
+    "training_nominal_mass_kg_per_stilt": 0.022
+  },
+  "forward_speed_mps": {
+    "mean": 0.14054720103740692,
+    "median": 0.11753581464290619,
+    "p10": 0.07581190019845963,
+    "p90": 0.25480103492736816
+  },
+  "initial_heading_displacement_speed_mps": {
+    "mean": 0.12295608222484589,
+    "median": 0.10827935487031937,
+    "p10": 0.06812168657779694
+  },
+  "max_tilt_deg_median": 3.2776942307941677,
+  "survival_fraction": 1.0,
+  "task_id": "Mjlab-Stilt-Flat-MicroDuck"
+}

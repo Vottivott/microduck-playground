@@ -29,10 +29,17 @@ src/mjlab_microduck/robot/microduck.bak/*
 src/mjlab_microduck/robot/microduck_test/*
 data/
 *.pt
+# Curated swing checkpoints are part of the reproducibility release.
+!experiments/swing/checkpoints/*.pt
 
 claude_experiments/
 
 backup_onnx/
+
+# Generated swing-seat work products (released meshes live one level up).
+hardware/swing-seat/source/output/
+hardware/swing-seat/source/output_padded/
+hardware/swing-seat/source/output_retained/
 
 
 logdir/.claude/

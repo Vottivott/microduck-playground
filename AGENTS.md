@@ -198,7 +198,7 @@ Never launch a long run without one.
 
 ## Training ops & reading a run
 
-- wandb project `mjlab_microduck`; logs in `logs/<experiment_name>/`; resume
+- wandb project `mjlab_microduck`; logs in `logs/rsl_rl/<experiment_name>/`; resume
   with `--agent.load-checkpoint model_XXXX.pt --agent.resume True`.
 - Watch per-iteration: mean reward rising AND episode length behaving as the
   task demands; every penalty term ≤ 0; the MAIN task term actually growing
