@@ -1,0 +1,1375 @@
+{
+  "revision": "pin-free friction rail ends",
+  "treads_per_module": 3,
+  "units": "millimetres",
+  "parts": {
+    "module-01": {
+      "file": "module-01.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          67.72393417358398,
+          298.0,
+          92.20309782028198
+        ]
+      ],
+      "volume_cm3": 181.35891118629254,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        -37.48819351196289,
+        149.0,
+        -7.355183124542236
+      ]
+    },
+    "module-02": {
+      "file": "module-02.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          70.36182403564453,
+          298.0,
+          97.9970474243164
+        ]
+      ],
+      "volume_cm3": 182.77161392565128,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        -74.65953826904297,
+        149.0,
+        -79.0316390991211
+      ]
+    },
+    "module-03": {
+      "file": "module-03.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          67.72394561767578,
+          298.0,
+          96.28520202636719
+        ]
+      ],
+      "volume_cm3": 183.35104138909242,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        -119.8716812133789,
+        149.0,
+        -158.21388244628906
+      ]
+    },
+    "module-04": {
+      "file": "module-04.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          70.36181640625,
+          298.0,
+          97.99702453613281
+        ]
+      ],
+      "volume_cm3": 182.77164664423054,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        -157.04302978515625,
+        149.0,
+        -233.9724578857422
+      ]
+    },
+    "module-05": {
+      "file": "module-05.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          67.72395324707031,
+          298.0,
+          96.28515625
+        ]
+      ],
+      "volume_cm3": 183.35097325345603,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        -202.2551727294922,
+        149.0,
+        -313.15472412109375
+      ]
+    },
+    "module-06": {
+      "file": "module-06.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          70.36181640625,
+          298.0,
+          97.99700927734375
+        ]
+      ],
+      "volume_cm3": 182.77158362141802,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        -239.42654418945312,
+        149.0,
+        -388.9132995605469
+      ]
+    },
+    "module-07": {
+      "file": "module-07.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          67.72396850585938,
+          298.0,
+          96.28518676757812
+        ]
+      ],
+      "volume_cm3": 183.35111526188007,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        -284.6386413574219,
+        149.0,
+        -468.0954895019531
+      ]
+    },
+    "module-08": {
+      "file": "module-08.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          71.26614379882812,
+          298.0,
+          97.39337158203125
+        ]
+      ],
+      "volume_cm3": 182.3455891998876,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        -321.80999755859375,
+        149.0,
+        -543.8540649414062
+      ]
+    },
+    "module-09": {
+      "file": "module-09.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          88.55294799804688,
+          298.0,
+          78.13043212890625
+        ]
+      ],
+      "volume_cm3": 155.27334864949654,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        -368.9902038574219,
+        149.0,
+        -622.6332397460938
+      ]
+    },
+    "floor--143": {
+      "file": "floor--143.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          165.0,
+          62.0,
+          21.82117462158203
+        ]
+      ],
+      "volume_cm3": 125.42289443342916,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        27.5,
+        174.0,
+        -0.0
+      ]
+    },
+    "floor-0": {
+      "file": "floor-0.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          52.5,
+          270.0,
+          18.162899017333984
+        ]
+      ],
+      "volume_cm3": 66.73923045220705,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        -52.5,
+        135.0,
+        -4.0
+      ]
+    },
+    "floor-143": {
+      "file": "floor-143.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          165.0,
+          62.0,
+          21.82117462158203
+        ]
+      ],
+      "volume_cm3": 116.31104278948926,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        27.5,
+        -112.0,
+        -0.0
+      ]
+    },
+    "clamp-screw": {
+      "file": "clamp-screw.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          42.0,
+          42.0,
+          87.0
+        ]
+      ],
+      "volume_cm3": 21.404163190569815,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        21.0,
+        21.0,
+        8.0
+      ]
+    },
+    "pressure-pad": {
+      "file": "pressure-pad.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          36.0,
+          36.0,
+          14.0
+        ]
+      ],
+      "volume_cm3": 6.216043939663609,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        18.0,
+        18.0,
+        4.0
+      ]
+    },
+    "clamp-body--143": {
+      "file": "clamp-body--143.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          126.9993896484375,
+          46.0,
+          111.0
+        ]
+      ],
+      "volume_cm3": 179.94413743542248,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        -381.6678466796875,
+        166.0,
+        -586.0
+      ]
+    },
+    "clamp-body-143": {
+      "file": "clamp-body-143.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          126.9993896484375,
+          46.0,
+          111.0
+        ]
+      ],
+      "volume_cm3": 179.94413743542248,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        -381.6678466796875,
+        -120.0,
+        -586.0
+      ]
+    },
+    "thread-fit-coupon": {
+      "file": "thread-fit-coupon.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          28.0,
+          28.0,
+          14.0
+        ]
+      ],
+      "volume_cm3": 8.058356627579585,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        14.0,
+        14.0,
+        -0.0
+      ]
+    },
+    "coupon-side-000-tenon": {
+      "file": "coupon-side-000-tenon.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          22.0,
+          13.0,
+          16.0
+        ]
+      ],
+      "volume_cm3": 2.3000466651693983,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        11.0,
+        6.5,
+        4.0
+      ]
+    },
+    "coupon-spine-000-tenon": {
+      "file": "coupon-spine-000-tenon.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          17.0,
+          11.0,
+          16.0
+        ]
+      ],
+      "volume_cm3": 1.279246666895946,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        8.5,
+        5.5,
+        4.0
+      ]
+    },
+    "coupon-side-025-tenon": {
+      "file": "coupon-side-025-tenon.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          22.0,
+          13.0,
+          16.0
+        ]
+      ],
+      "volume_cm3": 2.301006668869655,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        11.0,
+        6.5,
+        4.0
+      ]
+    },
+    "coupon-spine-025-tenon": {
+      "file": "coupon-spine-025-tenon.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          17.0,
+          11.0,
+          16.0
+        ]
+      ],
+      "volume_cm3": 1.2802066705962023,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        8.5,
+        5.5,
+        4.0
+      ]
+    },
+    "coupon-side-050-tenon": {
+      "file": "coupon-side-050-tenon.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          22.0,
+          13.0,
+          16.0
+        ]
+      ],
+      "volume_cm3": 2.301966663414637,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        11.0,
+        6.5,
+        4.0
+      ]
+    },
+    "coupon-spine-050-tenon": {
+      "file": "coupon-spine-050-tenon.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          17.0,
+          11.0,
+          16.0
+        ]
+      ],
+      "volume_cm3": 1.2811666651411848,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        8.5,
+        5.5,
+        4.0
+      ]
+    },
+    "coupon-side-100-tenon": {
+      "file": "coupon-side-100-tenon.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          22.0,
+          13.0,
+          16.0
+        ]
+      ],
+      "volume_cm3": 2.3038866708151504,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        11.0,
+        6.5,
+        4.0
+      ]
+    },
+    "coupon-spine-100-tenon": {
+      "file": "coupon-spine-100-tenon.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          17.0,
+          11.0,
+          16.0
+        ]
+      ],
+      "volume_cm3": 1.283086672541698,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        8.5,
+        5.5,
+        4.0
+      ]
+    },
+    "coupon-side-socket": {
+      "file": "coupon-side-socket.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          22.0,
+          13.0,
+          16.0
+        ]
+      ],
+      "volume_cm3": 3.1779039915962226,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        11.0,
+        6.5,
+        -0.0
+      ]
+    },
+    "coupon-spine-socket": {
+      "file": "coupon-spine-socket.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          17.0,
+          11.0,
+          16.0
+        ]
+      ],
+      "volume_cm3": 2.314623989746094,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        8.5,
+        5.5,
+        -0.0
+      ]
+    }
+  },
+  "assembly": {
+    "joints": [
+      {
+        "name": "joint-1",
+        "rail_y": -143,
+        "center_mm": [
+          92.00843256315305,
+          -143.0,
+          86.05218610552222
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-1",
+        "rail_y": 0,
+        "center_mm": [
+          94.9290527782388,
+          0.0,
+          84.49926479085995
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          9,
+          5,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-1",
+        "rail_y": 143,
+        "center_mm": [
+          92.00843256315305,
+          143.0,
+          86.05218610552222
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-2",
+        "rail_y": -143,
+        "center_mm": [
+          133.20017851223258,
+          -143.0,
+          163.52258770250816
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-2",
+        "rail_y": 0,
+        "center_mm": [
+          136.12079990186268,
+          0.0,
+          161.9696657633296
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          9,
+          5,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-2",
+        "rail_y": 143,
+        "center_mm": [
+          133.20017851223258,
+          143.0,
+          163.52258770250816
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-3",
+        "rail_y": -143,
+        "center_mm": [
+          174.39192598354882,
+          -143.0,
+          240.99298849010657
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-3",
+        "rail_y": 0,
+        "center_mm": [
+          177.31254424016507,
+          0.0,
+          239.44006821678101
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          9,
+          5,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-3",
+        "rail_y": 143,
+        "center_mm": [
+          174.39192598354882,
+          143.0,
+          240.99298849010657
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-4",
+        "rail_y": -143,
+        "center_mm": [
+          215.5836703366079,
+          -143.0,
+          318.46339093571163
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-4",
+        "rail_y": 0,
+        "center_mm": [
+          218.50428579314584,
+          0.0,
+          316.9104721512141
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          9,
+          5,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-4",
+        "rail_y": 143,
+        "center_mm": [
+          215.5836703366079,
+          143.0,
+          318.46339093571163
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-5",
+        "rail_y": -143,
+        "center_mm": [
+          256.7754111204203,
+          -143.0,
+          395.9337952791188
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-5",
+        "rail_y": 0,
+        "center_mm": [
+          259.69604202714595,
+          0.0,
+          394.38086827961075
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          9,
+          5,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-5",
+        "rail_y": 143,
+        "center_mm": [
+          256.7754111204203,
+          143.0,
+          395.9337952791188
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-6",
+        "rail_y": -143,
+        "center_mm": [
+          297.9671400380485,
+          -143.0,
+          473.40420593188827
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-6",
+        "rail_y": 0,
+        "center_mm": [
+          300.88778243375265,
+          0.0,
+          471.851272823582
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          9,
+          5,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-6",
+        "rail_y": 143,
+        "center_mm": [
+          297.9671400380485,
+          143.0,
+          473.40420593188827
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-7",
+        "rail_y": -143,
+        "center_mm": [
+          339.15889070140554,
+          -143.0,
+          550.8746050222484
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-7",
+        "rail_y": 0,
+        "center_mm": [
+          342.0795247559018,
+          0.0,
+          549.321676349041
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          9,
+          5,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-7",
+        "rail_y": 143,
+        "center_mm": [
+          339.15889070140554,
+          143.0,
+          550.8746050222484
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-8",
+        "rail_y": -143,
+        "center_mm": [
+          381.3580023430891,
+          -143.0,
+          627.74133420039
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-8",
+        "rail_y": 0,
+        "center_mm": [
+          384.1755725035966,
+          0.0,
+          626.2432055716803
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          9,
+          5,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "joint-8",
+        "rail_y": 143,
+        "center_mm": [
+          381.3580023430891,
+          143.0,
+          627.74133420039
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "floor",
+        "rail_y": -143,
+        "center_mm": [
+          61.03046650102142,
+          -143.0,
+          8.315080040156397
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "floor",
+        "rail_y": 0,
+        "center_mm": [
+          62.18488523688361,
+          0.0,
+          9.830482212625725
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          9,
+          5,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      },
+      {
+        "name": "floor",
+        "rail_y": 143,
+        "center_mm": [
+          61.03046650102142,
+          143.0,
+          8.315080040156397
+        ],
+        "insertion_axis": [
+          0.46947156278589086,
+          0.0,
+          0.8829475928589269
+        ],
+        "nominal_tenon_mm": [
+          14,
+          7,
+          12
+        ],
+        "per_face_running_clearance_mm": 0.3,
+        "rib_interference_per_face_mm": 0.05,
+        "retention": "friction ribs; no pin, hole or positive lock"
+      }
+    ],
+    "thread": {
+      "pitch_mm": 4,
+      "major_diameter_mm": 17,
+      "root_diameter_mm": 13.6,
+      "radial_clearance_mm": 0.3,
+      "axial_flank_allowance_mm": 0.3,
+      "jaw_engagement_mm": 14,
+      "nominal_table_mm": 25,
+      "designed_table_range_mm": [
+        15,
+        40
+      ],
+      "ball_radius_mm": 5,
+      "pad_diameter_mm": 36,
+      "pad_capture": "four-slotted snap socket; print fit must be tested"
+    },
+    "fit": "Slide along rails until shoulders seat. Four narrow ribs per tenon have nominal 0.05mm per-face interference. Print coupons before choosing fit; no positive retention."
+  },
+  "checks": {
+    "socket_tread_intersection_mm3": 0.0,
+    "missing_tread_volume_mm3": 0.005398446965652208,
+    "individual_tread_missing_from_single_module_mm3": [
+      7.818288092191021e-05,
+      0.0,
+      0.0006678207622220119,
+      0.0,
+      0.000634984850573043,
+      0.0,
+      0.0,
+      0.0,
+      0.0005945599793146054,
+      0.0,
+      0.0007356268664201101,
+      0.0,
+      0.0,
+      0.0,
+      0.0006699593116839727,
+      0.000754303551123788,
+      0.0,
+      0.00035144885381062824,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0009115599095821381,
+      0.0,
+      0.0
+    ],
+    "module_overlap_mm3": [
+      3.453504753755018e-05,
+      2.8849707961834763e-05,
+      4.921778819759008e-06,
+      1.6184989514537544e-06,
+      0.0003262791197187198,
+      0.00017032732986166366,
+      0.000574153811423154,
+      0.000390749249769821
+    ],
+    "floor_module_overlap_mm3": [
+      5.2280765790631754e-08,
+      5.1345013297362146e-06,
+      2.4511609334846678e-08
+    ],
+    "module_insertion_unintended_overlap_mm3": [
+      3.453504753755018e-05,
+      5.9041817716358e-07,
+      3.1488016816183517e-07,
+      0.0,
+      0.0,
+      0.0,
+      2.8849707961834763e-05,
+      3.765001281408331e-06,
+      3.489628518001571e-07,
+      0.0,
+      0.0,
+      0.0,
+      4.921778819759008e-06,
+      3.515231924211548e-06,
+      1.657001040674307e-06,
+      0.0,
+      0.0,
+      0.0,
+      1.6184989514537544e-06,
+      3.1545319814085815e-06,
+      1.99511953506241e-06,
+      0.0,
+      0.0,
+      0.0,
+      0.0003262791197187198,
+      5.6108818095405395e-06,
+      4.064253853168036e-06,
+      0.0,
+      0.0,
+      0.0,
+      0.00017032732986166366,
+      8.918323561128242e-06,
+      2.4434549790915603e-06,
+      0.0,
+      0.0,
+      0.0,
+      0.000574153811423154,
+      6.651747222955843e-06,
+      1.0232720152695644e-07,
+      0.0,
+      0.0,
+      0.0,
+      0.000390749249769821,
+      7.374480984386386e-07,
+      8.898767968427516e-07,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "floor_insertion_unintended_overlap_mm3": [
+      5.211293244100634e-06,
+      7.560317568655606e-06,
+      5.522084715418411e-09,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "floor_pair_overlap_mm3": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "intentional_rib_interference_mm3": [
+      4.5258738515646355,
+      4.525979692916735,
+      4.525915310378575,
+      4.525861572896247,
+      4.526208879649251,
+      4.526075990220609,
+      4.525351032052034,
+      4.526290453747303,
+      0.7543338844443012,
+      0.9972464897712902,
+      0.9617811744768309
+    ]
+  },
+  "source_geometry_sha256": "8de61699397e327238ab115a6f2370943c672d67a8a0469c1c785f8a732274d0",
+  "fit_coupon_variants_mm_per_face": [
+    0,
+    0.025,
+    0.05,
+    0.1
+  ],
+  "status": "Pin-free friction-fit prototype, not physically fit/load-tested. Exact evaluated tread geometry retained within boolean precision."
+}

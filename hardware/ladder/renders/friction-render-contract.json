@@ -1,0 +1,8 @@
+{
+  "engine": "CYCLES",
+  "samples": 64,
+  "blender": "4.5.10 LTS",
+  "geometry": "printable mesh exports in millimetres; assembled STLs preserve CAD world alignment",
+  "exploded": "upper section+65mm along rail axis; floor module+65mm along rail axis, shoes\u00b125mmY",
+  "not_physical_validation": true
+}

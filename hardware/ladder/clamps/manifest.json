@@ -1,0 +1,249 @@
+{
+  "units": "millimetres",
+  "revision": "current threaded table clamp",
+  "parts": {
+    "clamp-screw": {
+      "file": "clamp-screw.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          42.0,
+          42.0,
+          87.0
+        ]
+      ],
+      "volume_cm3": 21.404163190569815,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        21.0,
+        21.0,
+        8.0
+      ]
+    },
+    "pressure-pad": {
+      "file": "pressure-pad.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          36.0,
+          36.0,
+          14.0
+        ]
+      ],
+      "volume_cm3": 6.216043939663609,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        18.0,
+        18.0,
+        4.0
+      ]
+    },
+    "clamp-body--143": {
+      "file": "clamp-body--143.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          126.9993896484375,
+          46.0,
+          111.0
+        ]
+      ],
+      "volume_cm3": 179.94413743542248,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        -381.6678466796875,
+        166.0,
+        -586.0
+      ]
+    },
+    "clamp-body-143": {
+      "file": "clamp-body-143.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          126.9993896484375,
+          46.0,
+          111.0
+        ]
+      ],
+      "volume_cm3": 179.94413743542248,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        -381.6678466796875,
+        -120.0,
+        -586.0
+      ]
+    },
+    "thread-fit-coupon": {
+      "file": "thread-fit-coupon.stl",
+      "bounds_mm": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          28.0,
+          28.0,
+          14.0
+        ]
+      ],
+      "volume_cm3": 8.058356627579585,
+      "watertight": true,
+      "single_solid": true,
+      "print_translation_mm": [
+        14.0,
+        14.0,
+        -0.0
+      ]
+    }
+  },
+  "assembly": {
+    "thread": {
+      "pitch_mm": 4,
+      "major_diameter_mm": 17,
+      "root_diameter_mm": 13.6,
+      "radial_clearance_mm": 0.3,
+      "axial_flank_allowance_mm": 0.3,
+      "jaw_engagement_mm": 14,
+      "nominal_table_mm": 25,
+      "designed_table_range_mm": [
+        15,
+        40
+      ],
+      "ball_radius_mm": 5,
+      "pad_diameter_mm": 36,
+      "pad_capture": "four-slotted snap socket; print fit must be tested"
+    }
+  },
+  "checks": {
+    "screw_pad_intersection_mm3": 0.0,
+    "clamp_table_intersection_-143": 0.0,
+    "clamp_table_intersection_143": 0.0,
+    "screw_body_intersection_mm3": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "evaluated_geometry_sha256": "8de61699397e327238ab115a6f2370943c672d67a8a0469c1c785f8a732274d0"
+  }
+}

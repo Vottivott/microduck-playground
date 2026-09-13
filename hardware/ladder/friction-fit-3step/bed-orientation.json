@@ -1,0 +1,142 @@
+{
+  "module-01": {
+    "rotation_xyz_deg": [
+      -127.3885010745202,
+      -130.22833974695524,
+      8.60256943459012
+    ],
+    "bounds_mm": [
+      226.1675530617133,
+      226.16755309237504,
+      226.16752585240482
+    ],
+    "geometric_fit_256cube": true,
+    "supports_not_sliced": true
+  },
+  "module-02": {
+    "rotation_xyz_deg": [
+      64.30422937898996,
+      39.19605707209964,
+      -172.28512261516926
+    ],
+    "bounds_mm": [
+      228.1735140821374,
+      228.17350886172687,
+      228.17342782492815
+    ],
+    "geometric_fit_256cube": true,
+    "supports_not_sliced": true
+  },
+  "module-03": {
+    "rotation_xyz_deg": [
+      -115.69592483297559,
+      -39.195962551506234,
+      82.2854631845093
+    ],
+    "bounds_mm": [
+      228.17349551155098,
+      228.1735250866423,
+      228.17350771185414
+    ],
+    "geometric_fit_256cube": true,
+    "supports_not_sliced": true
+  },
+  "module-04": {
+    "rotation_xyz_deg": [
+      64.30429566847235,
+      39.19606864210231,
+      -172.28501077196364
+    ],
+    "bounds_mm": [
+      228.17345788407508,
+      228.17343468695378,
+      228.17347766811585
+    ],
+    "geometric_fit_256cube": true,
+    "supports_not_sliced": true
+  },
+  "module-05": {
+    "rotation_xyz_deg": [
+      -115.79815302829289,
+      140.85519352389878,
+      7.502327093805138
+    ],
+    "bounds_mm": [
+      228.19077691426034,
+      228.19077611949285,
+      228.19011363520917
+    ],
+    "geometric_fit_256cube": true,
+    "supports_not_sliced": true
+  },
+  "module-06": {
+    "rotation_xyz_deg": [
+      115.69568881492218,
+      -39.196066191167354,
+      7.715007626251054
+    ],
+    "bounds_mm": [
+      228.1734243618124,
+      228.1734111603129,
+      228.1735136814698
+    ],
+    "geometric_fit_256cube": true,
+    "supports_not_sliced": true
+  },
+  "module-07": {
+    "rotation_xyz_deg": [
+      149.41088695926217,
+      -5.971588052628869,
+      39.45138526071198
+    ],
+    "bounds_mm": [
+      228.17346613725854,
+      228.17351405566956,
+      228.17351406729705
+    ],
+    "geometric_fit_256cube": true,
+    "supports_not_sliced": true
+  },
+  "module-08": {
+    "rotation_xyz_deg": [
+      51.62159689591719,
+      129.89740448360794,
+      80.20999753337524
+    ],
+    "bounds_mm": [
+      228.14390561031922,
+      228.14390269293762,
+      228.143906390393
+    ],
+    "geometric_fit_256cube": true,
+    "supports_not_sliced": true
+  },
+  "module-09": {
+    "rotation_xyz_deg": [
+      67.52253933209957,
+      121.34613468918515,
+      100.82302787492951
+    ],
+    "bounds_mm": [
+      227.7859167258599,
+      227.78591667119338,
+      227.78588423630137
+    ],
+    "geometric_fit_256cube": true,
+    "supports_not_sliced": true
+  },
+  "floor-0": {
+    "rotation_xyz_deg": [
+      0,
+      0,
+      45
+    ],
+    "bounds_mm": [
+      202.2325394193526,
+      202.23253941935258,
+      18.162899017333984
+    ],
+    "geometric_fit_256cube": true,
+    "supports_not_sliced": true
+  }
+}

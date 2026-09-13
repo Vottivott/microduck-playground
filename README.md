@@ -124,6 +124,19 @@ configuration. Parametric generators and printable meshes are under
   </tr>
 </table>
 
+The modular climbing ladder has pin-free stacking joints, a central spine, a
+matching floor base and printed tightening screws for the table mounts.
+Printable models, generators, assembly instructions and the full gallery are under
+[`hardware/ladder`](hardware/ladder/README.md).
+
+<table>
+  <tr>
+    <td align="center"><img src="hardware/ladder/renders/friction-exploded.png" width="300" alt="Stackable ladder modules and friction-fit joints"><br><sub>Stacking joints</sub></td>
+    <td align="center"><img src="hardware/ladder/renders/friction-floor-assembled.png" width="300" alt="Modular ladder floor base"><br><sub>Floor base</sub></td>
+    <td align="center"><img src="hardware/ladder/renders/friction-top-module.png" width="300" alt="Top module with threaded table mounts"><br><sub>Table mounts</sub></td>
+  </tr>
+</table>
+
 ## Quick start
 
 A CUDA GPU and [`uv`](https://docs.astral.sh/uv/) are recommended. Training
