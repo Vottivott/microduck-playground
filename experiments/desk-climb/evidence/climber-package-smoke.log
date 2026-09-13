@@ -1,0 +1,510 @@
+/scratch/floor-desk/repo/.venv/lib/python3.12/site-packages/mjlab/entity/entity.py:149: UserWarning: Actuator config matched 14 joint(s) but the same expressions also match 7 site(s): imu, left_foot, head_camera, tof, head_imu, mouth_tip, right_foot. Add a separate config with transmission_type=TransmissionType.SITE if those should be actuated too.
+  self._add_actuators()
+[mdp] Patches 1-2 active: NaN-safe reward/advantage
+[mdp] Patch 4 active: ONNX export filters passive_* joints
+Setting seed: 123
+Warp 1.12.0 initialized:
+   CUDA Toolkit 12.9, Driver 13.2
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA H200" (140 GiB, sm_90, mempool enabled)
+   Kernel cache:
+     /home/hannes/.cache/warp/1.12.0
+Warp DeprecationWarning: The symbol `warp.context.runtime` will soon be removed from the public API. It can still be accessed from `warp._src.context.runtime` but might be changed or removed without notice.
+Module mujoco_warp._src.smooth 95a0b8b load on device 'cuda:0' took 3.40 ms  (cached)
+Module mujoco_warp._src.collision_driver 88f7770 load on device 'cuda:0' took 0.49 ms  (cached)
+Module _nxn_broadphase__locals__kernel_e73b1315 e73b131 load on device 'cuda:0' took 0.50 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_8fea4ae7 8fea4ae load on device 'cuda:0' took 1.58 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_bd5ecce0 bd5ecce load on device 'cuda:0' took 2.09 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_079dfa94 079dfa9 load on device 'cuda:0' took 2.25 ms  (cached)
+Module _primitive_narrowphase__locals__primitive_narrowphase_b282a07a b282a07 load on device 'cuda:0' took 0.87 ms  (cached)
+Module mujoco_warp._src.constraint 27c5750 load on device 'cuda:0' took 2.30 ms  (cached)
+Module _efc_contact_init__locals__kernel_fda71e14 fda71e1 load on device 'cuda:0' took 0.50 ms  (cached)
+Module _efc_contact_jac_dense__locals__kernel_7974b597 cc0fc30 load on device 'cuda:0' took 0.59 ms  (cached)
+Module _efc_contact_update__locals__kernel_90315d53 90315d5 load on device 'cuda:0' took 0.56 ms  (cached)
+Module mujoco_warp._src.sensor 7fc0378 load on device 'cuda:0' took 2.60 ms  (cached)
+Module mujoco_warp._src.forward f60f76d load on device 'cuda:0' took 1.45 ms  (cached)
+Module mujoco_warp._src.passive 1a5e55c load on device 'cuda:0' took 1.08 ms  (cached)
+Module mujoco_warp._src.forward 8ebfcb1 load on device 'cuda:0' took 1.47 ms  (cached)
+Module mujoco_warp._src.support dd3f924 load on device 'cuda:0' took 0.53 ms  (cached)
+Module _tile_cholesky_factorize_solve__locals__cholesky_factorize_solve_fd1445d3 4a464d2 load on device 'cuda:0' took 41.58 ms  (cached)
+Module mujoco_warp._src.solver b116efb load on device 'cuda:0' took 1.71 ms  (cached)
+Module solve_init_jaref__locals__kernel_2aa8bdf6 2aa8bdf load on device 'cuda:0' took 0.49 ms  (cached)
+Module mul_m_dense__locals___mul_m_dense_5f474d43 5f474d4 load on device 'cuda:0' took 0.47 ms  (cached)
+Module update_constraint_efc__locals__kernel_32935e9d 32935e9 load on device 'cuda:0' took 0.53 ms  (cached)
+Module update_constraint_gauss_cost__locals__kernel_8169a580 8169a58 load on device 'cuda:0' took 0.49 ms  (cached)
+Module update_gradient_JTDAJ_dense_tiled__locals__kernel_9981265a 0667084 load on device 'cuda:0' took 0.97 ms  (cached)
+Module update_gradient_cholesky__locals__kernel_33be19e9 c4273dc load on device 'cuda:0' took 42.19 ms  (cached)
+Module linesearch_jv_fused__locals__kernel_93f316d4 93f316d load on device 'cuda:0' took 0.53 ms  (cached)
+Module linesearch_prepare_gauss__locals__kernel_c412d952 c412d95 load on device 'cuda:0' took 0.53 ms  (cached)
+Module update_constraint_efc__locals__kernel_3c1a9816 3c1a981 load on device 'cuda:0' took 0.56 ms  (cached)
+Module _contact_sort__locals__contact_sort_304c86df 6c97b35 load on device 'cuda:0' took 0.58 ms  (cached)
+Module mujoco_warp._src.derivative d0e2fd7 load on device 'cuda:0' took 0.96 ms  (cached)
+Module reset_data__locals__reset_xfrc_applied_e7898c5c e7898c5 load on device 'cuda:0' took 0.48 ms  (cached)
+Module reset_data__locals__reset_qM_10d3c793 10d3c79 load on device 'cuda:0' took 0.41 ms  (cached)
+Module reset_data__locals__reset_mocap_ff71f630 ff71f63 load on device 'cuda:0' took 0.39 ms  (cached)
+Module reset_data__locals__reset_contact_df686d47 df686d4 load on device 'cuda:0' took 0.40 ms  (cached)
+Module reset_data__locals__reset_nworld_6e0d904e 6e0d904 load on device 'cuda:0' took 0.48 ms  (cached)
+[BamActuator] model='m6' joints=14 kt=0.3660 R=2.8114 vin=range=(6.5, 8.2) drop_gain_range=(0.0, 0.2) force_limit=±1.07Nm friction_base=0.0048 friction_viscous=0.0054 envs=64 device=cuda:0
+Module mujoco_warp._src.render_util 94fd13e load on device 'cuda:0' took 0.64 ms  (cached)
+Module mujoco_warp._src.bvh 08f985a load on device 'cuda:0' took 1.02 ms  (cached)
+Module mujoco_warp._src.ray c8f2bb3 load on device 'cuda:0' took 1.15 ms  (cached)
+
++---------------------------------+
+|         Base Environment        |
++------------------------+--------+
+| Property               | Value  |
++------------------------+--------+
+| Number of environments | 64     |
+| Environment device     | cuda:0 |
+| Environment seed       | 123    |
+| Physics step-size      | 0.005  |
+| Environment step-size  | 0.02   |
++------------------------+--------+
+
+[INFO] <EventManager> contains 2 active terms.
++-------------------------------------+
+| Active Event Terms in Mode: 'reset' |
++-------+-----------------------------+
+| Index | Name                        |
++-------+-----------------------------+
+|   0   | reset_stair_ladder          |
+|   1   | reset_action_history        |
+|   2   | randomize_com               |
+|   3   | randomize_head_com          |
+|   4   | randomize_joint_friction    |
+|   5   | randomize_armature          |
++-------+-----------------------------+
++---------------------------------------+
+| Active Event Terms in Mode: 'startup' |
++-------+-------------------------------+
+| Index | Name                          |
++-------+-------------------------------+
+|   0   | foot_friction                 |
+|   1   | encoder_bias                  |
+|   2   | base_com                      |
+|   3   | expand_bam_friction_fields    |
+|   4   | randomize_mass_inertia        |
++-------+-------------------------------+
++-----------------------------+
+| Domain Randomization Fields |
++-------+---------------------+
+| Index | Field Name          |
++-------+---------------------+
+|   0   | geom_friction       |
+|   1   | body_ipos           |
+|   2   | body_subtreemass    |
+|   3   | dof_invweight0      |
+|   4   | body_invweight0     |
+|   5   | tendon_length0      |
+|   6   | tendon_invweight0   |
+|   7   | dof_frictionloss    |
+|   8   | dof_damping         |
+|   9   | body_mass           |
+|   10  | body_inertia        |
+|   11  | body_iquat          |
+|   12  | dof_armature        |
++-------+---------------------+
+
+Module repeat_array_kernel_39317a34 b712927 load on device 'cuda:0' took 0.49 ms  (cached)
+Module repeat_array_kernel_39317a34 18fcc7e load on device 'cuda:0' took 0.50 ms  (cached)
+Module repeat_array_kernel_39317a34 5cde7e8 load on device 'cuda:0' took 0.53 ms  (cached)
+Module repeat_array_kernel_39317a34 0fe3117 load on device 'cuda:0' took 0.58 ms  (cached)
+[INFO] <CommandManager> contains 1 active terms.
++--------------------------------------------+
+|            Active Command Terms            |
++-------+-------+----------------------------+
+| Index | Name  |            Type            |
++-------+-------+----------------------------+
+|   0   | twist | VelocityCommandCommandOnly |
++-------+-------+----------------------------+
+
+[INFO] <ActionManager> contains 1 active terms.
++---------------------------------+
+| Active Action Terms (shape: 14) |
++-------+-----------+-------------+
+| Index | Name      |   Dimension |
++-------+-----------+-------------+
+|   0   | joint_pos |          14 |
++-------+-----------+-------------+
+
+[INFO] <ObservationManager> contains 2 groups.
++-----------------------------------------------------------+
+| Active Observation Terms in Group: 'actor' (shape: (61,)) |
++-----------+----------------------------------+------------+
+|   Index   | Name                             |   Shape    |
++-----------+----------------------------------+------------+
+|     0     | base_ang_vel                     |    (3,)    |
+|     1     | projected_gravity                |    (3,)    |
+|     2     | joint_pos                        |   (14,)    |
+|     3     | joint_vel                        |   (14,)    |
+|     4     | actions                          |   (14,)    |
+|     5     | command                          |    (3,)    |
+|     6     | head_command                     |    (4,)    |
+|     7     | body_command                     |    (6,)    |
++-----------+----------------------------------+------------+
++------------------------------------------------------------+
+| Active Observation Terms in Group: 'critic' (shape: (76,)) |
++----------+------------------------------------+------------+
+|  Index   | Name                               |   Shape    |
++----------+------------------------------------+------------+
+|    0     | base_lin_vel                       |    (3,)    |
+|    1     | base_ang_vel                       |    (3,)    |
+|    2     | projected_gravity                  |    (3,)    |
+|    3     | joint_pos                          |   (14,)    |
+|    4     | joint_vel                          |   (14,)    |
+|    5     | actions                            |   (14,)    |
+|    6     | command                            |    (3,)    |
+|    7     | foot_height                        |    (2,)    |
+|    8     | foot_air_time                      |    (2,)    |
+|    9     | foot_contact                       |    (2,)    |
+|    10    | foot_contact_forces                |    (6,)    |
+|    11    | head_command                       |    (4,)    |
+|    12    | body_command                       |    (6,)    |
++----------+------------------------------------+------------+
+
+[INFO] <TerminationManager> contains 10 active terms.
++------------------------------------------+
+|         Active Termination Terms         |
++-------+-----------------------+----------+
+| Index | Name                  | Time Out |
++-------+-----------------------+----------+
+|   0   | time_out              |   True   |
+|   1   | out_of_terrain_bounds |   True   |
+|   2   | nan_state             |  False   |
+|   3   | bad_orientation       |  False   |
+|   4   | fallen                |  False   |
+|   5   | off_side              |  False   |
+|   6   | foot_fling            |  False   |
+|   7   | overstep              |  False   |
+|   8   | airborne              |  False   |
+|   9   | reached_top           |   True   |
++-------+-----------------------+----------+
+
+[INFO] <RewardManager> contains 18 active terms.
++----------------------------------------+
+|          Active Reward Terms           |
++-------+-----------------------+--------+
+| Index | Name                  | Weight |
++-------+-----------------------+--------+
+|   0   | body_ang_vel          |  -0.05 |
+|   1   | angular_momentum      |  -0.05 |
+|   2   | dof_pos_limits        |   -1.0 |
+|   3   | action_rate_l2        |   -0.1 |
+|   4   | self_collisions       |   -1.0 |
+|   5   | upward_progress       | 1000.0 |
+|   6   | stance                |    2.0 |
+|   7   | gait_reference        |    0.0 |
+|   8   | gait_foot_reference   |    0.0 |
+|   9   | foot_target_progress  |  300.0 |
+|   10  | body_ladder_contact   |   0.02 |
+|   11  | vertical_impact       |    0.5 |
+|   12  | swing_overshoot       |   50.0 |
+|   13  | desk_progress         |  300.0 |
+|   14  | desk_standing_quality |    0.0 |
+|   15  | desk_leg_pose_cost    |    0.0 |
+|   16  | desk_leg_action_cost  |    0.0 |
+|   17  | table_arrival         |    5.0 |
++-------+-----------------------+--------+
+
+[INFO] <NullCurriculumManager> (inactive)
+[INFO] <MetricsManager> contains 1 active terms.
++-------------------------+
+|   Active Metrics Terms  |
++-------+-----------------+
+| Index | Name            |
++-------+-----------------+
+|   0   | mean_action_acc |
++-------+-----------------+
+
+[INFO] <NullRecorderManager> (inactive)
+Module mujoco_warp._src.io 4b387a0 load on device 'cuda:0' took 2.16 ms  (cached)
+Module _tile_cholesky_factorize__locals__cholesky_factorize_0587d9b8 99b4248 load on device 'cuda:0' took 30.04 ms  (cached)
+Module _tile_cholesky_solve__locals__cholesky_solve_11830e2e 7d510a5 load on device 'cuda:0' took 28.90 ms  (cached)
+--------------------------------------------------------------------------------
+Resolved observation sets: 
+	 actor :  ('actor',)
+	 critic :  ('critic',)
+--------------------------------------------------------------------------------
+Actor Model: MLPModel(
+  (obs_normalizer): EmpiricalNormalization()
+  (distribution): GaussianDistribution()
+  (mlp): MLP(
+    (0): Linear(in_features=61, out_features=512, bias=True)
+    (1): ELU(alpha=1.0)
+    (2): Linear(in_features=512, out_features=256, bias=True)
+    (3): ELU(alpha=1.0)
+    (4): Linear(in_features=256, out_features=128, bias=True)
+    (5): ELU(alpha=1.0)
+    (6): Linear(in_features=128, out_features=14, bias=True)
+  )
+)
+Critic Model: MLPModel(
+  (obs_normalizer): EmpiricalNormalization()
+  (mlp): MLP(
+    (0): Linear(in_features=76, out_features=512, bias=True)
+    (1): ELU(alpha=1.0)
+    (2): Linear(in_features=512, out_features=256, bias=True)
+    (3): ELU(alpha=1.0)
+    (4): Linear(in_features=256, out_features=128, bias=True)
+    (5): ELU(alpha=1.0)
+    (6): Linear(in_features=128, out_features=1, bias=True)
+  )
+)
+Setting seed: 123
+Could not find git repository in /scratch/floor-desk/repo/.venv/lib/python3.12/site-packages/rsl_rl/__init__.py. Skipping.
+################################################################################
+[1m                         Learning iteration 56501/56506                         [0m 
+
+                               Run name: central_spine
+                            Total steps: 1536 
+                       Steps per second: 816 
+                        Collection time: 1.699s 
+                          Learning time: 0.182s 
+                        Mean value loss: 0.5548
+                    Mean surrogate loss: -0.0058
+                      Mean entropy loss: 7.4533
+                            Mean reward: 0.08
+                    Mean episode length: 20.50
+                        Mean action std: 0.41
+            Episode_Reward/body_ang_vel: -0.0007
+        Episode_Reward/angular_momentum: -0.0000
+          Episode_Reward/dof_pos_limits: -0.0001
+          Episode_Reward/action_rate_l2: -0.0010
+         Episode_Reward/self_collisions: -0.0000
+         Episode_Reward/upward_progress: 0.0005
+                  Episode_Reward/stance: 0.0000
+          Episode_Reward/gait_reference: 0.0000
+     Episode_Reward/gait_foot_reference: 0.0000
+    Episode_Reward/foot_target_progress: 0.0015
+     Episode_Reward/body_ladder_contact: -0.0000
+         Episode_Reward/vertical_impact: -0.0000
+         Episode_Reward/swing_overshoot: -0.0004
+           Episode_Reward/desk_progress: 0.0000
+   Episode_Reward/desk_standing_quality: 0.0000
+      Episode_Reward/desk_leg_pose_cost: 0.0000
+    Episode_Reward/desk_leg_action_cost: 0.0000
+           Episode_Reward/table_arrival: 0.0000
+        Episode_Metrics/mean_action_acc: 0.1729
+             Metrics/twist/error_vel_xy: 0.0022
+            Metrics/twist/error_vel_yaw: 0.0209
+           Episode_Termination/time_out: 0.0000
+Episode_Termination/out_of_terrain_bounds: 0.0000
+          Episode_Termination/nan_state: 0.0000
+    Episode_Termination/bad_orientation: 0.0000
+             Episode_Termination/fallen: 0.0000
+           Episode_Termination/off_side: 0.0000
+         Episode_Termination/foot_fling: 0.1667
+           Episode_Termination/overstep: 0.0417
+           Episode_Termination/airborne: 0.0000
+        Episode_Termination/reached_top: 0.0000
+          Metrics/angular_momentum_mean: 0.0135
+--------------------------------------------------------------------------------
+                         Iteration time: 1.88s
+                           Time elapsed: 00:00:01
+                                    ETA: 00:00:07
+
+################################################################################
+[1m                         Learning iteration 56502/56506                         [0m 
+
+                               Run name: central_spine
+                            Total steps: 3072 
+                       Steps per second: 872 
+                        Collection time: 1.634s 
+                          Learning time: 0.127s 
+                        Mean value loss: 0.5371
+                    Mean surrogate loss: -0.0059
+                      Mean entropy loss: 7.4538
+                            Mean reward: -0.52
+                    Mean episode length: 33.80
+                        Mean action std: 0.41
+            Episode_Reward/body_ang_vel: -0.0057
+        Episode_Reward/angular_momentum: -0.0000
+          Episode_Reward/dof_pos_limits: -0.0005
+          Episode_Reward/action_rate_l2: -0.0063
+         Episode_Reward/self_collisions: -0.0000
+         Episode_Reward/upward_progress: -0.0003
+                  Episode_Reward/stance: 0.0026
+          Episode_Reward/gait_reference: 0.0000
+     Episode_Reward/gait_foot_reference: 0.0000
+    Episode_Reward/foot_target_progress: 0.0053
+     Episode_Reward/body_ladder_contact: -0.0001
+         Episode_Reward/vertical_impact: -0.0003
+         Episode_Reward/swing_overshoot: -0.0024
+           Episode_Reward/desk_progress: 0.0000
+   Episode_Reward/desk_standing_quality: 0.0000
+      Episode_Reward/desk_leg_pose_cost: 0.0000
+    Episode_Reward/desk_leg_action_cost: 0.0000
+           Episode_Reward/table_arrival: 0.0000
+        Episode_Metrics/mean_action_acc: 0.8369
+             Metrics/twist/error_vel_xy: 0.0145
+            Metrics/twist/error_vel_yaw: 0.1571
+           Episode_Termination/time_out: 0.0000
+Episode_Termination/out_of_terrain_bounds: 0.0000
+          Episode_Termination/nan_state: 0.0000
+    Episode_Termination/bad_orientation: 0.0000
+             Episode_Termination/fallen: 0.3750
+           Episode_Termination/off_side: 0.3333
+         Episode_Termination/foot_fling: 0.6250
+           Episode_Termination/overstep: 0.0000
+           Episode_Termination/airborne: 0.0000
+        Episode_Termination/reached_top: 0.0000
+          Metrics/angular_momentum_mean: 0.0078
+--------------------------------------------------------------------------------
+                         Iteration time: 1.76s
+                           Time elapsed: 00:00:03
+                                    ETA: 00:00:05
+
+################################################################################
+[1m                         Learning iteration 56503/56506                         [0m 
+
+                               Run name: central_spine
+                            Total steps: 4608 
+                       Steps per second: 736 
+                        Collection time: 1.959s 
+                          Learning time: 0.128s 
+                        Mean value loss: 0.2875
+                    Mean surrogate loss: -0.0055
+                      Mean entropy loss: 7.4535
+                            Mean reward: -0.34
+                    Mean episode length: 50.62
+                        Mean action std: 0.41
+            Episode_Reward/body_ang_vel: -0.0054
+        Episode_Reward/angular_momentum: -0.0000
+          Episode_Reward/dof_pos_limits: -0.0014
+          Episode_Reward/action_rate_l2: -0.0110
+         Episode_Reward/self_collisions: -0.0003
+         Episode_Reward/upward_progress: -0.0043
+                  Episode_Reward/stance: 0.0055
+          Episode_Reward/gait_reference: 0.0000
+     Episode_Reward/gait_foot_reference: 0.0000
+    Episode_Reward/foot_target_progress: 0.0076
+     Episode_Reward/body_ladder_contact: -0.0002
+         Episode_Reward/vertical_impact: -0.0006
+         Episode_Reward/swing_overshoot: -0.0010
+           Episode_Reward/desk_progress: 0.0003
+   Episode_Reward/desk_standing_quality: 0.0000
+      Episode_Reward/desk_leg_pose_cost: 0.0000
+    Episode_Reward/desk_leg_action_cost: 0.0000
+           Episode_Reward/table_arrival: 0.0000
+        Episode_Metrics/mean_action_acc: 0.7941
+             Metrics/twist/error_vel_xy: 0.0388
+            Metrics/twist/error_vel_yaw: 0.2989
+           Episode_Termination/time_out: 0.0000
+Episode_Termination/out_of_terrain_bounds: 0.0000
+          Episode_Termination/nan_state: 0.0000
+    Episode_Termination/bad_orientation: 0.0000
+             Episode_Termination/fallen: 1.0000
+           Episode_Termination/off_side: 0.1250
+         Episode_Termination/foot_fling: 0.0417
+           Episode_Termination/overstep: 0.0417
+           Episode_Termination/airborne: 0.0000
+        Episode_Termination/reached_top: 0.0000
+          Metrics/angular_momentum_mean: 0.0079
+--------------------------------------------------------------------------------
+                         Iteration time: 2.09s
+                           Time elapsed: 00:00:05
+                                    ETA: 00:00:03
+
+################################################################################
+[1m                         Learning iteration 56504/56506                         [0m 
+
+                               Run name: central_spine
+                            Total steps: 6144 
+                       Steps per second: 791 
+                        Collection time: 1.813s 
+                          Learning time: 0.128s 
+                        Mean value loss: 0.3587
+                    Mean surrogate loss: -0.0054
+                      Mean entropy loss: 7.4533
+                            Mean reward: -0.30
+                    Mean episode length: 54.27
+                        Mean action std: 0.41
+            Episode_Reward/body_ang_vel: -0.0068
+        Episode_Reward/angular_momentum: -0.0000
+          Episode_Reward/dof_pos_limits: -0.0020
+          Episode_Reward/action_rate_l2: -0.0145
+         Episode_Reward/self_collisions: -0.0008
+         Episode_Reward/upward_progress: -0.0000
+                  Episode_Reward/stance: 0.0121
+          Episode_Reward/gait_reference: 0.0000
+     Episode_Reward/gait_foot_reference: 0.0000
+    Episode_Reward/foot_target_progress: 0.0118
+     Episode_Reward/body_ladder_contact: -0.0004
+         Episode_Reward/vertical_impact: -0.0007
+         Episode_Reward/swing_overshoot: -0.0013
+           Episode_Reward/desk_progress: 0.0013
+   Episode_Reward/desk_standing_quality: 0.0000
+      Episode_Reward/desk_leg_pose_cost: 0.0000
+    Episode_Reward/desk_leg_action_cost: 0.0000
+           Episode_Reward/table_arrival: 0.0000
+        Episode_Metrics/mean_action_acc: 0.7990
+             Metrics/twist/error_vel_xy: 0.0363
+            Metrics/twist/error_vel_yaw: 0.3094
+           Episode_Termination/time_out: 0.0000
+Episode_Termination/out_of_terrain_bounds: 0.0000
+          Episode_Termination/nan_state: 0.0000
+    Episode_Termination/bad_orientation: 0.0000
+             Episode_Termination/fallen: 0.9583
+           Episode_Termination/off_side: 0.0000
+         Episode_Termination/foot_fling: 0.0417
+           Episode_Termination/overstep: 0.0833
+           Episode_Termination/airborne: 0.0000
+        Episode_Termination/reached_top: 0.0000
+          Metrics/angular_momentum_mean: 0.0070
+--------------------------------------------------------------------------------
+                         Iteration time: 1.94s
+                           Time elapsed: 00:00:07
+                                    ETA: 00:00:01
+
+################################################################################
+[1m                         Learning iteration 56505/56506                         [0m 
+
+                               Run name: central_spine
+                            Total steps: 7680 
+                       Steps per second: 838 
+                        Collection time: 1.705s 
+                          Learning time: 0.127s 
+                        Mean value loss: 0.1291
+                    Mean surrogate loss: -0.0057
+                      Mean entropy loss: 7.4534
+                            Mean reward: -0.23
+                    Mean episode length: 52.74
+                        Mean action std: 0.41
+            Episode_Reward/body_ang_vel: -0.0060
+        Episode_Reward/angular_momentum: -0.0000
+          Episode_Reward/dof_pos_limits: -0.0015
+          Episode_Reward/action_rate_l2: -0.0103
+         Episode_Reward/self_collisions: -0.0001
+         Episode_Reward/upward_progress: -0.0091
+                  Episode_Reward/stance: 0.0118
+          Episode_Reward/gait_reference: 0.0000
+     Episode_Reward/gait_foot_reference: 0.0000
+    Episode_Reward/foot_target_progress: 0.0092
+     Episode_Reward/body_ladder_contact: -0.0002
+         Episode_Reward/vertical_impact: -0.0004
+         Episode_Reward/swing_overshoot: -0.0008
+           Episode_Reward/desk_progress: 0.0000
+   Episode_Reward/desk_standing_quality: 0.0000
+      Episode_Reward/desk_leg_pose_cost: 0.0000
+    Episode_Reward/desk_leg_action_cost: 0.0000
+           Episode_Reward/table_arrival: 0.0000
+        Episode_Metrics/mean_action_acc: 0.8312
+             Metrics/twist/error_vel_xy: 0.0245
+            Metrics/twist/error_vel_yaw: 0.2180
+           Episode_Termination/time_out: 0.0000
+Episode_Termination/out_of_terrain_bounds: 0.0000
+          Episode_Termination/nan_state: 0.0000
+    Episode_Termination/bad_orientation: 0.0000
+             Episode_Termination/fallen: 0.7083
+           Episode_Termination/off_side: 0.0000
+         Episode_Termination/foot_fling: 0.3333
+           Episode_Termination/overstep: 0.0000
+           Episode_Termination/airborne: 0.0000
+        Episode_Termination/reached_top: 0.0000
+          Metrics/angular_momentum_mean: 0.0070
+--------------------------------------------------------------------------------
+                         Iteration time: 1.83s
+                           Time elapsed: 00:00:09
+                                    ETA: 00:00:00
+

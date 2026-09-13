@@ -88,6 +88,12 @@ full-video link—to open the complete silent MP4.
         <a href="https://huggingface.co/HannesVonEssen/microduck-stilts">Policies and videos</a>
       </td>
     </tr>
+  <tr>
+    <td><strong>Climbing</strong></td>
+    <td><a href="experiments/desk-climb/media/preview.mp4"><img src="experiments/desk-climb/media/preview.gif" width="280" alt="Cream Microduck climbing a modular ladder onto a desk and standing up"></a></td>
+    <td>Climb, land, recover.<br>
+    <a href="experiments/desk-climb/README.md">Experiment and training</a> · <a href="hardware/ladder/README.md">Ladder and mounts</a> · <a href="https://huggingface.co/HannesVonEssen/microduck-climb">Models</a></td>
+  </tr>
   </tbody>
 </table>
 

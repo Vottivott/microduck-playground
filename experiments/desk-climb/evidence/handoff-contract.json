@@ -1,0 +1,17 @@
+{
+  "arm": "official",
+  "simulator_only_trigger": "supported_root",
+  "trigger_not_actor_input": true,
+  "actor13zero": true,
+  "standing_action_scale": 1.0,
+  "official_gain_ratio": 0.8,
+  "official_filter": {
+    "head": 0.5,
+    "legs": 0.7
+  },
+  "previous_action": "raw policy output; filter seeded from last executed climbing target",
+  "delays": "existing BAM3to6lag preserved; not hardware parity claim",
+  "continuous_after_flags": true,
+  "failure_flags_do_not_disable_recovery": true,
+  "policy_sha256": "11a9693ed87f550c6f6859caaad69c9e86890692c4b6f046a41eaa3ec77d20ad"
+}

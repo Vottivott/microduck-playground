@@ -1,0 +1,9 @@
+{
+  "geom": 125,
+  "half_sizes": [
+    0.7,
+    0.4,
+    0.0125
+  ],
+  "full_table_collision_verified": true
+}

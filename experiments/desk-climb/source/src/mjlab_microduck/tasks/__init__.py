@@ -1,0 +1,388 @@
+from mjlab.tasks.registry import register_mjlab_task
+from mjlab.tasks.velocity.rl import VelocityOnPolicyRunner
+
+
+class MicroduckOnPolicyRunner(VelocityOnPolicyRunner):
+    def load(self, path, *args, **kwargs):
+        """Resume, then optionally pin the policy's action std
+        (``MICRODUCK_FIX_ACTION_STD=<value>``): s39/s40 lesson - the staircase
+        policy's std drifts to 0.5-0.7 and PPO's noise alone breaks the
+        top-landing stop; a reset std grows back within 500 iterations."""
+        out = super().load(path, *args, **kwargs)
+        import os as _os
+        fixed = _os.getenv("MICRODUCK_FIX_ACTION_STD")
+        if fixed:
+            actor = self.alg.get_policy() if hasattr(self.alg, "get_policy") else getattr(self.alg, "policy", None)
+            for name, prm in actor.named_parameters():
+                if name.endswith("std_param") or name.endswith("log_std") or name == "std":
+                    with __import__("torch").no_grad():
+                        prm.fill_(float(fixed))
+                    prm.requires_grad_(False)
+                    print(f"[runner] action std pinned at {fixed} ({name})")
+        return out
+
+    def __init__(self, env, train_cfg: dict, log_dir=None, device="cpu", **kwargs):
+        super().__init__(env, train_cfg, log_dir, device, **kwargs)
+        # resolve_symmetry_config injects _env into train_cfg["algorithm"]["symmetry_cfg"]
+        # in-place, sharing the same dict object with self.alg.symmetry.  Replace the
+        # train_cfg reference with a copy that omits _env so dump_yaml can serialize the
+        # config (MjSpec is not picklable), without touching the PPO's internal reference.
+        alg = train_cfg.get("algorithm", {})
+        sym = alg.get("symmetry_cfg") if isinstance(alg, dict) else None
+        if isinstance(sym, dict) and "_env" in sym:
+            alg["symmetry_cfg"] = {k: v for k, v in sym.items() if k != "_env"}
+
+
+from .microduck_velocity_env_cfg import (
+    make_microduck_velocity_env_cfg,
+    MicroduckRlCfg,
+)
+from .microduck_running_env_cfg import (
+    make_microduck_running_env_cfg,
+    MicroduckRunningRlCfg,
+    MicroduckRunningFlightRlCfg,
+)
+from .microduck_stilt_env_cfg import (
+    make_microduck_stilt_env_cfg,
+    MicroduckStiltRlCfg,
+)
+from .microduck_standup_env_cfg import (
+    make_microduck_standup_env_cfg,
+    MicroduckStandUpRlCfg,
+)
+from .microduck_velstand_env_cfg import (
+    make_microduck_velstand_env_cfg,
+    MicroduckVelStandRlCfg,
+)
+from .microduck_ground_pick_env_cfg import (
+    make_microduck_ground_pick_env_cfg,
+    MicroduckGroundPickRlCfg,
+)
+from .microduck_ladder_env_cfg import (
+    make_microduck_ladder_env_cfg,
+    make_microduck_staircase_env_cfg,
+    make_microduck_staircase_demo_env_cfg,
+    MicroduckLadderRlCfg,
+    MicroduckStaircaseLandingRlCfg,
+    MicroduckStaircaseRlCfg,
+    make_microduck_staircase_landing_env_cfg,
+    MicroduckStaircaseDemoRlCfg,
+)
+from .microduck_ball_kick_env_cfg import (
+    make_microduck_ball_kick_env_cfg,
+    MicroduckBallKickRlCfg,
+)
+from .microduck_sitstand_env_cfg import (
+    make_microduck_sitstand_env_cfg,
+    MicroduckSitStandRlCfg,
+)
+from .microduck_velocity_rollers_env_cfg import (
+    make_microduck_velocity_rollers_env_cfg,
+    MicroduckRollersRlCfg,
+)
+from .microduck_velocity_swizzle_env_cfg import (
+    make_microduck_velocity_swizzle_env_cfg,
+    MicroduckSwizzleRlCfg,
+)
+from .microduck_roller_crouch_env_cfg import (
+    make_microduck_roller_crouch_env_cfg,
+    MicroduckRollerCrouchRlCfg,
+)
+from .microduck_roller_slope_env_cfg import (
+    make_microduck_roller_slope_env_cfg,
+    MicroduckRollerSlopeRlCfg,
+)
+from .microduck_roller_standup_env_cfg import (
+    make_microduck_roller_standup_env_cfg,
+    MicroduckRollerStandUpRlCfg,
+)
+from .microduck_spin_env_cfg import (
+    make_microduck_spin_env_cfg,
+    MicroduckSpinRlCfg,
+)
+from .microduck_roulade_env_cfg import (
+    make_microduck_roulade_env_cfg,
+    MicroduckRouladeRlCfg,
+)
+from .backlash import make_backlash_variant
+
+# Standard velocity task
+register_mjlab_task(
+    task_id="Mjlab-Velocity-Flat-MicroDuck",
+    env_cfg=make_microduck_velocity_env_cfg(),
+    play_env_cfg=make_microduck_velocity_env_cfg(play=True),
+    rl_cfg=MicroduckRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+register_mjlab_task(
+    task_id="Mjlab-Velocity-Rough-MicroDuck",
+    env_cfg=make_microduck_velocity_env_cfg(rough=True),
+    play_env_cfg=make_microduck_velocity_env_cfg(play=True, rough=True),
+    rl_cfg=MicroduckRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# Forward-only max-speed task and a controlled-flight ablation.  Both preserve
+# the walking policy's 61D observation and 14D action contracts.
+register_mjlab_task(
+    task_id="Mjlab-Running-Flat-MicroDuck",
+    env_cfg=make_microduck_running_env_cfg(),
+    play_env_cfg=make_microduck_running_env_cfg(play=True),
+    rl_cfg=MicroduckRunningRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+register_mjlab_task(
+    task_id="Mjlab-RunningFlight-Flat-MicroDuck",
+    env_cfg=make_microduck_running_env_cfg(flight_reward_weight=1.5),
+    play_env_cfg=make_microduck_running_env_cfg(play=True, flight_reward_weight=1.5),
+    rl_cfg=MicroduckRunningFlightRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# Modular stilt locomotion. Morphology is selected at compile time through
+# MICRODUCK_STILT_HEIGHT_MM and MICRODUCK_STILT_BLEND so checkpoints can move
+# through a platform-to-peg, then short-to-tall curriculum.
+register_mjlab_task(
+    task_id="Mjlab-Stilt-Flat-MicroDuck",
+    env_cfg=make_microduck_stilt_env_cfg(),
+    play_env_cfg=make_microduck_stilt_env_cfg(play=True),
+    rl_cfg=MicroduckStiltRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# VelStand — walking + fall recovery + body pose control in one policy.
+register_mjlab_task(
+    task_id="Mjlab-VelStand-Flat-MicroDuck",
+    env_cfg=make_microduck_velstand_env_cfg(),
+    play_env_cfg=make_microduck_velstand_env_cfg(play=True),
+    rl_cfg=MicroduckVelStandRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+register_mjlab_task(
+    task_id="Mjlab-VelStand-Rough-MicroDuck",
+    env_cfg=make_microduck_velstand_env_cfg(rough=True),
+    play_env_cfg=make_microduck_velstand_env_cfg(play=True, rough=True),
+    rl_cfg=MicroduckVelStandRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# Stand-up task — robot starts inverted (lying on back) and must stand up
+register_mjlab_task(
+    task_id="Mjlab-StandUp-Flat-MicroDuck",
+    env_cfg=make_microduck_standup_env_cfg(),
+    play_env_cfg=make_microduck_standup_env_cfg(play=True),
+    rl_cfg=MicroduckStandUpRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+register_mjlab_task(
+    task_id="Mjlab-StandUp-Rough-MicroDuck",
+    env_cfg=make_microduck_standup_env_cfg(rough=True),
+    play_env_cfg=make_microduck_standup_env_cfg(play=True, rough=True),
+    rl_cfg=MicroduckStandUpRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# SitStand task — commanded sit ↔ stand in one policy, gently, head commandable
+register_mjlab_task(
+    task_id="Mjlab-SitStand-Flat-MicroDuck",
+    env_cfg=make_microduck_sitstand_env_cfg(),
+    play_env_cfg=make_microduck_sitstand_env_cfg(play=True),
+    rl_cfg=MicroduckSitStandRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+register_mjlab_task(
+    task_id="Mjlab-SitStand-Rough-MicroDuck",
+    env_cfg=make_microduck_sitstand_env_cfg(rough=True),
+    play_env_cfg=make_microduck_sitstand_env_cfg(play=True, rough=True),
+    rl_cfg=MicroduckSitStandRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# Ground-pick task — crouch, touch the ground with the mouth tip, return to stand
+register_mjlab_task(
+    task_id="Mjlab-GroundPick-Flat-MicroDuck",
+    env_cfg=make_microduck_ground_pick_env_cfg(),
+    play_env_cfg=make_microduck_ground_pick_env_cfg(play=True),
+    rl_cfg=MicroduckGroundPickRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# Alternating-tread stair-ladder climb (velocity recipe + per-env ladder
+# geometry curriculum).  Actor/action contracts remain 61D/14D.
+register_mjlab_task(
+    task_id="Mjlab-LadderClimb-MicroDuck",
+    env_cfg=make_microduck_ladder_env_cfg(),
+    play_env_cfg=make_microduck_ladder_env_cfg(play=True),
+    rl_cfg=MicroduckLadderRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# Staircase: mini stairs with landings (see make_microduck_staircase_env_cfg).
+register_mjlab_task(
+    task_id="Mjlab-Staircase-MicroDuck",
+    env_cfg=make_microduck_staircase_env_cfg(),
+    play_env_cfg=make_microduck_staircase_env_cfg(play=True),
+    rl_cfg=MicroduckStaircaseRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+register_mjlab_task(
+    task_id="Mjlab-StaircaseLanding-MicroDuck",
+    env_cfg=make_microduck_staircase_landing_env_cfg(),
+    play_env_cfg=make_microduck_staircase_landing_env_cfg(play=True),
+    rl_cfg=MicroduckStaircaseLandingRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# Demo: the real corner staircase (fixed frames, mesh landings), play/eval.
+# Registered only on request: its 160 entity cfgs and polygon tuples make
+# tyro's CLI parsing in `train` hang (s2 launch, 2026-09-03).
+import os as _os
+
+if _os.getenv("MICRODUCK_STAIRCASE_DEMO", "0") == "1":
+    register_mjlab_task(
+        task_id="Mjlab-StaircaseDemo-MicroDuck",
+        env_cfg=make_microduck_staircase_demo_env_cfg(play=False),
+        play_env_cfg=make_microduck_staircase_demo_env_cfg(play=True),
+        rl_cfg=MicroduckStaircaseDemoRlCfg,
+        runner_cls=MicroduckOnPolicyRunner,
+    )
+
+# BallKick task — kick a 70mm/15g ball forward hard with the right foot from a
+# standing start (flat terrain only — a ball on rough terrain is another task).
+register_mjlab_task(
+    task_id="Mjlab-BallKick-Flat-MicroDuck",
+    env_cfg=make_microduck_ball_kick_env_cfg(),
+    play_env_cfg=make_microduck_ball_kick_env_cfg(play=True),
+    rl_cfg=MicroduckBallKickRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+register_mjlab_task(
+    task_id="Mjlab-GroundPick-Rough-MicroDuck",
+    env_cfg=make_microduck_ground_pick_env_cfg(rough=True),
+    play_env_cfg=make_microduck_ground_pick_env_cfg(play=True, rough=True),
+    rl_cfg=MicroduckGroundPickRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# Roller skate velocity task (passive-wheel model; historical task id kept)
+register_mjlab_task(
+    task_id="Mjlab-Velocity-Flat-MicroDuck-Rollers",
+    env_cfg=make_microduck_velocity_rollers_env_cfg(),
+    play_env_cfg=make_microduck_velocity_rollers_env_cfg(play=True),
+    rl_cfg=MicroduckRollersRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# Roller SWIZZLE task — clean classic swizzle (symmetric, feet grounded).
+register_mjlab_task(
+    task_id="Mjlab-Velocity-Swizzle-MicroDuck",
+    env_cfg=make_microduck_velocity_swizzle_env_cfg(),
+    play_env_cfg=make_microduck_velocity_swizzle_env_cfg(play=True),
+    rl_cfg=MicroduckSwizzleRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+register_mjlab_task(
+    task_id="Mjlab-RollerCrouch-Flat-MicroDuck",
+    env_cfg=make_microduck_roller_crouch_env_cfg(),
+    play_env_cfg=make_microduck_roller_crouch_env_cfg(play=True),
+    rl_cfg=MicroduckRollerCrouchRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+register_mjlab_task(
+    task_id="Mjlab-RollerSlope-Flat-MicroDuck",
+    env_cfg=make_microduck_roller_slope_env_cfg(),
+    play_env_cfg=make_microduck_roller_slope_env_cfg(play=True),
+    rl_cfg=MicroduckRollerSlopeRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# Roller STANDUP — se relever sur rollers (policy dédiée, départ au sol).
+register_mjlab_task(
+    task_id="Mjlab-RollerStandUp-Flat-MicroDuck",
+    env_cfg=make_microduck_roller_standup_env_cfg(),
+    play_env_cfg=make_microduck_roller_standup_env_cfg(play=True),
+    rl_cfg=MicroduckRollerStandUpRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# Spin task — rotation rapide sur place, sur rollers (slot ground-pick).
+register_mjlab_task(
+    task_id="Mjlab-Spin-Flat-MicroDuck",
+    env_cfg=make_microduck_spin_env_cfg(),
+    play_env_cfg=make_microduck_spin_env_cfg(play=True),
+    rl_cfg=MicroduckSpinRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# Roulade — forward roll over the flat head top, land back on the feet.
+register_mjlab_task(
+    task_id="Mjlab-Roulade-Flat-MicroDuck",
+    env_cfg=make_microduck_roulade_env_cfg(),
+    play_env_cfg=make_microduck_roulade_env_cfg(play=True),
+    rl_cfg=MicroduckRouladeRlCfg,
+    runner_cls=MicroduckOnPolicyRunner,
+)
+
+# Backlash variants — ±1° serial gear play per servo + encoder-through-backlash
+# actuator feedback and joint obs (see tasks/backlash.py). Each family keeps its
+# base task's collision model: Velocity → robot_walk_backlash.xml,
+# VelStand/StandUp → robot_allcollisions_backlash.xml. Obs/action dims are
+# unchanged vs the base tasks.
+from mjlab_microduck.robot.microduck_constants import (
+    MICRODUCK_BACKLASH_ROBOT_CFG,
+    MICRODUCK_ROLLERS_BACKLASH_ROBOT_CFG,
+    MICRODUCK_WALK_BACKLASH_ROBOT_CFG,
+)
+
+# (task_id, make_fn, make_kwargs, rl_cfg, backlash robot cfg). Task ids mirror
+# the base ids with "-Backlash" inserted. Walk-model tasks get the walk
+# backlash robot, roller tasks the wheels+backlash robot, the rest the
+# allcollisions backlash robot — same model as their base task in each case.
+_BL_ALLCOL = MICRODUCK_BACKLASH_ROBOT_CFG
+_BL_WALK = MICRODUCK_WALK_BACKLASH_ROBOT_CFG
+_BL_ROLLERS = MICRODUCK_ROLLERS_BACKLASH_ROBOT_CFG
+_BACKLASH_TASKS = (
+    ("Mjlab-Velocity-Flat-Backlash-MicroDuck", make_microduck_velocity_env_cfg, {}, MicroduckRlCfg, _BL_WALK),
+    ("Mjlab-Velocity-Rough-Backlash-MicroDuck", make_microduck_velocity_env_cfg, {"rough": True}, MicroduckRlCfg, _BL_WALK),
+    ("Mjlab-Running-Flat-Backlash-MicroDuck", make_microduck_running_env_cfg, {}, MicroduckRunningRlCfg, _BL_WALK),
+    ("Mjlab-RunningFlight-Flat-Backlash-MicroDuck", make_microduck_running_env_cfg, {"flight_reward_weight": 1.5}, MicroduckRunningFlightRlCfg, _BL_WALK),
+    ("Mjlab-VelStand-Flat-Backlash-MicroDuck", make_microduck_velstand_env_cfg, {}, MicroduckVelStandRlCfg, _BL_ALLCOL),
+    ("Mjlab-VelStand-Rough-Backlash-MicroDuck", make_microduck_velstand_env_cfg, {"rough": True}, MicroduckVelStandRlCfg, _BL_ALLCOL),
+    ("Mjlab-StandUp-Flat-Backlash-MicroDuck", make_microduck_standup_env_cfg, {}, MicroduckStandUpRlCfg, _BL_ALLCOL),
+    ("Mjlab-StandUp-Rough-Backlash-MicroDuck", make_microduck_standup_env_cfg, {"rough": True}, MicroduckStandUpRlCfg, _BL_ALLCOL),
+    ("Mjlab-SitStand-Flat-Backlash-MicroDuck", make_microduck_sitstand_env_cfg, {}, MicroduckSitStandRlCfg, _BL_ALLCOL),
+    ("Mjlab-SitStand-Rough-Backlash-MicroDuck", make_microduck_sitstand_env_cfg, {"rough": True}, MicroduckSitStandRlCfg, _BL_ALLCOL),
+    ("Mjlab-GroundPick-Flat-Backlash-MicroDuck", make_microduck_ground_pick_env_cfg, {}, MicroduckGroundPickRlCfg, _BL_ALLCOL),
+    ("Mjlab-GroundPick-Rough-Backlash-MicroDuck", make_microduck_ground_pick_env_cfg, {"rough": True}, MicroduckGroundPickRlCfg, _BL_ALLCOL),
+    ("Mjlab-BallKick-Flat-Backlash-MicroDuck", make_microduck_ball_kick_env_cfg, {}, MicroduckBallKickRlCfg, _BL_ALLCOL),
+    ("Mjlab-Velocity-Flat-Backlash-MicroDuck-Rollers", make_microduck_velocity_rollers_env_cfg, {}, MicroduckRollersRlCfg, _BL_ROLLERS),
+    ("Mjlab-Velocity-Swizzle-Backlash-MicroDuck", make_microduck_velocity_swizzle_env_cfg, {}, MicroduckSwizzleRlCfg, _BL_ROLLERS),
+    ("Mjlab-RollerCrouch-Flat-Backlash-MicroDuck", make_microduck_roller_crouch_env_cfg, {}, MicroduckRollerCrouchRlCfg, _BL_ROLLERS),
+    ("Mjlab-RollerSlope-Flat-Backlash-MicroDuck", make_microduck_roller_slope_env_cfg, {}, MicroduckRollerSlopeRlCfg, _BL_ROLLERS),
+)
+for _task_id, _make_cfg, _kw, _rl_cfg, _robot_cfg in _BACKLASH_TASKS:
+    register_mjlab_task(
+        task_id=_task_id,
+        env_cfg=make_backlash_variant(_make_cfg(**_kw), _robot_cfg),
+        play_env_cfg=make_backlash_variant(_make_cfg(play=True, **_kw), _robot_cfg),
+        rl_cfg=_rl_cfg,
+        runner_cls=MicroduckOnPolicyRunner,
+    )
+
+from .microduck_long_stair_env_cfg import make_long_stairs, LongStairRlCfg
+register_mjlab_task(task_id='Mjlab-LongStairsBlind-MicroDuck',env_cfg=make_long_stairs(),play_env_cfg=make_long_stairs(play=True),rl_cfg=LongStairRlCfg,runner_cls=MicroduckOnPolicyRunner)
+
+from .microduck_floor_desk_env_cfg import make_floor_desk,FloorDeskRlCfg
+register_mjlab_task(task_id='Mjlab-FloorDeskBlind-MicroDuck',env_cfg=make_floor_desk(),play_env_cfg=make_floor_desk(play=True),rl_cfg=FloorDeskRlCfg,runner_cls=MicroduckOnPolicyRunner)
+
+from .microduck_desk_recovery_env_cfg import make_desk_recovery,DeskRecoveryRlCfg
+register_mjlab_task(task_id='Mjlab-DeskRecoveryBlind-MicroDuck',env_cfg=make_desk_recovery(),play_env_cfg=make_desk_recovery(play=True),rl_cfg=DeskRecoveryRlCfg,runner_cls=MicroduckOnPolicyRunner)

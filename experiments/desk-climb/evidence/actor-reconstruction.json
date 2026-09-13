@@ -1,0 +1,8 @@
+{
+  "cpu_onnx_torch_max_error": 1.6689300537109375e-06,
+  "samples": 512,
+  "normalizer_epsilon": 0.01,
+  "normalizer_frozen_required": true,
+  "fresh_critic_and_Adam_required": true,
+  "exploration_std": 0.1
+}

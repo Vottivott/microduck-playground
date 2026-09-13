@@ -1,0 +1,58 @@
+{
+    "url": "https://cad.onshape.com/documents/804927696f06d877f3f1803e/w/5b75db19292e71970de02dee/e/ef6e972847fec8d82570b35e",
+    "outputFormat": "mujoco",
+    "robot_name": "microduck",
+    "output_filename": "robot_allcollisions",
+    "simplify_stls": true,
+    "max_stl_size": 1.0,
+    "ignore": {
+        "*": "collision",
+        "!sole_left": "collision",
+        "!sole_right": "collision",
+        "!leg": "collision",
+        "!power_support": "collision",
+        
+        "!top_head_shell": "collision",
+        "!bottom_head_shell": "collision",
+        "!soft_mouth_top": "collision",
+        "!jaw": "collision",
+        "!left_upper_leg": "collision",
+        "!right_upper_leg": "collision",
+        "!hip_l": "collision",
+        "!NP-F970": "collision",
+        "!trunk_shell_left": "collision",
+        "!trunk_shell_right": "collision",
+        
+    },
+    "additional_xml": [
+        "joints_properties.xml",
+        "sensors.xml",
+        "additional.xml"
+    ],
+    "post_import_commands": [
+        "sed -i 's/body name=\"trunk_base\" pos=\"[^\"]*\"/body name=\"trunk_base\" pos=\"0 0 0.12\"/' robot_allcollisions.xml",
+        "sed -i '/<!-- Part sole_left -->/{n; n; s/class=\"collision\"/name=\"left_foot_collision\" class=\"collision\"/}' robot_allcollisions.xml",
+        "sed -i '/<!-- Part sole_right -->/{n; n; s/class=\"collision\"/name=\"right_foot_collision\" class=\"collision\"/}' robot_allcollisions.xml",
+        "sed -i '/<!-- Part power_support -->/{n; n; s/class=\"collision\"/class=\"self_collision_only\"/}' robot_allcollisions.xml",
+        "sed -i '/<!-- Part np_f970 -->/{n; n; s/class=\"collision\"/name=\"trunk_collision\" class=\"collision\"/}' robot_allcollisions.xml",
+        "sed -i '0,/<geom type=\"mesh\" class=\"collision\" pos=\"-0.0175 0 -0.0185\"/{s/<geom type=\"mesh\" class=\"collision\" pos=\"-0.0175 0 -0.0185\"/<geom name=\"left_hip_collision\" type=\"mesh\" class=\"collision\" pos=\"-0.0175 0 -0.0185\"/}' robot_allcollisions.xml",
+        "sed -i '0,/<geom type=\"mesh\" class=\"collision\" pos=\"-0.0175 0 -0.0185\"/{s/<geom type=\"mesh\" class=\"collision\" pos=\"-0.0175 0 -0.0185\"/<geom name=\"right_hip_collision\" type=\"mesh\" class=\"collision\" pos=\"-0.0175 0 -0.0185\"/}' robot_allcollisions.xml",
+        "sed -i 's/<geom type=\"mesh\" class=\"collision\" pos=\"-0.022 0.0357771 0.0385\"/<geom name=\"left_shin_collision\" type=\"mesh\" class=\"collision\" pos=\"-0.022 0.0357771 0.0385\"/' robot_allcollisions.xml",
+        "sed -i 's/<geom type=\"mesh\" class=\"collision\" pos=\"-0.0357771 -0.022 0.0385\"/<geom name=\"right_shin_collision\" type=\"mesh\" class=\"collision\" pos=\"-0.0357771 -0.022 0.0385\"/' robot_allcollisions.xml",
+        "sed -i '/<!-- Part top_head_shell -->/{n; n; s/class=\"collision\"/name=\"top_head_shell_collision\" class=\"collision\"/}' robot_allcollisions.xml",
+        "sed -i '/<!-- Part soft_mouth_top -->/{n; n; s/class=\"collision\"/name=\"top_mouth_collision\" class=\"collision\"/}' robot_allcollisions.xml",
+        "sed -i '/<!-- Part jaw -->/{n; n; s/class=\"collision\"/name=\"jaw_collision\" class=\"collision\"/}' robot_allcollisions.xml",
+        "sed -i '/<!-- Part bottom_head_shell -->/{n; n; s/class=\"collision\"/name=\"bottom_head_shell_collision\" class=\"collision\"/}' robot_allcollisions.xml",
+        "sed -i 's/ inheritrange=\"1\"//g' robot_allcollisions.xml",
+        "sed -i 's|<site[^>]*name=\"head_camera\"[^>]*pos=\"\\([^\"]*\\)\"[^>]*/>|&\\n              <camera name=\"head_camera\" pos=\"\\1\" quat=\"0 0 -1 0\"/>|' robot_allcollisions.xml"
+    ],
+    "joint_properties": {
+        "default": {
+            "class": "chosen_actuator"
+        },
+        "passive*": {
+          "actuated": false,
+          "class" : "passive_joint"
+        }
+    }
+}

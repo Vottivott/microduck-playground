@@ -1,0 +1,10 @@
+{
+  "climber": {
+    "cpu_checkpoint_onnx_max_error": 2.6226043701171875e-06,
+    "samples": 300
+  },
+  "getup": {
+    "cpu_checkpoint_onnx_max_error": 9.5367431640625e-07,
+    "samples": 300
+  }
+}

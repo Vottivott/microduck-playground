@@ -1,0 +1,18 @@
+{
+  "climber.pt": {
+    "sha256": "bac883b22409b03994b0ac10334866c4749749a5c7566845482503d89da7b7af",
+    "bytes": 4840539
+  },
+  "climber.onnx": {
+    "sha256": "9d8872e3cc32c7e75f3ac84d5e47b404769d4762043a1e45b3418b3b14bff9a4",
+    "bytes": 793741
+  },
+  "getup.pt": {
+    "sha256": "6a8ce1983b3d0c0ee51add6e693acbf150f2549b783e49fa26787d35679e707b",
+    "bytes": 4840347
+  },
+  "getup.onnx": {
+    "sha256": "11a9693ed87f550c6f6859caaad69c9e86890692c4b6f046a41eaa3ec77d20ad",
+    "bytes": 793747
+  }
+}

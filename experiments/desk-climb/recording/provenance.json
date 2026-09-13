@@ -1,0 +1,14 @@
+{
+  "actions.npz": {
+    "original_sha256": "dd0d335250271e6d7f0982e06a93a4f6dfa34dfbe9ebc71ba7e7df295632ed0d",
+    "compressed_sha256": "dd0d335250271e6d7f0982e06a93a4f6dfa34dfbe9ebc71ba7e7df295632ed0d",
+    "bytes": 55368552,
+    "arrays_bitwise_preserved": true
+  },
+  "trajectories.npz": {
+    "original_sha256": "1e206cb1742065e26bd4309665f2122d9b691384008083c60d6fdc7446c840b5",
+    "compressed_sha256": "1e206cb1742065e26bd4309665f2122d9b691384008083c60d6fdc7446c840b5",
+    "bytes": 31071370,
+    "arrays_bitwise_preserved": true
+  }
+}

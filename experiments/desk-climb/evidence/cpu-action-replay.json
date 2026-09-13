@@ -1,0 +1,13 @@
+{
+  "seed": 19923,
+  "env": 38,
+  "samples": 3000,
+  "max_raw_error_recorded_history": 0.002579927444458008,
+  "max_executed_error_recorded_history": 0.002579927444458008,
+  "max_raw_error_self_feedback": 0.0033420324325561523,
+  "max_executed_error_self_feedback": 0.0033420324325561523,
+  "switch_step": 523,
+  "CPU_ONNX_replay": true,
+  "exact_action_parity": false,
+  "note": "Recorded GPU batch inference versus CPU ONNX; recurrent previous-action feedback amplifies small numeric differences. No identical physics replay claim."
+}
