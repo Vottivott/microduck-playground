@@ -17,7 +17,7 @@ https://github.com/user-attachments/assets/50c3d537-8db2-4005-9d9c-3472faeec4d0
 The repo encodes the full sim2real recipe: [BAM](https://github.com/Rhoban/bam)
 actuator physics, domain randomization, backlash simulation, and the
 reward-design lessons that made it work
-(see [AGENTS.md](AGENTS.md) for the distilled playbook).
+(see [AGENTS.md](../../../AGENTS.md) for the distilled playbook).
 
 ## Quickstart
 
@@ -170,7 +170,7 @@ Conventions worth knowing:
   deploy ONNX produced by `scripts/export.py`, never a hand-converted
   checkpoint, or the policy sees unnormalized observations at runtime.
 
-[AGENTS.md](AGENTS.md) documents the env-building workflow and the reward-design
+[AGENTS.md](../../../AGENTS.md) documents the env-building workflow and the reward-design
 rules learned across the project (also aimed at AI coding agents working in
 this repo).
 
