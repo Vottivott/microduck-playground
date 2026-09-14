@@ -46,6 +46,9 @@ mjlab_microduck = "mjlab_microduck.tasks"
 # flag that submits the run to Hugging Face Jobs instead (see train_cli.py).
 train = "mjlab_microduck.train_cli:main"
   
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
 [tool.ruff]
 src = ["src"]  # Helpful for recognizing first-party imports.
 indent-width = 4
