@@ -21,7 +21,7 @@ from mjlab.utils.torch import configure_torch_backends
 from mjlab.utils.wrappers import VideoRecorder
 from rsl_rl.runners import OnPolicyRunner
 
-from mjlab_microduck.onnx_policy_contract import bake_action_clip
+from mjlab_microduck.onnx_policy_contract import bake_action_clip, bake_action_bounds
 
 
 @dataclass(frozen=True)
@@ -455,6 +455,13 @@ def run_export(task_id: str, cfg: ExportConfig):
     # Deployment runtimes consume ONNX outputs directly, so preserve that
     # behavior inside the graph rather than relying on each caller to know it.
     bake_action_clip(onnx_path, agent_cfg.clip_actions)
+
+    # Preserve joint-travel command bounds and bounded previous-action history.
+    for term in env.unwrapped.action_manager._terms.values():
+        if hasattr(term, "raw_action_bounds"):
+            lo, hi = term.raw_action_bounds()
+            bake_action_bounds(onnx_path, lo.cpu().numpy(), hi.cpu().numpy())
+            break
 
     metadata = get_base_metadata(runner.env.unwrapped, run_path=cfg.checkpoint_file)
     if basketball_checkpoint is not None and "student_state_dict" in basketball_checkpoint:

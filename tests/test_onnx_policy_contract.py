@@ -8,7 +8,7 @@ import onnxruntime as ort
 import pytest
 from onnx import TensorProto, helper, numpy_helper
 
-from mjlab_microduck.onnx_policy_contract import bake_action_clip
+from mjlab_microduck.onnx_policy_contract import bake_action_clip, bake_action_bounds
 
 
 def _write_linear_policy(path: Path) -> None:
@@ -54,3 +54,14 @@ def test_action_clip_rejects_invalid_or_duplicate_contract(tmp_path: Path) -> No
     bake_action_clip(path, 1.0)
     with pytest.raises(ValueError, match="already contains"):
         bake_action_clip(path, 1.0)
+
+
+def test_joint_bounds_preserve_per_joint_limits(tmp_path: Path) -> None:
+    path = tmp_path / "policy.onnx"
+    _write_linear_policy(path)
+    bake_action_bounds(path, [-.1, -.7], [.2, .8])
+    session = ort.InferenceSession(str(path), providers=["CPUExecutionProvider"])
+    actual = session.run(None, {"obs": np.asarray([[4., -3.]], np.float32)})[0]
+    np.testing.assert_allclose(actual, [[.2, -.7]])
+    with pytest.raises(ValueError, match="already contains"):
+        bake_action_bounds(path, [-.1, -.7], [.2, .8])

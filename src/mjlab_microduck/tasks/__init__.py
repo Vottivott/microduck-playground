@@ -1,5 +1,8 @@
 from mjlab.tasks.registry import register_mjlab_task
 from mjlab.tasks.velocity.rl import VelocityOnPolicyRunner
+from .microduck_chimney_env_cfg import make_microduck_chimney_env_cfg, MicroduckChimneyRlCfg
+from .microduck_approach_env_cfg import make_microduck_approach_env_cfg, MicroduckApproachRlCfg
+from .microduck_exit_env_cfg import make_microduck_exit_env_cfg, MicroduckExitRlCfg
 
 
 class MicroduckOnPolicyRunner(VelocityOnPolicyRunner):
@@ -19,6 +22,17 @@ from .microduck_velocity_env_cfg import (
     make_microduck_velocity_env_cfg,
     MicroduckRlCfg,
 )
+
+for _name, _factory, _rl in (
+    ("Chimney", make_microduck_chimney_env_cfg, MicroduckChimneyRlCfg),
+    ("Approach", make_microduck_approach_env_cfg, MicroduckApproachRlCfg),
+    ("Exit", make_microduck_exit_env_cfg, MicroduckExitRlCfg),
+):
+    register_mjlab_task(
+        task_id=f"Mjlab-{_name}-MicroDuck",
+        env_cfg=_factory(), play_env_cfg=_factory(play=True),
+        rl_cfg=_rl, runner_cls=MicroduckOnPolicyRunner,
+    )
 from .microduck_running_env_cfg import (
     make_microduck_running_env_cfg,
     MicroduckRunningRlCfg,

@@ -21,6 +21,8 @@ remote when preparing focused contributions.
 
 ## Experiments
 
+Private release preparation: [chimney climbing, enter and exit policies](docs/chimney-climb.md).
+
 Animated previews play directly in the table. Click one—or use its explicit
 full-video link—to open the complete silent MP4.
 
