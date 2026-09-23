@@ -34,21 +34,6 @@ full-video link—to open the complete silent MP4.
   </thead>
   <tbody>
     <tr>
-      <td><strong>Chimney climbing</strong></td>
-      <td>
-        <a href="experiments/chimney-climb/media/preview.mp4">
-          <img src="experiments/chimney-climb/media/preview.gif" width="280" alt="Animated preview of Microduck entering a narrow corridor, climbing to a platform, exiting and standing up">
-        </a>
-      </td>
-      <td>
-        Braced climbing through a 12.5 cm gap to a 3 m platform.
-        Selected simulation rollout; hardware untested.<br>
-        <a href="experiments/chimney-climb/media/preview.mp4">Full video</a> ·
-        <a href="experiments/chimney-climb/README.md">Experiment and training</a> ·
-        <a href="https://huggingface.co/HannesVonEssen/microduck-chimney-climb">Climb, enter and exit policies</a>
-      </td>
-    </tr>
-    <tr>
       <td><strong>Self-pumped swing</strong></td>
       <td>
         <a href="experiments/swing/media/alpha050_seed27.mp4">
@@ -109,6 +94,21 @@ full-video link—to open the complete silent MP4.
     <td>Climb, land, recover.<br>
     <a href="experiments/desk-climb/README.md">Experiment and training</a> · <a href="hardware/ladder/README.md">Ladder and mounts</a> · <a href="https://huggingface.co/HannesVonEssen/microduck-climb">Models</a></td>
   </tr>
+    <tr>
+      <td><strong>Chimney climbing</strong></td>
+      <td>
+        <a href="experiments/chimney-climb/media/preview.mp4">
+          <img src="experiments/chimney-climb/media/preview.gif" width="280" alt="Animated preview of Microduck entering a narrow corridor, climbing to a platform, exiting and standing up">
+        </a>
+      </td>
+      <td>
+        Braced climbing through a 12.5 cm gap to a 3 m platform.
+        Selected simulation rollout; hardware untested.<br>
+        <a href="experiments/chimney-climb/media/preview.mp4">Full video</a> ·
+        <a href="experiments/chimney-climb/README.md">Experiment and training</a> ·
+        <a href="https://huggingface.co/HannesVonEssen/microduck-chimney-climb">Climb, enter and exit policies</a>
+      </td>
+    </tr>
   </tbody>
 </table>
 
