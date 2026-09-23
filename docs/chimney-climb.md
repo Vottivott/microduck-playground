@@ -6,8 +6,7 @@ The main artifact is the **climb** policy. Enter and exit are companion skills.
 This is simulation research, not hardware-validated autonomous climbing.
 
 Models and the final user-selected video:
-[`HannesVonEssen/microduck-chimney-climb`](https://huggingface.co/HannesVonEssen/microduck-chimney-climb)
-(private while being prepared).
+[`HannesVonEssen/microduck-chimney-climb`](https://huggingface.co/HannesVonEssen/microduck-chimney-climb).
 
 ## Artifacts and conventions
 
@@ -45,7 +44,7 @@ Do not simply hot-swap these files in an unmodified walking runtime.
 ## Reproduce the continuous chain
 
 Use Linux with an NVIDIA GPU for mjlab/Warp. Install the project with `uv sync`.
-Authenticate to HF while the release is private, then:
+Download the public release, then:
 
 ```bash
 hf download HannesVonEssen/microduck-chimney-climb --local-dir policies/chimney
