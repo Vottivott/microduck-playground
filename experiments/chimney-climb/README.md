@@ -6,6 +6,9 @@
 [Policies and checkpoints](https://huggingface.co/HannesVonEssen/microduck-chimney-climb) ·
 [Simulation, training tasks and policy contracts](../../docs/chimney-climb.md)
 
+Training continuation: [main climb](../../docs/chimney-training.md) ·
+[enter and exit](../../docs/chimney-companion-training.md).
+
 Microduck braces between walls 12.5 cm apart, climbs to a 3 m platform,
 exits, then uses Pollen Robotics' official get-up policy to stand.
 The main released policy is the climb, with enter and exit companions.

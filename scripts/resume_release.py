@@ -123,6 +123,17 @@ def main():
         # Apply restored-counter curriculum stages before collecting any PPO data.
         raw.reset(seed=seed)
         assert raw.common_step_counter == counter
+        bank_matches = None
+        if a.bank:
+            from mjlab_microduck.robot import exit_stage
+            q = raw.sim.data.qpos.detach().clone()
+            q[:, :3] -= raw.scene.env_origins
+            bq = bank['qpos'].to(q.device).clone()
+            bq[:, :3] -= bank['origins'].to(q.device)
+            bq[:, 2] += exit_stage.PLATFORM_TOP_M - float(bank['platform_top'])
+            bank_matches = int(((q[:, None] - bq[None]).abs().amax(-1) < 1e-5).any(1).sum())
+            if a.num_envs >= 64:
+                assert bank_matches > 0, 'Optional bank was not applied to any reset'
         obs = env.get_observations()
         assert obs['actor'].shape == (a.num_envs, 61)
         assert raw.action_manager.total_action_dim == 14
@@ -153,11 +164,14 @@ def main():
         assert checked_steps == a.iterations * agent.num_steps_per_env
         for group in (runner.alg.actor.state_dict(), runner.alg.critic.state_dict()):
             assert all(torch.isfinite(v).all() for v in group.values())
-        actor = runner.get_inference_policy(device=a.device)
+        # Compare float32 CPU inference to ONNX CPU, avoiding CUDA TF32 batch
+        # rounding (training intentionally uses the configured CUDA backend).
+        actor = runner.get_inference_policy(device='cpu')
         term = raw.action_manager.get_term('joint_pos')
         lo, hi = term.raw_action_bounds()
+        lo, hi = lo.cpu(), hi.cpu()
         # Save random, zero and real post-training observations with expected actions.
-        obs = env.get_observations()
+        obs = env.get_observations().to('cpu')
         batches = [obs['actor'].detach().clone(), torch.zeros_like(obs['actor']),
                    torch.randn_like(obs['actor'])]
         inputs, expected = [], []
@@ -173,6 +187,7 @@ def main():
         report = dict(profile=a.profile, recipe_sha256=sha256(a.recipe), checkpoint_sha256=checkpoint_hash,
                       original_release_checkpoint=checkpoint_hash == recipe['checkpoint_sha256'],
                       optional_bank_sha256=sha256(a.bank) if a.bank else None,
+                      initial_bank_matches=bank_matches,
                       effective_environment={k: v for k, v in os.environ.items() if k.startswith('MICRODUCK_')},
                       exact_actor_critic_normalizer_optimizer_counter_restore=True,
                       restored_counter=counter, final_counter=raw.common_step_counter,

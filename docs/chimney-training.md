@@ -3,6 +3,8 @@
 This guide continues the **main climb** checkpoint (w17, iteration 99,250), not
 the enter/exit companions or whole video chain. All required data is public.
 
+For enter/exit checkpoints, use [companion continuation](chimney-companion-training.md).
+
 ## Provenance and limitations
 
 The checkpoint includes actor/critic, observation normalizers, Adam state,
