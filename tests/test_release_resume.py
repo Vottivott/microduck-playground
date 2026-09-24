@@ -40,3 +40,12 @@ def test_runner_applies_curriculum_after_load_and_before_learning():
     assert source.index('runner.load(') < source.index('raw.reset(seed=seed)') < source.index('runner.learn(')
     assert "runner.alg.learning_rate = runner.alg.optimizer.param_groups[0]['lr']" in source
     assert "scripts/export.py" in source
+
+
+def test_exit_bank_cache_separates_devices(tmp_path):
+    from mjlab_microduck.tasks.exit_mdp import _arrival_bank
+    path = tmp_path/'arrivals.pt'
+    torch.save({'qpos': torch.zeros(2, 21), 'qvel': torch.zeros(2, 20),
+                'origins': torch.zeros(2, 3), 'platform_top': 3.0}, path)
+    assert _arrival_bank(str(path), 'cpu')['qpos'].device.type == 'cpu'
+    assert _arrival_bank(str(path), 'meta')['qpos'].device.type == 'meta'

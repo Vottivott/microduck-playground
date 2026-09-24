@@ -409,15 +409,16 @@ _ARRIVAL_CACHE: dict = {}
 
 
 def _arrival_bank(path: str, dev) -> Optional[dict]:
-    if path in _ARRIVAL_CACHE:
-        return _ARRIVAL_CACHE[path]
+    key = (path, str(torch.device(dev)))
+    if key in _ARRIVAL_CACHE:
+        return _ARRIVAL_CACHE[key]
     try:
         blob = torch.load(path, map_location="cpu")
         out = {k: blob[k].to(dev) for k in ("qpos", "qvel", "origins")}
         out["platform_top"] = float(blob.get("platform_top", ex.PLATFORM_TOP_M))
     except Exception:
         out = None
-    _ARRIVAL_CACHE[path] = out
+    _ARRIVAL_CACHE[key] = out
     return out
 
 

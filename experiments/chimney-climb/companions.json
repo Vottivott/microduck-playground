@@ -25,6 +25,7 @@
     },
     "exit": {
       "task": "Mjlab-Exit-MicroDuck",
+      "optional_bank_sha256": "535fa3d74e36c6e576b264fbf6bebb5a5ad081b1f20f88c77d76e8465d8a634e",
       "checkpoint_sha256": "16381758f6698cddd4e57ae533a81688ef2a0295774cb845f2881af5e2e808d1",
       "seed": 151,
       "provenance": "x19 stored iteration 73750. Geometry, episode duration, primary reward weights, entropy and seed recovered from launch_x19.sh. Current public exit task includes later posture shaping and termination changes; this is an explicit continuation on that published task, NOT exact x19 historical replay. x19's launcher did not use an arrival bank; later x20 experiments did.",

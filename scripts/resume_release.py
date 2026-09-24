@@ -52,6 +52,7 @@ def main():
     p.add_argument('--num-envs', type=int, default=64)
     p.add_argument('--iterations', type=int, default=5, help='Additional updates, not total iteration target')
     p.add_argument('--seed', type=int)
+    p.add_argument('--bank', type=Path, help='Optional recovered real-arrival bank for exit only; explicitly changes the reset distribution')
     p.add_argument('--device', default='cuda:0')
     p.add_argument('--descendant', action='store_true', help='Allow a new checkpoint from this same task/recipe')
     a = p.parse_args()
@@ -65,6 +66,11 @@ def main():
     if not a.descendant and checkpoint_hash != recipe['checkpoint_sha256']:
         p.error('Wrong release checkpoint; --descendant is only for a later checkpoint of this same task.')
     os.environ.update(recipe['environment'])
+    if a.bank:
+        if a.profile != 'exit' or sha256(a.bank) != recipe.get('optional_bank_sha256'):
+            p.error('Bank is only supported for exit and must match the published bank hash.')
+        os.environ['MICRODUCK_EX_ARRIVAL_BANK'] = str(a.bank.resolve())
+        os.environ['MICRODUCK_EX_ARRIVAL_PROB'] = '0.45'
     os.environ.setdefault('WANDB_MODE', 'disabled')
     seed = recipe['seed'] if a.seed is None else a.seed
     import numpy as np
@@ -78,6 +84,11 @@ def main():
 
     configure_torch_backends()
     checkpoint = torch.load(a.checkpoint, map_location='cpu', weights_only=True)
+    if a.bank:
+        bank = torch.load(a.bank, map_location='cpu', weights_only=True)
+        for key, shape in [('qpos', (18, 21)), ('qvel', (18, 20)), ('origins', (18, 3))]:
+            assert tuple(bank[key].shape) == shape and torch.isfinite(bank[key]).all()
+        assert float(bank['platform_top']) == 3.0
     for key in ('actor_state_dict', 'critic_state_dict', 'optimizer_state_dict', 'iter', 'infos'):
         assert key in checkpoint, key
     assert checkpoint['optimizer_state_dict']['state'], 'Expected original populated optimizer state'
@@ -161,6 +172,8 @@ def main():
         np.savez_compressed(a.output/'parity-inputs.npz', obs=np.concatenate(inputs), actions=np.concatenate(expected))
         report = dict(profile=a.profile, recipe_sha256=sha256(a.recipe), checkpoint_sha256=checkpoint_hash,
                       original_release_checkpoint=checkpoint_hash == recipe['checkpoint_sha256'],
+                      optional_bank_sha256=sha256(a.bank) if a.bank else None,
+                      effective_environment={k: v for k, v in os.environ.items() if k.startswith('MICRODUCK_')},
                       exact_actor_critic_normalizer_optimizer_counter_restore=True,
                       restored_counter=counter, final_counter=raw.common_step_counter,
                       additional_iterations=a.iterations, checked_steps=checked_steps,
