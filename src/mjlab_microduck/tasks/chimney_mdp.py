@@ -272,14 +272,15 @@ _BANK_CACHE: dict = {}
 
 def _handover_bank(path: str, dev) -> Optional[dict]:
     """Load and cache a bank of real handover states (qpos, qvel, origins)."""
-    if path in _BANK_CACHE:
-        return _BANK_CACHE[path]
+    cache_key = (path, str(dev))
+    if cache_key in _BANK_CACHE:
+        return _BANK_CACHE[cache_key]
     try:
         blob = torch.load(path, map_location="cpu")
         out = {k: blob[k].to(dev) for k in ("qpos", "qvel", "origins")}
     except Exception:
         out = None
-    _BANK_CACHE[path] = out
+    _BANK_CACHE[cache_key] = out
     return out
 
 

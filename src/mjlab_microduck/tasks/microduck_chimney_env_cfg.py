@@ -93,7 +93,8 @@ UPRIGHT_OVERRIDES = {2: -0.4579, 3: -0.0049, 4: 0.4529, 11: 0.4579, 12: 0.0049, 
 # Wall friction.  The bracing measurement found the wedge is GEOMETRIC - a
 # 12 cm gap holds at friction 0.3, while 14 cm needs 0.8 - so how slippery the
 # wall may be is the sim2real question for this task.  The walls are built at
-# 0.9 and every run so far has only ever seen 0.9.
+# 0.9 by default. Historical w9 used 0.4–1.1; the recovered w16 launcher
+# used 0.5–1.1. Set the range explicitly for continuation (see resume.json).
 WALL_FRICTION = tuple(float(v) for v in os.getenv("MICRODUCK_CH_WALL_FRIC", "0.9,0.9").split(","))
 WIDTH_PIN = os.getenv("MICRODUCK_CH_WIDTH")     # pin the corridor for renders and probes
 EPISODE_LENGTH_S = float(os.getenv("MICRODUCK_CH_EPISODE_S", "6.0"))

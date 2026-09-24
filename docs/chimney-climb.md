@@ -1,5 +1,8 @@
 # Chimney climb release
 
+For public checkpoints, reset data, friction randomization and a tested resume
+workflow, see [Continuing training](chimney-training.md).
+
 Three 50 Hz policies for a MicroDuck entering a narrow vertical corridor,
 climbing by bracing between the walls, and exiting onto a platform.
 The main artifact is the **climb** policy. Enter and exit are companion skills.

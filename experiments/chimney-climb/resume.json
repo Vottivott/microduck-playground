@@ -1,0 +1,18 @@
+{
+  "provenance": "Reconstructed continuation recipe: recovered w16 launcher settings on the published w17 checkpoint and current public source. Not an exact w17 launch record.",
+  "checkpoint_sha256": "1c2e373dca625c7d35701aa47bf747af299852b25e1d4913b494f8d4bed73059",
+  "bank_sha256": "9025414274f71c25cb20575d1262c2b7a8fb06c1aba9ef56c8fa1e2bc0c56f94",
+  "seed": 91,
+  "environment": {
+    "MICRODUCK_CH_EPISODE_S": "40",
+    "MICRODUCK_CH_WALL_H": "10.0",
+    "MICRODUCK_CH_WALL_FRIC": "0.5,1.1",
+    "MICRODUCK_CH_GROUND_PROB": "0.45",
+    "MICRODUCK_CH_UPRIGHT_PROB": "0.6",
+    "MICRODUCK_CH_SPAWN_Z_MAX": "3.0",
+    "MICRODUCK_CH_UPRIGHT_YAW": "0.35",
+    "MICRODUCK_CH_UPRIGHT_X": "0.03",
+    "MICRODUCK_CH_UPRIGHT_JVEL": "0.4",
+    "MICRODUCK_CH_HANDOVER_PROB": "0.40"
+  }
+}
