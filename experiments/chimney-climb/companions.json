@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "profiles": {
+    "enter": {
+      "task": "Mjlab-Approach-MicroDuck",
+      "checkpoint_sha256": "b3fc4ee34892fee39d70e2eb4307e964daed8eb69ec709931f68438441569757",
+      "seed": 137,
+      "provenance": "a11_contactfix stored iteration 25500. Recorded a11 agent/env YAML recovered from the verified research archive; seed, approach weights, spawn mix and PPO parameters agree with this recipe. Uses current published collision/contact implementation, not a byte-identical historical source snapshot.",
+      "limitations": "Fresh simulator, RNG, episode state and curriculum-dependent reset state. No external reset bank is required. A smoke test validates continuation plumbing, not entry or chain success.",
+      "environment": {
+        "MICRODUCK_AP_WIDTH": "0.125",
+        "MICRODUCK_AP_EPISODE_S": "8.0",
+        "MICRODUCK_AP_DISTANCE_MAX": "0.50",
+        "MICRODUCK_AP_PROGRESS_W": "300",
+        "MICRODUCK_AP_ARRIVE_W": "4.0",
+        "MICRODUCK_AP_JAM_W": "20",
+        "MICRODUCK_AP_FALL_W": "10",
+        "MICRODUCK_AP_DASH_W": "150",
+        "MICRODUCK_AP_YAW_W": "2.0",
+        "MICRODUCK_AP_ENTROPY": "0.004",
+        "MICRODUCK_AP_INIT_STD": "0.5",
+        "MICRODUCK_AP_FRONTIER_PROB": "0.35",
+        "MICRODUCK_AP_NEARLY_DONE_PROB": "0.15"
+      }
+    },
+    "exit": {
+      "task": "Mjlab-Exit-MicroDuck",
+      "checkpoint_sha256": "16381758f6698cddd4e57ae533a81688ef2a0295774cb845f2881af5e2e808d1",
+      "seed": 151,
+      "provenance": "x19 stored iteration 73750. Geometry, episode duration, primary reward weights, entropy and seed recovered from launch_x19.sh. Current public exit task includes later posture shaping and termination changes; this is an explicit continuation on that published task, NOT exact x19 historical replay. x19's launcher did not use an arrival bank; later x20 experiments did.",
+      "limitations": "Procedural reverse-curriculum starts (40% frontier, 20% nearly done, remainder wedged), not live climb handovers. No bank dependency. Initial action history is reset; hidden actuator/contact/RNG state is fresh. Live chain transfer must be evaluated separately; no robust chain or standing claim follows from a smoke test.",
+      "environment": {
+        "MICRODUCK_EX_WIDTH": "0.125",
+        "MICRODUCK_EX_OVERHANG": "0.45",
+        "MICRODUCK_EX_OPEN": "0.40",
+        "MICRODUCK_EX_PLATFORM_TOP": "1.20",
+        "MICRODUCK_EX_PLATFORM_W": "0.50",
+        "MICRODUCK_EX_CLEAR": "0.07",
+        "MICRODUCK_EX_WALL_ABOVE": "0.375",
+        "MICRODUCK_EX_EPISODE_S": "10.0",
+        "MICRODUCK_EX_PROGRESS_W": "400",
+        "MICRODUCK_EX_LAND_W": "0.5",
+        "MICRODUCK_EX_CLEAR_W": "30",
+        "MICRODUCK_EX_DASH_W": "120",
+        "MICRODUCK_EX_FALL_W": "30",
+        "MICRODUCK_EX_ENTROPY": "0.005",
+        "MICRODUCK_EX_FRONTIER_PROB": "0.40",
+        "MICRODUCK_EX_NEARLY_DONE_PROB": "0.20",
+        "MICRODUCK_EX_ARRIVAL_BANK": "",
+        "MICRODUCK_EX_ARRIVAL_PROB": "0.0",
+        "MICRODUCK_CH_WIDTH": "0.125",
+        "MICRODUCK_CH_WALL_H": "3.0",
+        "MICRODUCK_CH_WALL_FRIC": "0.9,0.9"
+      }
+    }
+  }
+}
