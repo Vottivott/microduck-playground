@@ -4,8 +4,7 @@
 
 [Watch the backflip clip](../media/backflip-tight-v2.mp4).
 
-**Simulation only. The landing may damage or break the real robot. Successful
-simulated recovery does not establish a safe physical landing.**
+**⚠️ Landings may break the robot.** Simulation only; not yet validated on hardware. Successful simulated recovery does not establish a safe physical landing.
 
 [Policy and checkpoint](https://huggingface.co/HannesVonEssen/microduck-backflip)
 · [Parkour overview and reproduction](../README.md)

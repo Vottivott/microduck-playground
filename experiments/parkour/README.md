@@ -7,7 +7,7 @@ Two experimental simulation policies, released separately from the still-unrelea
 | Long jump | [![Long jump](media/long-jump.gif)](media/long-jump.mp4) | [HF](https://huggingface.co/HannesVonEssen/microduck-long-jump) · [Details](long-jump/README.md) |
 | Backflip | [![Backflip](media/backflip-tight-v2.gif)](media/backflip-tight-v2.mp4) | [HF](https://huggingface.co/HannesVonEssen/microduck-backflip) · [Details](backflip/README.md) |
 
-**Simulation only; hardware unvalidated. Landings may damage or break the real robot.** The backflip uses an uncalibrated soft-contact mat, not a rigid floor. It can recover to standing but subsequently drift off the mat; it is not a stable idle policy.
+**Simulation only; not yet validated on hardware.** For the backflip: **⚠️ Landings may break the robot.** The backflip uses an uncalibrated soft-contact mat, not a rigid floor. It can recover to standing but subsequently drift off the mat; it is not a stable idle policy.
 
 ## Reproduce
 

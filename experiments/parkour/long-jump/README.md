@@ -24,8 +24,7 @@ Selected checkpoint: p1, stored iteration 15,250. Its historical filename
 included or switched in by the reproduction script. Landing and stabilization
 are the jump policy's responsibility.
 
-**Simulation only; hardware unvalidated. A raised-platform landing can damage
-or break the real robot.** See the overview's montage-provenance caveat.
+**Simulation only; not yet validated on hardware.** See the overview's montage-provenance caveat.
 
 ## Fresh release check — 2026-09-29
 

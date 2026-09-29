@@ -71,7 +71,7 @@ run YAML and hashes accompany the applicable HF training packages. Changes to
 curricula/rewards beyond these recipes are new experiments and should be logged.
 The training source's contact budgets include publication fixes.
 
-**Simulation only. The landing may damage or break the real robot.** After
+**Simulation only; not yet validated on hardware.** For the backflip: **⚠️ Landings may break the robot.** After
 continuation, evaluate complete physical maneuvers and resets with the correct
 command slots and action bounds, not reward totals alone. The original montage's
 exact checkpoint/seed mapping remains unverified; training documentation does
