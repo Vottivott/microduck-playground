@@ -18,19 +18,20 @@
   },
   "backflip": {
     "source_sha256": "e0b3e1e17f68151dff05dc019999c0053bf6820cad6e44b2e80e305d799a36bd",
-    "preview_sha256": "22437bb1847d1a4637ad9a22adbb4d2c2b2ca76025434634e457ab3d253c0eec",
+    "preview_sha256": "bfe4a0ff24290751bafe65ecb63d75a3acd02c7d4c05f09925c0f8c15e89a186",
     "crop": {
-      "width": 720,
+      "width": 560,
       "height": 720,
-      "x": 120,
+      "x": 200,
       "y": 0
     },
     "fps": 50,
     "frames": 200,
     "gif_size": [
-      360,
+      280,
       360
     ],
-    "gif_fps": 20
+    "gif_fps": 20,
+    "note": "Removed the remaining 80-pixel bars on each side of the former 720x720 crop; no stretching or vertical crop."
   }
 }
