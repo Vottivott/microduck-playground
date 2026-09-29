@@ -1,8 +1,8 @@
 # Raised-platform backflip
 
-<video src="../media/backflip.mp4" controls muted playsinline width="720"></video>
+<video src="../media/backflip-tight-v2.mp4" controls muted playsinline width="720"></video>
 
-[Watch the backflip clip](../media/backflip.mp4).
+[Watch the backflip clip](../media/backflip-tight-v2.mp4).
 
 **Simulation only. The landing may damage or break the real robot. Successful
 simulated recovery does not establish a safe physical landing.**
