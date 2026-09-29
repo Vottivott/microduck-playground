@@ -1,0 +1,36 @@
+{
+  "long-jump": {
+    "source_sha256": "36730fc2d71d4ee2da96c10d8982823e40dca262448d0b48b7c07623f5aaeebf",
+    "preview_sha256": "db6af879e8bc0d2a1b108772f004eb43cb5e37ee77c685a1fc77941116243db5",
+    "crop": {
+      "width": 720,
+      "height": 720,
+      "x": 120,
+      "y": 0
+    },
+    "fps": 50,
+    "frames": 78,
+    "gif_size": [
+      360,
+      360
+    ],
+    "gif_fps": 20
+  },
+  "backflip": {
+    "source_sha256": "e0b3e1e17f68151dff05dc019999c0053bf6820cad6e44b2e80e305d799a36bd",
+    "preview_sha256": "22437bb1847d1a4637ad9a22adbb4d2c2b2ca76025434634e457ab3d253c0eec",
+    "crop": {
+      "width": 720,
+      "height": 720,
+      "x": 120,
+      "y": 0
+    },
+    "fps": 50,
+    "frames": 200,
+    "gif_size": [
+      360,
+      360
+    ],
+    "gif_fps": 20
+  }
+}
