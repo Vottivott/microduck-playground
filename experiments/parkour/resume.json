@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "profiles": {
+    "long-jump": {
+      "task": "Mjlab-PlatformJump-MicroDuck",
+      "checkpoint_sha256": "114ab38724b1bea789b0d3f12a1a18a5981b40572863117e212a2a0601f9ed4a",
+      "seed": 42,
+      "provenance": "p1_v1 stored iteration 15250. Original launch_p1.sh and recorded agent/env YAML recovered. Entropy 0.005; no evaluation gap/drop pin. Uses the published platform-jump source, which contains later research changes, not the original p1 implementation.",
+      "limitations": "Supported continuation from original PPO state under explicit current-source settings, not bit-exact p1 replay. Stage schedule is applied at the restored counter; new episode/RNG state. No external reset bank required.",
+      "environment": {
+        "MICRODUCK_PJ_ENTROPY": "0.005",
+        "MICRODUCK_PJ_CURRICULUM_SHIFT": "0",
+        "MICRODUCK_PJ_FLIGHT_PROB": "0.30"
+      }
+    },
+    "backflip": {
+      "task": "Mjlab-Flip-MicroDuck",
+      "checkpoint_sha256": "f7e523c19de5cd5e2ced430f3d9bb46bef1ed69ad0003cb45955d56169929cdd",
+      "seed": 31,
+      "provenance": "f21_liftoff stored iteration 12000. launch_f21.sh and recorded agent/env YAML recovered. Restores 0.7-0.9 m drop range, entropy 0.003, initial midflip probability 0.25, takeoff weight 45, minimum takeoff vz 0 and curriculum shift 3000. Current published source is pinned separately; not a complete historical source reconstruction.",
+      "limitations": "Restored counter selects the mature midflip curriculum (probability 0.15), not the initial 0.25 mix. Fresh simulator/RNG. No external reset bank required. Landing may break the real robot; no hardware or successful-flight claim follows from the smoke test.",
+      "environment": {
+        "MICRODUCK_FLIP_DIR": "back",
+        "MICRODUCK_FLIP_H_MIN": "0.7",
+        "MICRODUCK_FLIP_H_MAX": "0.9",
+        "MICRODUCK_FLIP_ENTROPY": "0.003",
+        "MICRODUCK_FLIP_MIDFLIP_PROB": "0.25",
+        "MICRODUCK_FLIP_HOP_W": "3.0",
+        "MICRODUCK_FLIP_TAKEOFF_W": "45",
+        "MICRODUCK_FLIP_TAKEOFF_VZ_MIN": "0.0",
+        "MICRODUCK_FLIP_CURRICULUM_SHIFT": "3000",
+        "MICRODUCK_FLIP_HOP_FATAL": "0",
+        "MICRODUCK_FLIP_HOP_DECAY": "1.0"
+      }
+    }
+  }
+}

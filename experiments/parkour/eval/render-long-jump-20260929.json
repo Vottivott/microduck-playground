@@ -1,0 +1,20 @@
+{
+  "task": "Mjlab-PlatformJump-MicroDuck",
+  "profile": "long-jump",
+  "seed": 28,
+  "num_envs": 1,
+  "duration_s": 12.0,
+  "first_episode_end_events": [
+    {
+      "env": 0,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    }
+  ],
+  "best_link_lower_bound": [
+    0.0
+  ],
+  "note": "Small fixed-profile diagnostic, not a hardware or robustness validation. Terminal-step state may reset before the link diagnostic is read."
+}

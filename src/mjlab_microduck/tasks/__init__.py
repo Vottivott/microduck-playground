@@ -337,6 +337,22 @@ for _task_id, _make_cfg, _kw, _rl_cfg, _robot_cfg in _BACKLASH_TASKS:
         runner_cls=MicroduckOnPolicyRunner,
     )
 
+# Parkour release: shared foundation, raised-platform jump and backflip only.
+from .microduck_long_jump_env_cfg import make_microduck_long_jump_env_cfg, MicroduckLongJumpRlCfg
+from .microduck_platform_jump_env_cfg import make_microduck_platform_jump_env_cfg, MicroduckPlatformJumpRlCfg
+from .microduck_flip_env_cfg import make_microduck_flip_env_cfg, MicroduckFlipRlCfg
+
+for _name, _factory, _agent in (
+    ("LongJump", make_microduck_long_jump_env_cfg, MicroduckLongJumpRlCfg),
+    ("PlatformJump", make_microduck_platform_jump_env_cfg, MicroduckPlatformJumpRlCfg),
+    ("Flip", make_microduck_flip_env_cfg, MicroduckFlipRlCfg),
+):
+    register_mjlab_task(
+        task_id=f"Mjlab-{_name}-MicroDuck",
+        env_cfg=_factory(), play_env_cfg=_factory(play=True),
+        rl_cfg=_agent, runner_cls=MicroduckOnPolicyRunner,
+    )
+
 # Basketball circus balance (feature/basketball): duck on a free-rolling ball.
 from mjlab_microduck.tasks.microduck_basketball_env_cfg import (  # noqa: E402
     MicroduckBasketballRlCfg,

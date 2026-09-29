@@ -109,11 +109,12 @@ full-video link—to open the complete silent MP4.
         <a href="https://huggingface.co/HannesVonEssen/microduck-chimney-climb">Climb, enter and exit policies</a>
       </td>
     </tr>
+    <tr><td><strong>Raised-platform long jump</strong></td><td><a href="experiments/parkour/media/long-jump.mp4"><img src="experiments/parkour/media/long-jump.jpg" width="280" alt="Raised-platform long jump in simulation"></a></td><td>Experimental simulation policy; hardware unvalidated. Landings may break the robot.<br><a href="experiments/parkour/long-jump/README.md">Details and reproduction</a> · <a href="https://huggingface.co/HannesVonEssen/microduck-long-jump">Policy and training checkpoint</a></td></tr>
+    <tr><td><strong>Raised-platform backflip</strong></td><td><a href="experiments/parkour/media/backflip.mp4"><img src="experiments/parkour/media/backflip.jpg" width="280" alt="Raised-platform backflip in simulation"></a></td><td>Experimental simulation policy; hardware unvalidated. Landings may break the robot.<br><a href="experiments/parkour/backflip/README.md">Details and reproduction</a> · <a href="https://huggingface.co/HannesVonEssen/microduck-backflip">Policy and training checkpoint</a></td></tr>
   </tbody>
 </table>
 
-Each preview is a direct simulation demonstration of the policy linked in its
-row. Compact machine-readable evaluation records live beside each experiment.
+Previews illustrate simulation behaviors. The jump/backflip excerpts are selected research footage; see their documented fresh-checkpoint verification and original footage provenance limits. Compact machine-readable evaluation records live beside each experiment.
 
 ## Hardware galleries
 
@@ -182,6 +183,7 @@ uv run train Mjlab-SwingPump-MicroDuck \
 
 ```text
 experiments/
+  parkour/               raised-platform long jump and backflip
   basketball/            blind LSTM policy, evaluation, continuation guide
   running/               clean policy preview and result summary
   stilts/                policy index, executed curriculum, continuation guide

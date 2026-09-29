@@ -1,0 +1,268 @@
+{
+  "task": "Mjlab-PlatformJump-MicroDuck",
+  "profile": "long-jump",
+  "seed": 28,
+  "num_envs": 32,
+  "duration_s": 12.0,
+  "first_episode_end_events": [
+    {
+      "env": 27,
+      "time_s": 0.72,
+      "terms": [
+        "fell"
+      ]
+    },
+    {
+      "env": 17,
+      "time_s": 0.98,
+      "terms": [
+        "fell"
+      ]
+    },
+    {
+      "env": 31,
+      "time_s": 1.74,
+      "terms": [
+        "fell"
+      ]
+    },
+    {
+      "env": 0,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 1,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 2,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 3,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 4,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 5,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 6,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 7,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 8,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 9,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 10,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 11,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 12,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 13,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 14,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 15,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 16,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 18,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 19,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 20,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 21,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 22,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 23,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 24,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 25,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 26,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 28,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 29,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    },
+    {
+      "env": 30,
+      "time_s": 12.0,
+      "terms": [
+        "time_out"
+      ]
+    }
+  ],
+  "best_link_lower_bound": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "note": "Small fixed-profile diagnostic, not a hardware or robustness validation. Terminal-step state may reset before the link diagnostic is read."
+}
