@@ -10,6 +10,11 @@ licenses.
 The swing-seat generator, retention components, and experiment-specific
 training/evaluation additions were developed for this playground repository.
 
+The MicroDock charging-dock generator, printable meshes, docking simulation
+and render scripts were developed for this playground repository. The dock's
+tag uses the tag36h11 code word for ID 0 from the AprilTag library (BSD
+2-Clause).
+
 Software: Apache License 2.0.
 3D hardware design files: Creative Commons Attribution-NonCommercial-
 ShareAlike 4.0 International (CC BY-NC-SA 4.0), following the upstream
