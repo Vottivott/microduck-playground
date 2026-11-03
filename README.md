@@ -22,7 +22,7 @@ remote when preparing focused contributions.
 ## Experiments
 
 Animated previews play directly in the table. Click one—or use its explicit
-full-video link—to open the complete silent MP4.
+full-video link—to open the complete video.
 
 <table>
   <thead>
@@ -121,8 +121,13 @@ full-video link—to open the complete silent MP4.
       <td>
         Backs into a fully printed dock that connects a magnetic charger to its own USB-C port:
         30/30 docked in simulation with the official walking policy. Not yet printed or tried on hardware.<br>
-        <a href="hardware/microdock/media/preview.mp4">Full video</a> ·
-        <a href="hardware/microdock/README.md">Hardware and simulation</a>
+        <a href="https://x.com/HannesVonEssen/status/2117688155600007338">Full video</a> ·
+        <a href="hardware/microdock/README.md">Hardware and simulation</a> ·
+        Bambu P1S print plates
+        <a href="hardware/microdock/print/microdock_plate1_base.3mf">1</a>,
+        <a href="hardware/microdock/print/microdock_plate2_board_hood_keeper.3mf">2</a>,
+        <a href="hardware/microdock/print/microdock_plate3_tag.3mf">3</a>
+        (<a href="hardware/microdock/print/README.md">how to print</a>)
       </td>
     </tr>
   </tbody>
@@ -177,7 +182,8 @@ The MicroDock charging dock prints without screws or inserts. Microduck backs in
 until the magnetic tip in its own USB-C port meets a magnetic adapter in a
 floating hood, which lines the robot up and rides clear of the power button.
 The generator, printable meshes, docking simulation and renders are under
-[`hardware/microdock`](hardware/microdock/README.md).
+[`hardware/microdock`](hardware/microdock/README.md), with ready-to-print plates for a Bambu Lab P1S in
+[`hardware/microdock/print`](hardware/microdock/print/README.md).
 
 <table>
   <tr>

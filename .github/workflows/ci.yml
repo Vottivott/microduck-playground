@@ -68,5 +68,8 @@ jobs:
       - name: Generate and check the MicroDock parts
         run: uv run hardware/microdock/source/cad.py --out "$RUNNER_TEMP/microdock" --check
 
+      - name: Lay out the MicroDock print plates
+        run: uv run hardware/microdock/source/plates.py --out "$RUNNER_TEMP/microdock-plates"
+
       - name: Check relative documentation links
         run: uv run python scripts/check_relative_links.py

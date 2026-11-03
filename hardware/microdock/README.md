@@ -74,18 +74,22 @@ detection, the turn and stopping on USB power) is scripted in the simulation, no
 - The hood is rigid along the docking direction. A version where the hood could slide back against a spring docked no
   better.
 
-## Parts and printing (Bambu Lab P1S bed, PLA)
+## Parts and printing (Bambu Lab P1S, PLA)
+
+Ready-to-print plates for a P1S are in [`print/`](print/README.md): three plates, because the base and the board
+don't fit one 256 × 256 mm plate together. Each plate has a 3MF that opens in Bambu Studio with the parts in place
+and turned for printing, and an STL of the whole plate.
 
 | STL | Size (mm) | Print |
 |---|---|---|
-| `stl/microdock_base.stl` | 195 × 200 × 19 | Flat. A 3 mm plate with a front ramp and a socket the board drops into. The duck stands on it while docked, which holds the dock in place. |
-| `stl/microdock_board.stl` | 247 × 110 × 6 | Flat on its back. A notch in the left edge lets the cable out. |
-| `stl/microdock_hood.stl` | 109 × 111 × 54 | Upside down (brim and skids on the bed). The pegs have flat tops, so no supports are needed. The cable slot in the left side wall is open at the wall's edge. |
-| `stl/microdock_keeper.stl` | 42 × 12 × 4 | Flat. Snaps onto the pegs behind the board. |
-| `stl/microdock_tag.stl` | 60 × 60 × 2.2 | AprilTag tag36h11 #0. Black base, then change to white for the raised cells at 1.6 mm. |
+| [`stl/microdock_base.stl`](stl/microdock_base.stl) | 195 × 200 × 19 | Flat. A 3 mm plate with a front ramp and a socket the board drops into. The duck stands on it while docked, which holds the dock in place. |
+| [`stl/microdock_board.stl`](stl/microdock_board.stl) | 247 × 110 × 6 | Flat on its back. A notch in the left edge lets the cable out. |
+| [`stl/microdock_hood.stl`](stl/microdock_hood.stl) | 109 × 111 × 54 | Upside down, with tree supports on the build plate only. They sit under the top plate's outer face and the pegs; the skids, lips and side walls the duck slides on stay clean, and the ceilings inside bridge. The cable slot in the left side wall is open at the wall's edge. |
+| [`stl/microdock_keeper.stl`](stl/microdock_keeper.stl) | 42 × 12 × 4 | Flat. Snaps onto the pegs behind the board. |
+| [`stl/microdock_tag.stl`](stl/microdock_tag.stl) | 60 × 60 × 2.2 | AprilTag tag36h11 #0, face up. Black base, white raised cells from 1.6 mm. |
 
-The meshes are in their assembly orientation; turn them as listed in the slicer. About 320 cm³ of solid parts, roughly
-200 g of PLA at normal infill.
+The files in `stl/` are in their assembly orientation; the plates have them turned as listed. About 320 cm³ of solid
+parts, roughly 200 g of PLA at normal infill.
 
 ## Bill of materials
 
@@ -139,6 +143,7 @@ head fits the hood, goes in from below and is stopped by the rib):
 
 ```bash
 uv run hardware/microdock/source/cad.py --check
+uv run hardware/microdock/source/plates.py          # the P1S plates in print/
 ```
 
 The simulation runs in this repository's environment, with a checkout of
@@ -170,7 +175,9 @@ MUJOCO_GL=egl uv run --with manifold3d python hardware/microdock/sim/render_gall
 ```text
 source/dock.py          design parameters, the simulator's collision pieces and scene, the magnet model
 source/cad.py           printable parts -> stl/ (manifold3d)
+source/plates.py        P1S print plates -> print/
 stl/                    the five printable parts (mm, assembly orientation)
+print/                  three P1S plates: 3MF, STL and a top view each
 sim/docking.py          docking trials with the official walking policy on the BAM actuator model
 sim/back_patch.py       the back of recent units (shell cut-out and recessed port) as a visual mesh
 sim/visuals.py          printable parts and the newer back as render visuals
