@@ -13,12 +13,12 @@ The parts don't fit one plate (the base and the board together are too big), so 
   1  base
   2  board (on its back), hood (upside down), keeper
   3  tag: black base with the white cells on top (its two colours as two parts)
-For each plate: a 3MF with the objects in place (the tag's two colours as colours, which Bambu Studio maps to
-filaments), an STL of the whole plate, and a top view.
+For each plate: an STL of the whole plate and a top view. bambu_project.py builds the Bambu Studio project from the
+same layout.
 
 uv run hardware/microdock/source/plates.py [--out DIR]
 """
-import argparse, json, os, sys, zipfile
+import argparse, json, os, sys
 import numpy as np
 import trimesh
 from scipy.spatial.transform import Rotation as Rot
@@ -80,42 +80,6 @@ def layout(p: Params):
     return plates
 
 
-def write_3mf(path, title, placed):
-    """Plain 3MF (core spec): one object per part at its place on the plate, colours as base materials; a part made
-    of several colours is one object with a component per colour."""
-    colours = sorted({c for _, pcs in placed for _, c in pcs}, key=lambda c: c != WHITE)
-    res, build, oid = [], [], 2
-    def mesh_xml(m, pindex):
-        v = "".join(f'<vertex x="{x:.4f}" y="{y:.4f}" z="{z:.4f}"/>' for x, y, z in m.vertices)
-        t = "".join(f'<triangle v1="{a}" v2="{b}" v3="{c}" pid="1" p1="{pindex}"/>' for a, b, c in m.faces)
-        return f"<mesh><vertices>{v}</vertices><triangles>{t}</triangles></mesh>"
-    for name, pcs in placed:
-        if len(pcs) == 1:
-            m, c = pcs[0]; ci = colours.index(c)
-            res.append(f'<object id="{oid}" name="microdock_{name}" type="model" pid="1" pindex="{ci}">{mesh_xml(m, ci)}</object>')
-            build.append(f'<item objectid="{oid}"/>'); oid += 1
-        else:
-            comps = []
-            for j, (m, c) in enumerate(pcs):
-                ci = colours.index(c)
-                res.append(f'<object id="{oid}" name="microdock_{name}_{"black" if c == BLACK else "white"}" type="model" pid="1" pindex="{ci}">{mesh_xml(m, ci)}</object>')
-                comps.append(f'<component objectid="{oid}"/>'); oid += 1
-            res.append(f'<object id="{oid}" name="microdock_{name}" type="model"><components>{"".join(comps)}</components></object>')
-            build.append(f'<item objectid="{oid}"/>'); oid += 1
-    base = "".join(f'<base name="{"White PLA" if c == WHITE else "Black PLA"}" displaycolor="{c}"/>' for c in colours)
-    model = ('<?xml version="1.0" encoding="UTF-8"?>\n<model unit="millimeter" xml:lang="en-US" '
-             'xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02">'
-             f'<metadata name="Title">{title}</metadata><metadata name="Application">microduck-playground plates.py</metadata>'
-             f'<resources><basematerials id="1">{base}</basematerials>{"".join(res)}</resources><build>{"".join(build)}</build></model>')
-    ct = ('<?xml version="1.0" encoding="UTF-8"?>\n<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
-          '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
-          '<Default Extension="model" ContentType="application/vnd.ms-package.3dmanufacturing-3dmodel+xml"/></Types>')
-    rels = ('<?xml version="1.0" encoding="UTF-8"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
-            '<Relationship Target="/3D/3dmodel.model" Id="rel0" Type="http://schemas.microsoft.com/3dmanufacturing/2013/01/3dmodel"/></Relationships>')
-    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
-        z.writestr("[Content_Types].xml", ct); z.writestr("_rels/.rels", rels); z.writestr("3D/3dmodel.model", model)
-
-
 def top_view(path, placed, px=4):
     """Top view of the plate: each part's height as shading, the excluded corner hatched."""
     from PIL import Image, ImageDraw
@@ -145,7 +109,6 @@ if __name__ == "__main__":
     report = {}
     for k, placed in layout(Params()).items():
         stem = f"microdock_plate{k}_{names[k]}"
-        write_3mf(os.path.join(a.out, stem + ".3mf"), f"MicroDock plate {k}", placed)
         trimesh.util.concatenate([m for _, pcs in placed for m, _ in pcs]).export(os.path.join(a.out, stem + ".stl"))
         top_view(os.path.join(a.out, stem + ".png"), placed)
         report[stem] = {name: [round(float(v), 1) for v in np.max([m.bounds[1] for m, _ in pcs], axis=0) - np.min([m.bounds[0] for m, _ in pcs], axis=0)]
