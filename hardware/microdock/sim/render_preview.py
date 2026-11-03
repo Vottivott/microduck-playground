@@ -1,6 +1,7 @@
 """MuJoCo preview of a docking run, in the scene style of the playground's other previews: mjlab's checker floor and
 visual defaults, one shadow-casting sun tilted toward the camera (as scripts/render_checkpoint.py), 50 fps, square.
-Replays a run saved by docking.py --save, with the printable parts as the dock's visuals and the back of recent units.
+Replays a run saved by docking.py --save, with the printable parts as the dock's visuals, the back of recent units and
+the charging cable, which leaves the hood and runs along the floor out of the picture.
 
   export MICRODUCK_RL_DIR=/path/to/microduck_rl
   MUJOCO_GL=egl uv run --with manifold3d python hardware/microdock/sim/render_preview.py run.pkl preview.mp4
@@ -48,6 +49,7 @@ for l in spec.lights:
     l.diffuse = [0.7]*3; l.specular = [0.3]*3; l.ambient = [0.0]*3
 
 model = spec.compile(); data = mujoco.MjData(model)
+HOOD = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "hood")
 # Shadow map: 8192 texels as in render_checkpoint.py, but over a box sized to this small static scene (its +-16 m box
 # gives ~4 mm texels: blocky shadows and acne on the dock's large flat faces). The box half-size is shadowclip*extent,
 # fixed when the renderer's context is made. The far clip (zfar*extent) stays at the playground renders' 200 m (50 x 4).
@@ -71,7 +73,9 @@ idx = [int(v) for v in a.frames.split(",")] if a.frames else list(range(n))
 frames = []
 for i in idx:
     data.qpos[:] = Q[i]; mujoco.mj_forward(model, data); place(i)
-    r.update_scene(data, camera=cam, scene_option=opt); frames.append(r.render().copy())
+    r.update_scene(data, camera=cam, scene_option=opt)
+    visuals.draw_cable(r.scene, visuals.smooth_path(visuals.cable_points(p, data.xpos[HOOD], data.xmat[HOOD].reshape(3, 3))))
+    frames.append(r.render().copy())
 from PIL import Image
 stem = os.path.splitext(a.out)[0]
 if a.frames:
