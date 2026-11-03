@@ -3,6 +3,7 @@
 # dependencies = [
 #   "manifold3d>=3.2",
 #   "numpy>=2.0",
+#   "scipy>=1.10",  # trimesh's graph engine: counts the bodies for --check
 #   "trimesh>=4.8",
 # ]
 # ///
