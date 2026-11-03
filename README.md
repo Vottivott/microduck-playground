@@ -111,6 +111,20 @@ full-video link—to open the complete silent MP4.
     </tr>
     <tr><td><strong>Raised-platform long jump</strong></td><td><a href="experiments/parkour/media/long-jump.mp4"><img src="experiments/parkour/media/long-jump.gif" width="280" alt="Raised-platform long jump in simulation"></a></td><td>Simulation only; not yet validated on hardware.<br><a href="experiments/parkour/long-jump/README.md">Details and reproduction</a> · <a href="https://huggingface.co/HannesVonEssen/microduck-long-jump">Policy and training checkpoint</a></td></tr>
     <tr><td><strong>Raised-platform backflip</strong></td><td><a href="experiments/parkour/media/backflip-tight-v2.mp4"><img src="experiments/parkour/media/backflip-tight-v2.gif" width="280" alt="Raised-platform backflip in simulation"></a></td><td>Experimental simulation policy; hardware unvalidated. ⚠️ Landings may break the robot.<br><a href="experiments/parkour/backflip/README.md">Details and reproduction</a> · <a href="https://huggingface.co/HannesVonEssen/microduck-backflip">Policy and training checkpoint</a></td></tr>
+    <tr>
+      <td><strong>Self-charging dock</strong></td>
+      <td>
+        <a href="hardware/microdock/media/preview.mp4">
+          <img src="hardware/microdock/media/preview.gif" width="280" alt="Animated preview of Microduck turning around and backing into a printed dock until the magnetic tip in its USB-C port meets the charging adapter">
+        </a>
+      </td>
+      <td>
+        Backs into a fully printed dock that connects a magnetic charger to its own USB-C port:
+        30/30 docked in simulation with the official walking policy. Not yet printed or tried on hardware.<br>
+        <a href="hardware/microdock/media/preview.mp4">Full video</a> ·
+        <a href="hardware/microdock/README.md">Hardware and simulation</a>
+      </td>
+    </tr>
   </tbody>
 </table>
 
@@ -159,6 +173,20 @@ Printable models, generators, assembly instructions and the full gallery are und
   </tr>
 </table>
 
+The MicroDock charging dock prints without screws or inserts. Microduck backs in
+until the magnetic tip in its own USB-C port meets a magnetic adapter in a
+floating hood, which lines the robot up and rides clear of the power button.
+The generator, printable meshes, docking simulation and renders are under
+[`hardware/microdock`](hardware/microdock/README.md).
+
+<table>
+  <tr>
+    <td align="center"><img src="hardware/microdock/renders/microdock_three_quarter.png" width="300" alt="MicroDock assembled: base plate, board with AprilTag and floating hood"><br><sub>Assembled</sub></td>
+    <td align="center"><img src="hardware/microdock/renders/microdock_parts.png" width="300" alt="MicroDock printed parts pulled apart: base, board, tag, hood and keeper"><br><sub>Printed parts</sub></td>
+    <td align="center"><img src="hardware/microdock/renders/microdock_docked.png" width="300" alt="Microduck docked, with the hood resting on its back"><br><sub>Docked</sub></td>
+  </tr>
+</table>
+
 ## Quick start
 
 A CUDA GPU and [`uv`](https://docs.astral.sh/uv/) are recommended. Training
@@ -189,6 +217,7 @@ experiments/
   stilts/                policy index, executed curriculum, continuation guide
   swing/                 selected checkpoints, evaluation, media, methodology
 hardware/
+  microdock/             printable charging dock, docking simulation, renders
   stilts/                parametric stilt generator and printable meshes
   swing-seat/            retained-seat generator, meshes, clearance reports
 src/mjlab_microduck/     tasks, robot models, actuator model, rewards

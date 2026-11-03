@@ -65,5 +65,8 @@ jobs:
             --with-requirements hardware/swing-seat/source/requirements.txt \
             python hardware/swing-seat/source/verify_all.py
 
+      - name: Generate and check the MicroDock parts
+        run: uv run hardware/microdock/source/cad.py --out "$RUNNER_TEMP/microdock" --check
+
       - name: Check relative documentation links
         run: uv run python scripts/check_relative_links.py
