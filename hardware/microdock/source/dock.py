@@ -67,7 +67,11 @@ class Params:
     lip_rise: float = 6.0
     stop_face_x: float = -47.0      # battery stop (just behind the battery's back face)
     plug: tuple = (8.0, 12.0, 14.0) # magnetic adapter (vertical, horizontal, length)
-    angle_plug: tuple = (22.0, 12.5, 7.5)   # right-angle USB-C head: length (cable direction), depth along the plug, thickness
+    # right-angle USB-C head (UGREEN 100 W, measured on its product photos): a round aluminium body along the cable with a
+    # black elbow on its side that holds the plug. Length from the plug-side end to the end of the strain relief, depth
+    # from the plug's base to the back of the body, body diameter. The cable leaves on the body's axis.
+    angle_plug: tuple = (27.6, 9.5, 6.8)
+    angle_elbow: tuple = (2.7, 10.3, 5.33)  # elbow: depth in front of the body, length along it, body end beyond the plug's axis
     hood_drop: float = 7.0          # rest position below docked when no robot
     hood_lift: float = 6.0
     hood_float_y: float = 12.0

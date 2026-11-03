@@ -92,7 +92,7 @@ The meshes are in their assembly orientation; turn them as listed in the slicer.
 | Part | Example | Price |
 |---|---|---|
 | Magnetic USB-C adapter, 2-pack (24-pin, passes CC, so chargers switch on) | Auravale 240 W, [Amazon.de B0GWQ71YND](https://www.amazon.de/dp/B0GWQ71YND) | €8.99 |
-| Right-angle USB-C to USB-C cable | UGREEN 100 W, [Amazon B083Q4SHPT](https://www.amazon.com/dp/B083Q4SHPT) | $11.99 |
+| Right-angle USB-C to USB-C cable (the hood is shaped for this one's head) | UGREEN 100 W, [Amazon B083Q4SHPT](https://www.amazon.com/dp/B083Q4SHPT) | $11.99 |
 | USB-C charger, or any phone charger you have | Anker Nano 30 W, [Amazon B0B2MM1W65](https://www.amazon.com/dp/B0B2MM1W65) | $15.99 |
 | PLA, ≈ 200 g | Bambu Lab PLA Basic | ≈ €4 |
 
@@ -106,8 +106,8 @@ Prices as checked in November 2026.
 3. Plug the right-angle cable into the magnetic adapter. The cable's head lies flat behind the adapter and its cable
    points to the hood's left side (the duck's left when docked).
 4. Push the joined adapter and cable up into the hood from below, magnetic face toward the duck. The adapter's pocket,
-   the head's channel and the cable's slot in the left side wall are all open at the bottom. The head is bigger than the
-   pocket, so it rests against the pocket's back and the magnet can't pull the adapter out. Nothing has to be unplugged
+   the head's channel and the cable's slot in the left side wall are all open at the bottom. A rib beside the pocket
+   catches the front of the head's body, so the magnet can't pull the adapter out of place. Nothing has to be unplugged
    or threaded.
 5. Lead the cable past the notch in the board's left edge and down behind the board to the charger. Leave a little
    slack so the hood can float.
@@ -128,10 +128,14 @@ Prices as checked in November 2026.
    the onboard charger behaves is not public yet ([microduck#470](https://github.com/pollen-robotics/microduck/issues/470)).
 5. **Docking behaviour.** Tag detection, the turn and the stop on USB power are scripted in the simulation. Microduck's
    runtime does not have them yet.
+6. **The right-angle cable's head.** The hood's channel and its stop rib fit the UGREEN head as measured on its product
+   photos: a round aluminium body 6.8 mm across, 9.5 mm from the plug's base to the back, and a black elbow 2.7 mm deep
+   and 10.3 mm long around the plug. Another cable needs `angle_plug` and `angle_elbow` in `source/dock.py` changed.
 
 ## Reproduce
 
-The printable parts (writes `stl/` and checks that each part is one watertight body that fits the bed):
+The printable parts (writes `stl/`, checks that each part is one watertight body that fits the bed, and that the cable
+head fits the hood, goes in from below and is stopped by the rib):
 
 ```bash
 uv run hardware/microdock/source/cad.py --check

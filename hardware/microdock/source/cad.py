@@ -96,12 +96,17 @@ def hood(p: Params):
     # adapter pocket (0.15 mm clearance), open at the bottom: the adapter + cable go in from below as one piece
     s = s - cube(ax0 - pl - 0.2, ax0 + 1, -ph/2 - 0.15, ph/2 + 0.15, -1.0, p.port_z + pv/2 + 0.15)
     al, aw, at = p.angle_plug
-    # Right-angle head behind the adapter: a flat bar whose cable leaves along the plug's wide side, so with the port
-    # horizontal it lies flat (thickness `at` vertical, depth `aw` behind the adapter) and points to the duck's left
-    # (+y); its cable leaves through the left side wall.
-    s = s - cube(ax0 - pl - aw - 0.6, ax0 - pl + 0.2, -6.0, p.side_in + 0.01, -1.0, p.port_z + at/2 + 0.3)   # open below, like the pocket
+    ed, el, xe = p.angle_elbow
+    # Right-angle head behind the adapter: its body runs along the plug's wide side, so with the port horizontal it lies
+    # flat (body diameter `at` vertical, `aw` deep behind the adapter) and points to the duck's left (+y); its cable
+    # leaves through the left side wall. The channel fits it with 0.6 mm to spare behind.
+    s = s - cube(ax0 - pl - aw - 0.6, ax0 - pl + 0.2, -xe - 0.65, p.side_in + 0.01, -1.0, p.port_z + at/2 + 0.3)   # open below, like the pocket
+    # Head stop: a rib behind the sleeve's left wall catches the front of the head's body, so the magnet can't pull the
+    # adapter forward out of place (the elbow alone would fit into the pocket's back). It clears the elbow's flared side
+    # and the body's path when the pair goes in from below.
+    s = s + cube(ax0 - pl - ed + 0.15, ax0 - pl + 0.4, (el - xe) + 2.1, ph/2 + 2.2, p.port_z - at/2 - 0.5, p.port_z + pv/2 + 2.0)
     # cable exit: a slot open at the wall's bottom edge, so the cable slips in from below (no need to unplug it)
-    xc = ax0 - pl - aw/2 - 0.2                     # the cable leaves the head at the middle of its depth
+    xc = ax0 - pl - (aw - at/2)                    # the cable leaves the head on its body's axis
     s = s - m3.Manifold.cylinder(p.wall_t + 2.0, CABLE_SLOT/2, CABLE_SLOT/2, 40).rotate((-90, 0, 0)).translate((xc, p.side_in - 1.0, p.port_z))
     s = s - cube(xc - CABLE_SLOT/2, xc + CABLE_SLOT/2, p.side_in - 1.0, p.side_in + p.wall_t + 1.0, p.side_bot - 2.0, p.port_z)
     for sx in (-1, 1):                     # small lead-in chamfers at the slot's mouth
@@ -163,6 +168,27 @@ PARTS = (("microdock_base", base), ("microdock_board", board), ("microdock_hood"
          ("microdock_keeper", keeper), ("microdock_tag", tag))
 
 
+def head_fit(p: Params, hood_part=None):
+    """The right-angle cable head (elbow, round body, strain relief, cable to the slot) and the adapter against the hood:
+    overlap (mm3) at the nominal position, the worst overlap while the joined pair rises in from below, and how far the
+    head can be pulled forward (toward the duck) before the hood stops it."""
+    from dock import adapter_box
+    hood_part = hood_part or hood(p)
+    pv, ph, pl = p.plug; al, aw, at = p.angle_plug; ed, el, xe = p.angle_elbow
+    x0 = p.adapter_face_x - pl; r = at/2; xa = x0 - (aw - r)          # adapter back face; body axis (hood x)
+    def cyl_y(r0, r1, y0, y1, x, z): return m3.Manifold.cylinder(y1 - y0, r0, r1, 48).rotate((-90, 0, 0)).translate((x, y0, z))
+    def pair(dx=0.0, dz=0.0, cable=True):
+        z = p.port_z + dz
+        h = hull(np.array([[x0 + dx + xx, y, z + zz] for xx, y in ((0, -xe), (0, el - xe), (-(ed + 2.1), el - xe + 1.8), (-(ed + 2.1), -xe)) for zz in (-r, r)]))
+        h = h + cyl_y(r, r, -xe, al - 8.8 - xe, xa + dx, z) + cyl_y(r, 2.9, al - 8.8 - xe, al - xe, xa + dx, z)
+        if cable: h = h + cyl_y(2.0, 2.0, al - xe, p.side_in + p.wall_t + 3.0, xa + dx, z)
+        return h + hull(adapter_box(p) + np.array([dx, 0, dz]))
+    nominal = (pair() ^ hood_part).volume()
+    path = max((pair(dz=dz) ^ hood_part).volume() for dz in np.arange(-45.0, 0.01, 1.0))
+    travel = next((dx for dx in np.arange(0.05, 5.0, 0.05) if (pair(dx=dx, cable=False) ^ hood_part).volume() > 0.01), None)
+    return dict(nominal_mm3=round(nominal, 4), insertion_mm3=round(path, 4), forward_travel_mm=None if travel is None else round(float(travel), 2))
+
+
 def export_all(p: Params, outdir):
     import trimesh
     os.makedirs(outdir, exist_ok=True); info = {}
@@ -178,12 +204,16 @@ def export_all(p: Params, outdir):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--out", default=os.path.join(HERE, "..", "stl"), help="output directory (default: ../stl)")
-    ap.add_argument("--check", action="store_true", help="fail unless every part is one watertight body that fits a 256 mm bed")
+    ap.add_argument("--check", action="store_true", help="fail unless every part is one watertight body that fits a 256 mm bed and the cable head fits the hood")
     a = ap.parse_args()
     info = export_all(Params(), a.out)
     print(json.dumps(info, indent=1))
     if a.check:
         bad = [k for k, v in info.items() if not (v["watertight"] and v["bodies"] == 1 and max(v["extents_mm"]) <= BED_MM)]
+        fit = head_fit(Params()); print("cable head fit:", json.dumps(fit))
+        if fit["nominal_mm3"] > 0.01 or fit["insertion_mm3"] > 0.01 or fit["forward_travel_mm"] is None or fit["forward_travel_mm"] > 0.5:
+            bad.append("cable head fit")
         if bad:
             sys.exit(f"check failed: {bad}")
-        print(f"check passed: {len(info)} parts, each one watertight body within a {BED_MM:.0f} mm bed")
+        print(f"check passed: {len(info)} parts, each one watertight body within a {BED_MM:.0f} mm bed; the cable head fits, "
+              f"goes in from below and stops within {fit['forward_travel_mm']} mm")
