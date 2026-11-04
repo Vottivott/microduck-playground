@@ -71,5 +71,8 @@ jobs:
       - name: Lay out the MicroDock print plates
         run: uv run hardware/microdock/source/plates.py --out "$RUNNER_TEMP/microdock-plates"
 
+      - name: Generate and check the MicroDock v2 parts
+        run: uv run hardware/microdock-v2/source/build.py --out "$RUNNER_TEMP/microdock-v2" --check
+
       - name: Check relative documentation links
         run: uv run python scripts/check_relative_links.py

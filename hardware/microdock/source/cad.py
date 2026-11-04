@@ -74,7 +74,7 @@ def board(p: Params):
                            ((0, -0.2), (-(PEG_R + p.hood_float_y + 1), 4.2), (PEG_R + p.hood_float_y + 1, 4.2))]))
         s = s - v
     # cable notch in the left edge, level with the hood's side-wall cable exit (room for the hood to float)
-    zc = p.z0 + p.port_z
+    zc = p.z0 + p.adapter_z
     s = s - cube(-p.board_t - 1, 1, PEG_Y + PEG_R + p.hood_float_y + 4.0, w + 1, zc - p.hood_drop - 6.0, zc + p.hood_lift + 6.0)
     # tag pocket
     tw = p.tag_size/2 + 2.0 + 0.15
@@ -94,21 +94,21 @@ def hood(p: Params):
     pv, ph, pl = p.plug
     ax0 = p.adapter_face_x
     # adapter pocket (0.15 mm clearance), open at the bottom: the adapter + cable go in from below as one piece
-    s = s - cube(ax0 - pl - 0.2, ax0 + 1, -ph/2 - 0.15, ph/2 + 0.15, -1.0, p.port_z + pv/2 + 0.15)
+    s = s - cube(ax0 - pl - 0.2, ax0 + 1, -ph/2 - 0.15, ph/2 + 0.15, -1.0, p.adapter_z + pv/2 + 0.15)
     al, aw, at = p.angle_plug
     ed, el, xe = p.angle_elbow
     # Right-angle head behind the adapter: its body runs along the plug's wide side, so with the port horizontal it lies
     # flat (body diameter `at` vertical, `aw` deep behind the adapter) and points to the duck's left (+y); its cable
     # leaves through the left side wall. The channel fits it with 0.6 mm to spare behind.
-    s = s - cube(ax0 - pl - aw - 0.6, ax0 - pl + 0.2, -xe - 0.65, p.side_in + 0.01, -1.0, p.port_z + at/2 + 0.3)   # open below, like the pocket
+    s = s - cube(ax0 - pl - aw - 0.6, ax0 - pl + 0.2, -xe - 0.65, p.side_in + 0.01, -1.0, p.adapter_z + at/2 + 0.3)   # open below, like the pocket
     # Head stop: a rib behind the sleeve's left wall catches the front of the head's body, so the magnet can't pull the
     # adapter forward out of place (the elbow alone would fit into the pocket's back). It clears the elbow's flared side
     # and the body's path when the pair goes in from below.
-    s = s + cube(ax0 - pl - ed + 0.15, ax0 - pl + 0.4, (el - xe) + 2.1, ph/2 + 2.2, p.port_z - at/2 - 0.5, p.port_z + pv/2 + 2.0)
+    s = s + cube(ax0 - pl - ed + 0.15, ax0 - pl + 0.4, (el - xe) + 2.1, ph/2 + 2.2, p.adapter_z - at/2 - 0.5, p.adapter_z + pv/2 + 2.0)
     # cable exit: a slot open at the wall's bottom edge, so the cable slips in from below (no need to unplug it)
     xc = ax0 - pl - (aw - at/2)                    # the cable leaves the head on its body's axis
-    s = s - m3.Manifold.cylinder(p.wall_t + 2.0, CABLE_SLOT/2, CABLE_SLOT/2, 40).rotate((-90, 0, 0)).translate((xc, p.side_in - 1.0, p.port_z))
-    s = s - cube(xc - CABLE_SLOT/2, xc + CABLE_SLOT/2, p.side_in - 1.0, p.side_in + p.wall_t + 1.0, p.side_bot - 2.0, p.port_z)
+    s = s - m3.Manifold.cylinder(p.wall_t + 2.0, CABLE_SLOT/2, CABLE_SLOT/2, 40).rotate((-90, 0, 0)).translate((xc, p.side_in - 1.0, p.adapter_z))
+    s = s - cube(xc - CABLE_SLOT/2, xc + CABLE_SLOT/2, p.side_in - 1.0, p.side_in + p.wall_t + 1.0, p.side_bot - 2.0, p.adapter_z)
     for sx in (-1, 1):                     # small lead-in chamfers at the slot's mouth
         s = s - hull(np.array([[xc + sx*(CABLE_SLOT/2 - 0.01), y, z] for y in (p.side_in - 1.0, p.side_in + p.wall_t + 1.0) for z in (p.side_bot - 2.0, p.side_bot + 1.2)] +
                               [[xc + sx*(CABLE_SLOT/2 + 1.2), y, p.side_bot - 2.0] for y in (p.side_in - 1.0, p.side_in + p.wall_t + 1.0)]))
@@ -178,7 +178,7 @@ def head_fit(p: Params, hood_part=None):
     x0 = p.adapter_face_x - pl; r = at/2; xa = x0 - (aw - r)          # adapter back face; body axis (hood x)
     def cyl_y(r0, r1, y0, y1, x, z): return m3.Manifold.cylinder(y1 - y0, r0, r1, 48).rotate((-90, 0, 0)).translate((x, y0, z))
     def pair(dx=0.0, dz=0.0, cable=True):
-        z = p.port_z + dz
+        z = p.adapter_z + dz
         h = hull(np.array([[x0 + dx + xx, y, z + zz] for xx, y in ((0, -xe), (0, el - xe), (-(ed + 2.1), el - xe + 1.8), (-(ed + 2.1), -xe)) for zz in (-r, r)]))
         h = h + cyl_y(r, r, -xe, al - 8.8 - xe, xa + dx, z) + cyl_y(r, 2.9, al - 8.8 - xe, al - xe, xa + dx, z)
         if cable: h = h + cyl_y(2.0, 2.0, al - xe, p.side_in + p.wall_t + 3.0, xa + dx, z)

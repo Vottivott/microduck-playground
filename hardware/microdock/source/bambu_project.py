@@ -55,10 +55,11 @@ def flatten(resources, kind, name):
     return cfg
 
 
-def build(bambu, resources, out, work):
+def build(bambu, resources, out, work, p=None):
+    """p: the dock's parameters (default Params(); the seated MicroDock v2 passes its own)."""
     parts = os.path.join(work, "parts"); os.makedirs(parts, exist_ok=True)
     files = {}
-    for k, placed in plates.layout(Params()).items():
+    for k, placed in plates.layout(p or Params()).items():
         for name, pcs in placed:
             for m, c in pcs:
                 stem = f"microdock_{name}" + ("" if len(pcs) == 1 else ("_black" if c == plates.BLACK else "_white"))

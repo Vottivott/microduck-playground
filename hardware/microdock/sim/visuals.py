@@ -65,15 +65,16 @@ def cable_points(p: dk.Params, hood_pos, hood_mat, far_y=3.0):
     - past the notch in the board's left edge and down behind the board;
     - over the base's rear edge onto the floor, then along the floor toward +y (the slot's side), out of the picture.
     The head rides in the hood, so the first points move with the hood body (hood_pos, hood_mat: its pose)."""
-    al, aw, at = p.angle_plug; xe = p.angle_elbow[2]; pz = p.port_z
+    al, aw, at = p.angle_plug; xe = p.angle_elbow[2]; pz = p.adapter_z
     xa = p.adapter_face_x - p.plug[2] - (aw - at/2)          # the head's body axis, which the cable leaves along (hood frame, mm)
     yo = p.side_in + p.wall_t                                  # the side wall's outer face
     def hood(x, y, z): return hood_pos + hood_mat @ (np.array([x, y, z])*1e-3)
     hy, hz = hood_pos[1]*1e3, hood_pos[2]*1e3
+    dz = (p.z0 - dk.Params().z0)*1e-3                          # a lower hood (the seated v2) lowers the run behind the board
     def w(x, y, z): return np.array([x, y, z])
     return [hood(xa, al - xe + 0.2, pz), hood(xa, al - xe + 5.2, pz), hood(xa, yo + 3.0, pz), hood(p.hood_rear + 4.0, yo + 7.0, pz - 1.0),
             w(-0.003, (hy + yo + 9.0)*1e-3, (hz + pz - 2.0)*1e-3), w(-0.013, (hy + yo + 9.0)*1e-3, (hz + pz - 8.0)*1e-3),
-            w(-0.014, 0.046, 0.085), w(-0.016, 0.044, (p.T + 2.0)*1e-3), w((p.plate_x[0] + 7.0)*1e-3, 0.052, (p.T + 2.0)*1e-3),
+            w(-0.014, 0.046, 0.085 + dz), w(-0.016, 0.044, (p.T + 2.0)*1e-3), w((p.plate_x[0] + 7.0)*1e-3, 0.052, (p.T + 2.0)*1e-3),
             w(CABLE_X + 0.001, 0.068, CABLE_R), w(CABLE_X, 0.110, CABLE_R), w(CABLE_X, 0.40, CABLE_R), w(CABLE_X, far_y, CABLE_R)]
 
 
