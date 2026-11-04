@@ -83,13 +83,13 @@ hood's supports. Open it, slice and print; [`print/`](print/README.md) also has 
 | STL | Size (mm) | Print |
 |---|---|---|
 | [`stl/microdock_base.stl`](stl/microdock_base.stl) | 195 × 200 × 19 | Flat. A 3 mm plate with a front ramp and a socket the board drops into. The duck stands on it while docked, which holds the dock in place. |
-| [`stl/microdock_board.stl`](stl/microdock_board.stl) | 247 × 110 × 6 | Flat on its back. A notch in the left edge lets the cable out. |
-| [`stl/microdock_hood.stl`](stl/microdock_hood.stl) | 109 × 111 × 54 | Upside down, with grid supports on the build plate only (set in the project). They sit under the top plate's outer face and the pegs; the skids, lips and side walls the duck slides on stay clean, and the ceilings inside bridge. The cable slot in the left side wall is open at the wall's edge. |
-| [`stl/microdock_keeper.stl`](stl/microdock_keeper.stl) | 42 × 12 × 4 | Flat. Snaps onto the pegs behind the board. |
+| [`stl/microdock_board.stl`](stl/microdock_board.stl) | 247 × 110 × 6 | Flat on its back. A clip in the left edge holds the cable. |
+| [`stl/microdock_hood.stl`](stl/microdock_hood.stl) | 109 × 111 × 54 | Upside down, with grid supports on the build plate only (set in the project). They sit under the top plate's outer face and the pegs; the skids, lips and side walls the duck slides on stay clean, and the ceilings inside bridge. The cable slot in the left side wall is open at the wall's edge. The adapter's catch needs no supports: its two fingers hang from the top plate and print straight up from it. |
+| [`stl/microdock_keeper.stl`](stl/microdock_keeper.stl) | 42 × 32 × 4 | Flat. Slides onto the pegs behind the board; a piece of 1.75 mm filament through each peg locks it on. |
 | [`stl/microdock_tag.stl`](stl/microdock_tag.stl) | 60 × 60 × 2.2 | AprilTag tag36h11 #0, face up. Black base, white raised cells from 1.6 mm. |
 
 The files in `stl/` are in their assembly orientation; the plates have them turned as listed. Bambu Studio estimates
-about 5 h 25 min and 240 g of PLA for all three plates.
+about 5 h 33 min and 241 g of PLA for all three plates.
 
 ## Bill of materials
 
@@ -105,18 +105,27 @@ Prices as checked in November 2026.
 ## Assembly
 
 1. Push the board into the base's socket.
-2. Push the hood's two pegs through the board's window from the front, then snap the keeper onto them behind the
-   board. With nothing under it, the hood rests in V-seats that centre it.
+2. Push the hood's two pegs through the board's window from the front, then slide the keeper onto them behind the
+   board and lock it: push a 12 mm piece of 1.75 mm filament (snap it off the spool) down through the hole in each peg,
+   right behind the keeper. The hood's weight sits in front of the board, so it always leans forward on its pegs, and
+   undocking pulls it forward through the magnet: the keeper holds it on wherever it floats (`keeper_fit` in
+   `source/cad.py` checks every height, side position and a 10° roll). With nothing under it, the hood rests on V-seats;
+   they are too shallow to centre it against PLA's friction, so leave it roughly in the middle (see the v2 notes).
 3. Plug the right-angle cable into the magnetic adapter. The cable's head lies flat behind the adapter and its cable
    points to the hood's left side (the duck's left when docked).
 4. Push the joined adapter and cable up into the hood from below, magnetic face toward the duck. The adapter's pocket,
    the head's channel and the cable's slot in the left side wall are all open at the bottom. A rib beside the pocket
-   catches the front of the head's body, so the magnet can't pull the adapter out of place. Nothing has to be unplugged
-   or threaded.
-5. Lead the cable past the notch in the board's left edge and down behind the board to the charger. Leave a little
-   slack so the hood can float.
+   catches the front of the head's body, so the magnet can't pull the adapter out of place. Push until it clicks: a
+   finger in each side wall of the pocket snaps in under the adapter and holds it up. Nothing has to be unplugged or
+   threaded. To take the pair out, pull the head down firmly.
+5. Press the cable into the clip in the board's left edge, low down, so that it runs through the board, with about 11 cm
+   of cable between the hood's side wall and the clip (the hood's cable exit moves up to 66 mm from the clip as it floats). Lead it down behind the board to the charger. The loop lets the
+   hood float, and the clip keeps the cable's weight, and any tug on it, off the hood.
 6. Press the tag into its pocket.
 7. On the robot, push the magnetic tip into Microduck's USB-C port. It stays there.
+8. Stand the dock against a wall and fix the base to the floor with removable mounting tape (or anti-slip pads).
+   Docking pushes the dock back and undocking pulls it forward, by a few newtons in the simulation: more than a
+   free-standing dock holds on a smooth floor.
 
 ## Check before building
 
@@ -135,11 +144,15 @@ Prices as checked in November 2026.
 6. **The right-angle cable's head.** The hood's channel and its stop rib fit the UGREEN head as measured on its product
    photos: a round aluminium body 6.8 mm across, 9.5 mm from the plug's base to the back, and a black elbow 2.7 mm deep
    and 10.3 mm long around the plug. Another cable needs `angle_plug` and `angle_elbow` in `source/dock.py` changed.
+   The board's cable clip is sized for a 4 mm cable (`CABLE_D` in `source/cad.py`).
+7. **The magnetic adapter's corners.** Its section is nearly a stadium, so the catch's hooks rest under its rounded
+   corners: a 3.8 mm radius as measured on the product photos (`ADAPTER_R` in `source/cad.py`). The catch snaps in for
+   radii from about 3.1 to 4 mm.
 
 ## Reproduce
 
 The printable parts (writes `stl/`, checks that each part is one watertight body that fits the bed, and that the cable
-head fits the hood, goes in from below and is stopped by the rib):
+head fits the hood, goes in from below, is held by the catch and is stopped by the rib):
 
 ```bash
 uv run hardware/microdock/source/cad.py --check

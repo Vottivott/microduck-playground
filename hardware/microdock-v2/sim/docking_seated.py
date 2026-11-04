@@ -146,7 +146,13 @@ def run(model, data, bc, pol, p, a, x0, y0, yaw0, nx, ny, nyaw, rec=None):
     # sit (official sitstand: posture flag 1), then hand over to the butt walk
     with contextlib.redirect_stdout(io.StringIO()):
         pol.toggle_sit()
-    for _ in range(int(a.sit_s*50)): st("sit", 0, 0, 0)
+    still = 0
+    for k in range(int(a.sit_s*50)):
+        st("sit", 0, 0, 0)
+        if getattr(a, "sit_until_still", False):           # hand over as soon as the sit is done (the sit takes ~1 s)
+            moving = np.linalg.norm(data.qvel[:3]) > 0.005 or np.max(np.abs(data.qvel[np.array(bc.dof_indexes)])) > 0.1
+            still = 0 if moving else still + 1
+            if k >= 30 and still >= 5: break
     after_sit = (X(), Y(), dg.yaw_deg(data), data.qpos[2]*1000)
     pol.sit_mode = False; pol.current_policy = 'walking'; pol.ort_session = pol.butt_walk_session
     for _ in range(int(a.handover_s*50)): st("seated", 0, 0, 0)
@@ -160,7 +166,9 @@ def run(model, data, bc, pol, p, a, x0, y0, yaw0, nx, ny, nyaw, rec=None):
         if X() < p.dock_x - 15: break
     resting[0] = con_step is not None
     if a.rest == "doze":
-        for _ in range(int(a.doze_pause*50)): err = st("docked", 0, 0, 0)
+        for _ in range(int(a.doze_pause*50)):          # still, or (--doze_push) still backing in to seat the plug
+            e_yaw = dg.wrap(a.yawt - (dg.yaw_deg(data) + nyaw))
+            err = st("docked", a.vback, 0, float(np.clip(a.kyaw*e_yaw, -0.3, 0.3))) if a.doze_push else st("docked", 0, 0, 0)
         err = doze(model, bc, lambda ph: st(ph, 0, 0, 0, policy=False), off)
         for _ in range(int(a.hold*50)): err = st("asleep", 0, 0, 0, policy=False)
     else:
@@ -188,6 +196,7 @@ if __name__ == "__main__":
     ap.add_argument("--rest", default="policy", choices=["policy", "doze"],
                     help="once docked: sit still on the butt walk (policy), or doze off and switch the leg servos off (doze)")
     ap.add_argument("--doze_pause", type=float, default=0.5, help="seconds still on the butt walk before dozing off")
+    ap.add_argument("--doze_push", action="store_true", help="keep backing in during that time instead of stopping")
     ap.add_argument("--save", default="", help="pickle the first trial's qpos at 50 Hz (for the renders)")
     ap.add_argument("--out", default="", help="write the results (and a summary) as JSON")
     ap.add_argument("--set", nargs="*", default=[], help="override Params fields, e.g. --set z0=64")

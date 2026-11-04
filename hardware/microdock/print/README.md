@@ -10,10 +10,10 @@
 | Plate | Parts | Bambu Studio's estimate | Plate STL |
 |---|---|---|---|
 | <img src="microdock_plate1_base.png" width="200" alt="Plate 1: the base"> | **1:** base | 2 h 9 min, 101 g | [STL](microdock_plate1_base.stl) |
-| <img src="microdock_plate2_board_hood_keeper.png" width="200" alt="Plate 2: board, hood and keeper"> | **2:** board on its back, hood upside down, keeper | 2 h 53 min, 128 g (19 min of it supports) | [STL](microdock_plate2_board_hood_keeper.stl) |
+| <img src="microdock_plate2_board_hood_keeper.png" width="200" alt="Plate 2: board, hood and keeper"> | **2:** board on its back, hood upside down, keeper | 3 h 2 min, 131 g (about 20 min of it supports) | [STL](microdock_plate2_board_hood_keeper.stl) |
 | <img src="microdock_plate3_tag.png" width="200" alt="Plate 3: the two-colour tag"> | **3:** tag, black base with white cells on top | 22 min, 7 g black and 2 g white | [STL](microdock_plate3_tag.stl) |
 
-About 5 h 25 min and 240 g of PLA in all.
+About 5 h 33 min and 241 g of PLA in all.
 
 ## Notes
 

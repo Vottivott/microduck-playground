@@ -2,7 +2,7 @@
 
 The duck sits in front of the dock (the official sitstand policy), then butt-walks backward under the hood. Seated, its
 trunk rides about 64 mm lower than standing, so everything on the board that meets the hood (its window and V-seats, the
-cable notch) moves down with `z0`. Three more changes come from the seated pose:
+cable clip) moves down with `z0`. Three more changes come from the seated pose:
 - the window lets the hood float further sideways (the sit shifts the duck by up to ~25 mm) and drop further (the seated
   height varies more than the standing one);
 - the adapter sits 2.3 mm lower in the hood: the duck backs in leaning ~2-3 deg forward and settles at ~7 deg, and the

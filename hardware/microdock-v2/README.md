@@ -77,18 +77,34 @@ Bambu Studio's estimates:
 | Plate | Time | PLA |
 |---|---|---|
 | 1 | 2 h 9 min | 101 g |
-| 2 | 2 h 52 min | 126 g |
+| 2 | 3 h 1 min | 130 g |
 | 3 | 22 min | 9 g |
 
-That's about 5 h 25 min and 236 g in all.
+That's about 5 h 32 min and 240 g in all.
 
 The bill of materials and the assembly are the MicroDock's ([BOM](../microdock/README.md#bill-of-materials),
 [assembly](../microdock/README.md#assembly)), with the v2 board and hood.
 
+### What the simulation leaves out
+
+The simulation holds the dock still and moves the hood on two sliders, so these were checked separately:
+- **The keeper:** it keeps the hood on the board. The hood leans forward on its pegs, and undocking pulls it forward
+  through the magnet. `keeper_fit` in `../microdock/source/cad.py` checks every hood position (`build.py --check`
+  runs it): at least 274 mm² of the keeper always bears on the board. Two filament pins lock it on the pegs.
+- **Re-centring:** the V-seats under the pegs (about 10°) are too shallow to centre the hood against PLA's friction,
+  so after an off-centre docking it stays where it was left. With the simulator's centring spring removed and the hood
+  starting off-centre (A_1400, z0 62): ±10 mm docked 30/30 each, −20 mm 29/30, +20 mm 27/30.
+- **Holding the dock in place:** backing in pushes the dock back by up to about 3 N (peaks to 6 N) and scooting out
+  pulls it forward by up to about 3 N, with the duck's weight only partly on the plate. A free-standing 240 g dock
+  would slide on a smooth floor: stand it against a wall and fix the base down (assembly step 8).
+- **The cable loop:** as the hood floats, its cable exit moves 39 to 66 mm from the board's clip. Leave about 11 cm.
+- **The hood's weight:** the print with its adapter and cable head is about 45 g, the simulator's hood 28 g. With
+  45 g it still docked 30/30.
+
 ## Reproduce
 
-The parts: the board, the hood, the print plates, and the checks that the cable head fits the hood and that the other
-parts are the MicroDock's.
+The parts: the board, the hood, the print plates, and the checks that the cable head fits the hood and its catch and
+that the other parts are the MicroDock's.
 
 ```bash
 uv run hardware/microdock-v2/source/build.py --check
