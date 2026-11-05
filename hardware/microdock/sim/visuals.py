@@ -62,18 +62,18 @@ def scene(p: dk.Params, robot_dir, back=True):
 def cable_points(p: dk.Params, hood_pos, hood_mat, far_y=3.0):
     """The charging cable's route (world, m), as in the README's assembly steps:
     - out of the right-angle head along its axis and through the slot in the hood's left side wall;
-    - past the notch in the board's left edge and down behind the board;
+    - in a loop down to the clip in the board's left edge, through the board, and down behind it;
     - over the base's rear edge onto the floor, then along the floor toward +y (the slot's side), out of the picture.
     The head rides in the hood, so the first points move with the hood body (hood_pos, hood_mat: its pose)."""
-    al, aw, at = p.angle_plug; xe = p.angle_elbow[2]; pz = p.port_z
+    al, aw, at = p.angle_plug; xe = p.angle_elbow[2]; pz = p.adapter_z
     xa = p.adapter_face_x - p.plug[2] - (aw - at/2)          # the head's body axis, which the cable leaves along (hood frame, mm)
     yo = p.side_in + p.wall_t                                  # the side wall's outer face
     def hood(x, y, z): return hood_pos + hood_mat @ (np.array([x, y, z])*1e-3)
-    hy, hz = hood_pos[1]*1e3, hood_pos[2]*1e3
     def w(x, y, z): return np.array([x, y, z])
-    return [hood(xa, al - xe + 0.2, pz), hood(xa, al - xe + 5.2, pz), hood(xa, yo + 3.0, pz), hood(p.hood_rear + 4.0, yo + 7.0, pz - 1.0),
-            w(-0.003, (hy + yo + 9.0)*1e-3, (hz + pz - 2.0)*1e-3), w(-0.013, (hy + yo + 9.0)*1e-3, (hz + pz - 8.0)*1e-3),
-            w(-0.014, 0.046, 0.085), w(-0.016, 0.044, (p.T + 2.0)*1e-3), w((p.plate_x[0] + 7.0)*1e-3, 0.052, (p.T + 2.0)*1e-3),
+    yk, zk = (v*1e-3 for v in cad.cable_clip(p)); bt = p.board_t*1e-3   # the board's clip (world)
+    return [hood(xa, al - xe + 0.2, pz), hood(xa, al - xe + 5.2, pz), hood(xa, yo + 3.0, pz), hood(xa - 1.0, yo + 10.0, pz - 10.0),
+            w(0.010, yk + 0.002, zk + 0.012), w(0.003, yk, zk + 0.001), w(0.0, yk, zk), w(-bt, yk, zk), w(-bt - 0.005, yk, zk - 0.004),
+            w(-0.014, yk - 0.001, (p.T + p.socket_h + 3.0)*1e-3), w(-0.016, yk - 0.002, (p.T + 2.0)*1e-3), w((p.plate_x[0] + 7.0)*1e-3, 0.052, (p.T + 2.0)*1e-3),
             w(CABLE_X + 0.001, 0.068, CABLE_R), w(CABLE_X, 0.110, CABLE_R), w(CABLE_X, 0.40, CABLE_R), w(CABLE_X, far_y, CABLE_R)]
 
 

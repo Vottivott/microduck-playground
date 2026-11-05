@@ -120,11 +120,27 @@ full-video link—to open the complete video.
       </td>
       <td>
         Backs into a fully printed dock that connects a magnetic charger to its own USB-C port:
-        30/30 docked in simulation with the official walking policy. Not yet printed or tried on hardware.<br>
+        30/30 docked in simulation with the official walking policy. Not yet tried on hardware.<br>
         <a href="https://x.com/HannesVonEssen/status/2117688155600007338">Full video</a> ·
         <a href="hardware/microdock/README.md">Hardware and simulation</a> ·
         <a href="hardware/microdock/print/microdock_P1S.3mf">Bambu P1S project (3 plates)</a>
         (<a href="hardware/microdock/print/README.md">how to print</a>)
+      </td>
+    </tr>
+    <tr>
+      <td><strong>MicroDock v2</strong></td>
+      <td>
+        <a href="hardware/microdock-v2/media/preview.mp4">
+          <img src="hardware/microdock-v2/media/preview.gif" width="280" alt="Animated preview of Microduck turning around, sitting down and scooting back on its seat into the seated dock until the magnetic tip in its USB-C port meets the charging adapter, dozing off, then scooting out, standing up and walking off">
+        </a>
+      </td>
+      <td>
+        Sits down to charge: it scoots back into the dock on its seat, then scoots out and walks off when charged.
+        30/30 docked and undocked in simulation. Not yet tried on hardware.<br>
+        <a href="https://x.com/HannesVonEssen/status/2118390483869213114">Full video</a> ·
+        <a href="hardware/microdock-v2/README.md">Hardware and simulation</a> ·
+        <a href="hardware/microdock-v2/print/microdock_v2_P1S.3mf">Bambu P1S project (3 plates)</a> ·
+        <a href="hardware/microdock-v2/training/README.md">Scoot policies and training</a>
       </td>
     </tr>
   </tbody>
@@ -175,18 +191,20 @@ Printable models, generators, assembly instructions and the full gallery are und
   </tr>
 </table>
 
-The MicroDock charging dock prints without screws or inserts. Microduck backs in
-until the magnetic tip in its own USB-C port meets a magnetic adapter in a
-floating hood, which lines the robot up and rides clear of the power button.
-The generator, printable meshes, docking simulation and renders are under
-[`hardware/microdock`](hardware/microdock/README.md), with a ready-to-print Bambu Studio project for a Bambu Lab
-P1S in [`hardware/microdock/print`](hardware/microdock/print/README.md).
+The MicroDock v2 charging dock prints without screws or inserts. Microduck sits
+down and scoots back on its seat until the magnetic tip in its own USB-C port meets a
+magnetic adapter in a floating hood, which lines the robot up and rides clear of
+the power button. When it is charged, it scoots out, stands up and walks off.
+The generator, printable meshes, docking and undocking simulation, scoot policies and renders are under
+[`hardware/microdock-v2`](hardware/microdock-v2/README.md), with a ready-to-print Bambu Studio project for a Bambu
+Lab P1S in [`hardware/microdock-v2/print`](hardware/microdock-v2/README.md#parts-and-printing). The original
+[MicroDock](hardware/microdock/README.md), which the duck backs into standing, shares every part but the board.
 
 <table>
   <tr>
-    <td align="center"><img src="hardware/microdock/renders/microdock_three_quarter.png" width="300" alt="MicroDock assembled: base plate, board with AprilTag and floating hood"><br><sub>Assembled</sub></td>
-    <td align="center"><img src="hardware/microdock/renders/microdock_parts.png" width="300" alt="MicroDock printed parts pulled apart: base, board, tag, hood and keeper"><br><sub>Printed parts</sub></td>
-    <td align="center"><img src="hardware/microdock/renders/microdock_docked.png" width="300" alt="Microduck docked, with the hood resting on its back"><br><sub>Docked</sub></td>
+    <td align="center"><img src="hardware/microdock-v2/renders/microdock_three_quarter.png" width="300" alt="MicroDock v2 assembled: base plate, board with AprilTag and floating hood"><br><sub>Assembled</sub></td>
+    <td align="center"><img src="hardware/microdock-v2/renders/microdock_parts.png" width="300" alt="MicroDock v2 printed parts pulled apart: base, board, tag, hood and keeper"><br><sub>Printed parts</sub></td>
+    <td align="center"><img src="hardware/microdock-v2/renders/microdock_docked.png" width="300" alt="Microduck docked sitting down, with the hood resting on its back"><br><sub>Docked</sub></td>
   </tr>
 </table>
 
@@ -221,6 +239,7 @@ experiments/
   swing/                 selected checkpoints, evaluation, media, methodology
 hardware/
   microdock/             printable charging dock, docking simulation, renders
+  microdock-v2/          the seated dock: new board, scoot policies and training, simulation
   stilts/                parametric stilt generator and printable meshes
   swing-seat/            retained-seat generator, meshes, clearance reports
 src/mjlab_microduck/     tasks, robot models, actuator model, rewards

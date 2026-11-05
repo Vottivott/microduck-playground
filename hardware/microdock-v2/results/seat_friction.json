@@ -1,0 +1,781 @@
+{
+ "note": "seat friction robustness: the docking policy trained with 0.25-0.7; the main batch (seated30.json) uses 0.45",
+ "runs": [
+  {
+   "cmd": "docking_seated.py --seeds 41 --n 10 --seat_mu 0.3",
+   "docked": 10,
+   "runs": 10,
+   "runs_touching_button": 0,
+   "results": [
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.09,
+      0.1,
+      -0.38
+     ],
+     "after_turn": [
+      216.1,
+      -13.1,
+      1.3
+     ],
+     "after_sit": [
+      154.3,
+      -4.8,
+      -4.1,
+      61.9
+     ],
+     "con_step": 740,
+     "hood": [
+      -0.02,
+      2.31
+     ],
+     "trunk_z": 61.6,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      456,
+      21,
+      171
+     ],
+     "noise": [
+      2.5,
+      -4.0,
+      1.11
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.09,
+      0.1,
+      -0.43
+     ],
+     "after_turn": [
+      207.6,
+      -10.5,
+      2.8
+     ],
+     "after_sit": [
+      141.4,
+      -7.9,
+      -3.9,
+      61.8
+     ],
+     "con_step": 693,
+     "hood": [
+      0.13,
+      1.67
+     ],
+     "trunk_z": 61.7,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      421,
+      8,
+      176
+     ],
+     "noise": [
+      -6.5,
+      -2.2,
+      1.19
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.07,
+      0.26,
+      -0.42
+     ],
+     "after_turn": [
+      233.6,
+      7.8,
+      7.0
+     ],
+     "after_sit": [
+      167.9,
+      1.8,
+      3.4,
+      61.1
+     ],
+     "con_step": 731,
+     "hood": [
+      0.5,
+      10.71
+     ],
+     "trunk_z": 62.2,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      407,
+      -6,
+      182
+     ],
+     "noise": [
+      9.6,
+      2.7,
+      -0.8
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.04,
+      0.21,
+      -0.38
+     ],
+     "after_turn": [
+      227.1,
+      2.6,
+      6.4
+     ],
+     "after_sit": [
+      161.9,
+      -2.8,
+      2.4,
+      61.3
+     ],
+     "con_step": 738,
+     "hood": [
+      0.1,
+      9.31
+     ],
+     "trunk_z": 61.8,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      441,
+      -27,
+      175
+     ],
+     "noise": [
+      4.4,
+      -0.8,
+      0.37
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.09,
+      0.27,
+      -0.35
+     ],
+     "after_turn": [
+      229.7,
+      9.2,
+      6.7
+     ],
+     "after_sit": [
+      164.0,
+      5.0,
+      1.9,
+      61.2
+     ],
+     "con_step": 745,
+     "hood": [
+      0.12,
+      12.69
+     ],
+     "trunk_z": 61.8,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      454,
+      -12,
+      188
+     ],
+     "noise": [
+      -1.1,
+      5.9,
+      -0.19
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.08,
+      0.24,
+      -0.36
+     ],
+     "after_turn": [
+      235.5,
+      2.4,
+      6.9
+     ],
+     "after_sit": [
+      169.6,
+      -3.2,
+      3.2,
+      61.0
+     ],
+     "con_step": 746,
+     "hood": [
+      -0.01,
+      10.35
+     ],
+     "trunk_z": 61.7,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      450,
+      -28,
+      187
+     ],
+     "noise": [
+      -1.9,
+      5.0,
+      1.3
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.09,
+      0.06,
+      -0.4
+     ],
+     "after_turn": [
+      207.8,
+      -14.0,
+      1.6
+     ],
+     "after_sit": [
+      141.5,
+      -10.1,
+      -4.7,
+      61.9
+     ],
+     "con_step": 701,
+     "hood": [
+      0.11,
+      -0.39
+     ],
+     "trunk_z": 61.7,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      437,
+      30,
+      176
+     ],
+     "noise": [
+      -7.7,
+      0.0,
+      1.52
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.11,
+      0.39,
+      -0.38
+     ],
+     "after_turn": [
+      233.0,
+      14.8,
+      5.8
+     ],
+     "after_sit": [
+      166.8,
+      11.4,
+      0.6,
+      61.1
+     ],
+     "con_step": 753,
+     "hood": [
+      0.31,
+      19.56
+     ],
+     "trunk_z": 62.1,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      441,
+      29,
+      181
+     ],
+     "noise": [
+      0.7,
+      0.2,
+      0.09
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.07,
+      0.21,
+      -0.41
+     ],
+     "after_turn": [
+      239.2,
+      10.4,
+      9.5
+     ],
+     "after_sit": [
+      173.0,
+      -0.1,
+      6.4,
+      60.9
+     ],
+     "con_step": 725,
+     "hood": [
+      0.06,
+      10.0
+     ],
+     "trunk_z": 61.7,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      410,
+      -7,
+      188
+     ],
+     "noise": [
+      -6.8,
+      -1.7,
+      -0.02
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.04,
+      0.32,
+      -0.38
+     ],
+     "after_turn": [
+      237.6,
+      12.0,
+      6.3
+     ],
+     "after_sit": [
+      171.3,
+      7.3,
+      2.0,
+      60.9
+     ],
+     "con_step": 765,
+     "hood": [
+      0.13,
+      15.82
+     ],
+     "trunk_z": 61.8,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      454,
+      -32,
+      185
+     ],
+     "noise": [
+      4.1,
+      0.8,
+      -0.59
+     ]
+    }
+   ]
+  },
+  {
+   "cmd": "docking_seated.py --seeds 41 --n 10 --seat_mu 0.8",
+   "docked": 10,
+   "runs": 10,
+   "runs_touching_button": 0,
+   "results": [
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.06,
+      0.09,
+      -0.42
+     ],
+     "after_turn": [
+      216.1,
+      -13.1,
+      1.3
+     ],
+     "after_sit": [
+      155.4,
+      -2.6,
+      -4.6,
+      61.8
+     ],
+     "con_step": 757,
+     "hood": [
+      0.22,
+      2.5
+     ],
+     "trunk_z": 61.8,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      456,
+      21,
+      171
+     ],
+     "noise": [
+      2.5,
+      -4.0,
+      1.11
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.08,
+      0.08,
+      -0.41
+     ],
+     "after_turn": [
+      207.6,
+      -10.5,
+      2.8
+     ],
+     "after_sit": [
+      144.8,
+      -3.7,
+      -1.8,
+      62.1
+     ],
+     "con_step": 711,
+     "hood": [
+      0.24,
+      0.22
+     ],
+     "trunk_z": 61.8,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      421,
+      8,
+      176
+     ],
+     "noise": [
+      -6.5,
+      -2.2,
+      1.19
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.06,
+      0.2,
+      -0.47
+     ],
+     "after_turn": [
+      233.6,
+      7.8,
+      7.0
+     ],
+     "after_sit": [
+      171.0,
+      5.8,
+      5.5,
+      61.2
+     ],
+     "con_step": 757,
+     "hood": [
+      0.4,
+      8.84
+     ],
+     "trunk_z": 61.9,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      407,
+      -6,
+      182
+     ],
+     "noise": [
+      9.6,
+      2.7,
+      -0.8
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.09,
+      0.13,
+      -0.42
+     ],
+     "after_turn": [
+      227.1,
+      2.6,
+      6.4
+     ],
+     "after_sit": [
+      165.0,
+      1.0,
+      5.0,
+      61.4
+     ],
+     "con_step": 763,
+     "hood": [
+      0.24,
+      3.93
+     ],
+     "trunk_z": 61.8,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      441,
+      -27,
+      175
+     ],
+     "noise": [
+      4.4,
+      -0.8,
+      0.37
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.09,
+      0.24,
+      -0.39
+     ],
+     "after_turn": [
+      229.7,
+      9.2,
+      6.7
+     ],
+     "after_sit": [
+      167.2,
+      9.2,
+      4.0,
+      61.4
+     ],
+     "con_step": 768,
+     "hood": [
+      0.29,
+      9.61
+     ],
+     "trunk_z": 62.0,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      454,
+      -12,
+      188
+     ],
+     "noise": [
+      -1.1,
+      5.9,
+      -0.19
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.09,
+      0.1,
+      -0.4
+     ],
+     "after_turn": [
+      235.5,
+      2.4,
+      6.9
+     ],
+     "after_sit": [
+      172.3,
+      0.5,
+      5.2,
+      61.1
+     ],
+     "con_step": 774,
+     "hood": [
+      0.39,
+      2.07
+     ],
+     "trunk_z": 62.0,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      450,
+      -28,
+      187
+     ],
+     "noise": [
+      -1.9,
+      5.0,
+      1.3
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.07,
+      0.04,
+      -0.45
+     ],
+     "after_turn": [
+      207.8,
+      -14.0,
+      1.6
+     ],
+     "after_sit": [
+      144.5,
+      -6.3,
+      -2.9,
+      62.2
+     ],
+     "con_step": 716,
+     "hood": [
+      0.26,
+      -1.61
+     ],
+     "trunk_z": 61.8,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      437,
+      30,
+      176
+     ],
+     "noise": [
+      -7.7,
+      0.0,
+      1.52
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.05,
+      0.37,
+      -0.43
+     ],
+     "after_turn": [
+      233.0,
+      14.8,
+      5.8
+     ],
+     "after_sit": [
+      170.2,
+      15.7,
+      2.9,
+      61.2
+     ],
+     "con_step": 778,
+     "hood": [
+      0.18,
+      19.04
+     ],
+     "trunk_z": 61.8,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      441,
+      29,
+      181
+     ],
+     "noise": [
+      0.7,
+      0.2,
+      0.09
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.06,
+      0.13,
+      -0.41
+     ],
+     "after_turn": [
+      239.2,
+      10.4,
+      9.5
+     ],
+     "after_sit": [
+      175.7,
+      3.2,
+      8.4,
+      61.0
+     ],
+     "con_step": 751,
+     "hood": [
+      0.36,
+      4.32
+     ],
+     "trunk_z": 62.0,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      410,
+      -7,
+      188
+     ],
+     "noise": [
+      -6.8,
+      -1.7,
+      -0.02
+     ]
+    },
+    {
+     "ok": true,
+     "button_contacts": 0,
+     "err": [
+      -0.06,
+      0.26,
+      -0.4
+     ],
+     "after_turn": [
+      237.6,
+      12.0,
+      6.3
+     ],
+     "after_sit": [
+      174.4,
+      11.3,
+      4.0,
+      61.0
+     ],
+     "con_step": 790,
+     "hood": [
+      0.32,
+      11.55
+     ],
+     "trunk_z": 61.9,
+     "usb_drops": 0,
+     "seed": 41,
+     "start": [
+      454,
+      -32,
+      185
+     ],
+     "noise": [
+      4.1,
+      0.8,
+      -0.59
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -6,7 +6,7 @@ the charging cable, which leaves the hood and runs along the floor out of the pi
   export MICRODUCK_RL_DIR=/path/to/microduck_rl
   MUJOCO_GL=egl uv run --with manifold3d python hardware/microdock/sim/render_preview.py run.pkl preview.mp4
 writes preview.mp4 (every simulation step, 50 fps, 1080 x 1080) and preview.gif (320 px, every 8th step at 125 ms,
-ending 1.5 s after docking). MUJOCO_GL=osmesa renders without a GPU.
+ending 1.5 s after docking, or with --gif_to end at the end of the run). MUJOCO_GL=osmesa renders without a GPU.
 """
 import argparse, math, os, pickle, sys
 import numpy as np
@@ -22,6 +22,7 @@ ap.add_argument("--azimuth", type=float, default=225.0); ap.add_argument("--elev
 # camera: wide on the approach (both the duck and the dock in view), easing in to the docked duck as it backs in
 ap.add_argument("--start", default="0.19,-0.02,0.09,0.90", help="lookat x,y,z and distance at the start (m)")
 ap.add_argument("--end", default="0.06,0.0,0.11,0.62", help="... and once docked")
+ap.add_argument("--gif_to", default="docked", choices=["docked", "end"], help="the gif ends 1.5 s after docking, or at the run's end")
 a = ap.parse_args()
 RL = os.environ.get("MICRODUCK_RL_DIR", "")
 ROBOT_DIR = os.path.join(RL, "src", "mjlab_microduck", "robot", "microduck")
@@ -85,6 +86,6 @@ else:
     import imageio
     imageio.mimsave(a.out, frames, fps=50, codec="libx264", quality=None, macro_block_size=8, ffmpeg_params=["-crf", "24", "-preset", "slow", "-movflags", "+faststart"])
     ph = H["log"]["phase"]; docked = ph.index("docked") if "docked" in ph else n
-    g = [Image.fromarray(f).resize((320, 320), Image.LANCZOS) for f in frames[:min(n, docked + 75)][::8]]
+    g = [Image.fromarray(f).resize((320, 320), Image.LANCZOS) for f in frames[:n if a.gif_to == "end" else min(n, docked + 75)][::8]]
     g[0].save(stem + ".gif", save_all=True, append_images=g[1:], duration=125, loop=0, optimize=True)
     print("wrote", a.out, len(frames), "frames,", stem + ".gif", len(g), "frames")

@@ -78,11 +78,14 @@ class Params:
     hood_travel_x: float = 0.0      # 0 = the hood is rigid in x (sits against the board); >0 adds a spring-loaded travel
     hood_kx: float = 25.0           # N/m (only with travel)
     hood_mass: float = 0.028
+    adapter_dz: float = 0.0         # the adapter (and the cable head behind it) this much above the port's height in the hood frame
 
     @property
     def bat_top(self): return self.bat_top_old - self.bat_drop
     @property
     def port_z(self): return self.bat_top + self.port_above_bat
+    @property
+    def adapter_z(self): return self.port_z + self.adapter_dz   # where the hood holds the adapter (hood frame)
     @property
     def tip_face_x(self): return self.shell_back_x - self.tip_out
     @property
@@ -117,13 +120,13 @@ def hood_pieces(p: Params):
     pv, ph, pl = p.plug
     ax0 = p.adapter_face_x
     # adapter sleeve (holds the magnetic adapter, face slightly proud of it), the web to the top plate is behind the head
-    pc["sleeve_l"] = box(ax0 - pl + 0.4, ax0 - 0.6, ph/2 + 0.2, ph/2 + 2.2, p.port_z - pv/2 - 2.0, p.port_z + pv/2 + 2.0)
-    pc["sleeve_r"] = box(ax0 - pl + 0.4, ax0 - 0.6, -ph/2 - 2.2, -ph/2 - 0.2, p.port_z - pv/2 - 2.0, p.port_z + pv/2 + 2.0)
-    pc["sleeve_b"] = box(ax0 - pl + 0.4, ax0 - 0.6, -ph/2 - 2.2, ph/2 + 2.2, p.port_z - pv/2 - 2.0, p.port_z - pv/2 - 0.2)
+    pc["sleeve_l"] = box(ax0 - pl + 0.4, ax0 - 0.6, ph/2 + 0.2, ph/2 + 2.2, p.adapter_z - pv/2 - 2.0, p.adapter_z + pv/2 + 2.0)
+    pc["sleeve_r"] = box(ax0 - pl + 0.4, ax0 - 0.6, -ph/2 - 2.2, -ph/2 - 0.2, p.adapter_z - pv/2 - 2.0, p.adapter_z + pv/2 + 2.0)
+    pc["sleeve_b"] = box(ax0 - pl + 0.4, ax0 - 0.6, -ph/2 - 2.2, ph/2 + 2.2, p.adapter_z - pv/2 - 2.0, p.adapter_z - pv/2 - 0.2)
     # battery stop below the sleeve, and the floor web back to the rear wall
     pc["stop"] = box(p.stop_face_x - 3.0, p.stop_face_x, -16.0, 16.0, 1.0, p.bat_top - 1.0)
     pc["floor"] = box(xr, p.stop_face_x - 3.0, -16.0, 16.0, 0.0, 2.6)
-    pc["web"] = box(ax0 - pl + 0.4, p.stop_face_x - 3.0, -ph/2 - 2.2, ph/2 + 2.2, 1.0, p.port_z - pv/2 - 1.8)
+    pc["web"] = box(ax0 - pl + 0.4, p.stop_face_x - 3.0, -ph/2 - 2.2, ph/2 + 2.2, 1.0, p.adapter_z - pv/2 - 1.8)
     pc["sideweb_l"] = box(xr, ax0 - pl + 0.4, ph/2 + 0.2, ph/2 + 2.2, 0.0, top1)
     pc["sideweb_r"] = box(xr, ax0 - pl + 0.4, -ph/2 - 2.2, -ph/2 - 0.2, 0.0, top1)
     return pc
@@ -132,7 +135,7 @@ def hood_pieces(p: Params):
 def adapter_box(p: Params):
     pv, ph, pl = p.plug
     ax0 = p.adapter_face_x
-    return box(ax0 - pl, ax0, -ph/2, ph/2, p.port_z - pv/2, p.port_z + pv/2)
+    return box(ax0 - pl, ax0, -ph/2, ph/2, p.adapter_z - pv/2, p.adapter_z + pv/2)
 
 
 def static_pieces(p: Params):
@@ -174,7 +177,7 @@ def build_scene(p: Params, robot_dir, scene_path=None):
         hood.append(f'<geom name="hood_{k}" type="mesh" mesh="hood_{k}" rgba="{GREEN}" contype="5" conaffinity="5" solref="0.004 1" friction="0.25 0.005 0.0001"/>')
     assets.append(_mesh_xml("hood_adapter", adapter_box(p)))
     hood.append(f'<geom name="hood_adapter" type="mesh" mesh="hood_adapter" rgba="0.15 0.17 0.25 1" contype="5" conaffinity="5" solref="0.004 1" friction="0.3 0.005 0.0001"/>')
-    hood.append(f'<site name="adapter_face" pos="{p.adapter_face_x/1e3:.5f} 0 {p.port_z/1e3:.5f}" size="0.001"/>')
+    hood.append(f'<site name="adapter_face" pos="{p.adapter_face_x/1e3:.5f} 0 {p.adapter_z/1e3:.5f}" size="0.001"/>')
     xml = f'''<mujoco model="microdock">
   <include file="robot_groundcontact.xml"/>
   <visual><headlight diffuse="0.5 0.5 0.5" ambient="0.38 0.38 0.38" specular="0.05 0.05 0.05"/><global offwidth="1280" offheight="720"/></visual>
