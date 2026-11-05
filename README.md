@@ -120,7 +120,7 @@ full-video link—to open the complete video.
       </td>
       <td>
         Backs into a fully printed dock that connects a magnetic charger to its own USB-C port:
-        30/30 docked in simulation with the official walking policy. Not yet printed or tried on hardware.<br>
+        30/30 docked in simulation with the official walking policy. Not yet tried on hardware.<br>
         <a href="https://x.com/HannesVonEssen/status/2117688155600007338">Full video</a> ·
         <a href="hardware/microdock/README.md">Hardware and simulation</a> ·
         <a href="hardware/microdock/print/microdock_P1S.3mf">Bambu P1S project (3 plates)</a>
@@ -140,7 +140,7 @@ full-video link—to open the complete video.
         a stance for hours, and it can't fall over while it rests. When it is charged, a second butt walk scoots it out of
         the dock against the magnet, and it stands up and walks off. In simulation, with the official walk and sit policies
         and two new butt-walk policies: 30/30 docked, and 30/30 undocked from a 4 N magnet. One new part: the board. Not yet
-        printed or tried on hardware.<br>
+        tried on hardware.<br>
         <a href="hardware/microdock-v2/README.md">Hardware and simulation</a> ·
         <a href="hardware/microdock-v2/print/microdock_v2_P1S.3mf">Bambu P1S project (3 plates)</a> ·
         <a href="hardware/microdock-v2/training/README.md">Butt-walk policies and training</a>

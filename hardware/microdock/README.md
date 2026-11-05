@@ -16,7 +16,7 @@ power appears, then stands and charges.
 
 [![Microduck backing into the MicroDock in simulation](media/preview.gif)](media/preview.mp4)
 
-**Status:** designed and tested in simulation only; not yet printed or tried on hardware. The docking behaviour (tag
+**Status:** designed and tested in simulation only; not yet tried on hardware. The docking behaviour (tag
 detection, the turn and stopping on USB power) is scripted in the simulation, not implemented on the robot.
 
 **Update, 5 November 2026:** if you printed the MicroDock before this date, reprint plate 2 (the board, the hood and

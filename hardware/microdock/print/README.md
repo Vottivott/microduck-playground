@@ -24,7 +24,7 @@ About 5 h 33 min and 241 g of PLA in all.
   of the tag to one filament, add a pause at 1.6 mm on plate 3 and swap to white there.
 - **Another build plate:** change the plate type in Bambu Studio; the bed temperature follows it.
 - The project was made with Bambu Studio 02.09.01.70, and older versions may warn that it comes from a newer one.
-  It has been sliced in Bambu Studio but not printed yet.
+  It has been sliced in Bambu Studio.
 - Other slicers: use the plate STLs above (supports as described), or the single parts in [`../stl`](../stl).
 
 ## Regenerate

@@ -23,7 +23,7 @@ sideways and down. The hood, base, keeper and tag are the MicroDock's.
 
 [![Microduck sitting down, butt-walking back into the MicroDock v2, dozing off, then scooting out and walking off, in simulation](media/preview.gif)](media/preview.mp4)
 
-**Status:** designed and tested in simulation only, like the MicroDock; not yet printed or tried on hardware.
+**Status:** designed and tested in simulation only, like the MicroDock; not yet tried on hardware.
 - **The butt walks:** two new policies, trained for this dock in simulation (see [`training/`](training/README.md)).
   They have not run on a robot yet.
 - **The behaviour around them:** these are scripted in the simulation, not implemented on the robot:
