@@ -123,10 +123,23 @@ Studio's estimates:
 
 That's about 5 h 32 min and 240 g in all.
 
-The bill of materials and the assembly are the MicroDock's ([BOM](../microdock/README.md#bill-of-materials),
-[assembly](../microdock/README.md#assembly)), with the v2 board.
+The [assembly manual](#assembly) below shows what to buy and how to put it together.
 
-### What the simulation leaves out
+## Assembly
+
+The assembly manual. Print the [PDF](media/microdock_v2_assembly.pdf) at 100 % to use page 2's 1:1 check of the cable's
+thickness.
+
+![What you need: the five printed parts and two filament pins, a magnetic USB-C adapter pair, a right-angle USB-C cable and a USB-C charger](media/assembly/page_02.jpg)
+![Steps 1 and 2: push the board into the base, then press the tag into its pocket](media/assembly/page_03.jpg)
+![Steps 3 and 4: plug the right-angle cable into the magnetic adapter, then turn the hood upside down](media/assembly/page_04.jpg)
+![Steps 5 and 6: lower the cable head and adapter into the hood, then press them down until they click](media/assembly/page_05.jpg)
+![Steps 7 and 8: push the hood's pegs through the board's window, then slide the keeper onto them from behind](media/assembly/page_06.jpg)
+![Steps 9 and 10: lock the keeper with a filament pin through each peg, then press the cable into the board's clip, leaving about 11 cm of loop](media/assembly/page_07.jpg)
+![Step 11 and a check: plug the cable into a USB-C charger, then check that the hood floats freely](media/assembly/page_08.jpg)
+![Step 12 and done: push the magnetic tip into Microduck's USB-C port, then stand the dock against a wall and tape its base to the floor](media/assembly/page_09.jpg)
+
+## What the simulation leaves out
 
 The simulation holds the dock still and moves the hood on two sliders, so these were checked separately:
 - **The keeper:** it keeps the hood on the board. The hood leans forward on its pegs, and undocking pulls it forward
@@ -137,7 +150,7 @@ The simulation holds the dock still and moves the hood on two sliders, so these 
   starting off-centre: ±10 mm docked 30/30 each, −20 mm 29/30, +20 mm 27/30.
 - **Holding the dock in place:** backing in pushes the dock back by up to about 3 N (peaks to 6 N) and scooting out
   pulls it forward by up to about 3 N, with the duck's weight only partly on the plate. A free-standing 240 g dock
-  would slide on a smooth floor: stand it against a wall and fix the base down (assembly step 8).
+  would slide on a smooth floor: stand it against a wall and fix the base down (the manual's last page).
 - **The cable loop:** as the hood floats, its cable exit moves 39 to 66 mm from the board's clip. Leave about 11 cm.
 - **The hood's weight:** the print with its adapter and cable head is about 45 g, the simulator's hood 28 g. With
   45 g it still docked 30/30.
@@ -188,6 +201,7 @@ MUJOCO_GL=egl uv run --with manifold3d python hardware/microdock/sim/render_gall
 - `policy/experimental/butt_walk_dock_undock.onnx`: the experimental single policy.
 - `training/`: the environment they were trained in, and how.
 - `results/`, `media/`, `renders/`: the trial results, the preview and the gallery.
+- `media/assembly/`, `media/microdock_v2_assembly.pdf`: the assembly manual.
 
 ## License
 
