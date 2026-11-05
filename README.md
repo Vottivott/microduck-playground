@@ -137,6 +137,7 @@ full-video link—to open the complete video.
       <td>
         Sits down to charge: it scoots back into the dock on its seat, then scoots out and walks off when charged.
         30/30 docked and undocked in simulation. Not yet tried on hardware.<br>
+        <a href="https://x.com/HannesVonEssen/status/2118390483869213114">Full video</a> ·
         <a href="hardware/microdock-v2/README.md">Hardware and simulation</a> ·
         <a href="hardware/microdock-v2/print/microdock_v2_P1S.3mf">Bambu P1S project (3 plates)</a> ·
         <a href="hardware/microdock-v2/training/README.md">Scoot policies and training</a>
