@@ -8,9 +8,10 @@
 #   "trimesh>=4.8",
 # ]
 # ///
-"""MicroDock v2 parts: the seated dock's new board and hood, the P1S print plates and, with --bambu, the Bambu Studio
-project. The base, keeper and tag are the MicroDock's (hardware/microdock/stl); --check confirms that they come out
-unchanged with the seated parameters, and that the cable head fits the new hood and its catch.
+"""MicroDock v2 parts: the seated dock's new board, the P1S print plates and, with --bambu, the Bambu Studio project.
+The hood, base, keeper and tag are the MicroDock's (hardware/microdock/stl); --check confirms that they come out
+unchanged with the seated parameters, that the cable head fits the hood and its catch, and that the keeper holds the
+hood wherever it floats on the new board.
 
 uv run hardware/microdock-v2/source/build.py [--out DIR] [--check] [--bambu /path/to/bambu-studio]
 """
@@ -39,7 +40,7 @@ def same(a, b):
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("--check", action="store_true", help="fail unless the board and the hood are each one watertight body within the bed, the cable head fits the hood and its catch, the keeper holds the hood wherever it is, and the other parts are the MicroDock's")
+    ap.add_argument("--check", action="store_true", help="fail unless the board is one watertight body within the bed, the cable head fits the hood and its catch, the keeper holds the hood wherever it is, and the other parts are the MicroDock's")
     ap.add_argument("--out", default=OUT, help="output folder (default: hardware/microdock-v2, which holds stl/ and print/)")
     ap.add_argument("--bambu", default="", help="Bambu Studio binary: also build print/microdock_v2_P1S.3mf (and slice it with --check)")
     a = ap.parse_args()
@@ -47,7 +48,7 @@ if __name__ == "__main__":
     p, p1 = seated.Params(), dock.Params()
     os.makedirs(os.path.join(OUT, "stl"), exist_ok=True); os.makedirs(os.path.join(OUT, "print"), exist_ok=True)
     info = {}
-    for name in ("board", "hood"):
+    for name in ("board",):
         m = mesh(getattr(cad, name)(p)); m.export(os.path.join(OUT, "stl", f"microdock_v2_{name}.stl"))
         info[name] = dict(extents_mm=[round(float(v), 1) for v in m.extents], volume_cm3=round(float(m.volume)/1000, 1),
                           watertight=bool(m.is_watertight), bodies=len(m.split(only_watertight=False)))
@@ -64,13 +65,13 @@ if __name__ == "__main__":
         bad += cad.fit_problems(fit)
         kf = cad.keeper_fit(p); print("keeper:", json.dumps(kf))
         bad += cad.keeper_problems(kf)
-        for name in ("base", "keeper"):
+        for name in ("hood", "base", "keeper"):
             if not same(getattr(cad, name)(p), getattr(cad, name)(p1)): bad.append(f"{name} differs from the MicroDock's")
         if not all(same(x, y) for x, y in zip(cad.tag_insert(p), cad.tag_insert(p1))): bad.append("tag differs from the MicroDock's")
         if bad:
             sys.exit(f"check failed: {bad}")
-        print("check passed: the board and the hood are each one watertight body within the bed, the cable head fits the hood and its catch; "
-              f"the keeper bears at least {kf['min_bearing_mm2']} mm2 on the board wherever the hood is; base, keeper and tag are the MicroDock's")
+        print("check passed: the board is one watertight body within the bed, the cable head fits the hood and its catch; "
+              f"the keeper bears at least {kf['min_bearing_mm2']} mm2 on the board wherever the hood is; hood, base, keeper and tag are the MicroDock's")
     if a.bambu:
         import bambu_project as bp
         resources = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(a.bambu))), "resources")

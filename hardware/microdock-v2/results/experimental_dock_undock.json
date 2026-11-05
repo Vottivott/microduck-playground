@@ -1,0 +1,1323 @@
+{
+ "note": "the experimental single policy: it backs in and scoots out (MICRODUCK_BUTT_WALK and --undock both set to it)",
+ "runs": [
+  {
+   "cmd": "MICRODUCK_BUTT_WALK=hardware/microdock-v2/policy/experimental/butt_walk_dock_undock.onnx undocking_seated.py --undock hardware/microdock-v2/policy/experimental/butt_walk_dock_undock.onnx --seeds 41,42,43 --n 10 --mag 4",
+   "summary": {
+    "undock": "butt_walk_dock_undock.onnx",
+    "butt_walk": "butt_walk_dock_undock.onnx",
+    "mag_N": 4.0,
+    "docked": 30,
+    "runs": 30,
+    "released": 30,
+    "out": 30,
+    "stood": 30,
+    "walked": 30,
+    "release_s_max": 1.86,
+    "scoot_max_yaw": 7.4,
+    "stand_max_hood_force": 0.0
+   },
+   "results": [
+    {
+     "seed": 41,
+     "t": 0,
+     "docked": true,
+     "err": [
+      -0.09,
+      0.05,
+      -0.45
+     ],
+     "after_sit": [
+      153.9,
+      -3.3,
+      -4.5,
+      62.0
+     ],
+     "con_step": 564,
+     "start": [
+      456,
+      21,
+      171.0
+     ],
+     "out_mm": 70.4,
+     "release_s": 1.4,
+     "scoot_s": 2.3,
+     "scoot_max_yaw": 7.1,
+     "scoot_max_tilt": 6.9,
+     "scoot_max_hood_force": 11.0,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 247.6,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 1,
+     "docked": true,
+     "err": [
+      -0.09,
+      -0.08,
+      -0.2
+     ],
+     "after_sit": [
+      142.2,
+      -7.1,
+      -3.6,
+      62.0
+     ],
+     "con_step": 517,
+     "start": [
+      421,
+      8,
+      176.1
+     ],
+     "out_mm": 71.1,
+     "release_s": 1.4,
+     "scoot_s": 2.42,
+     "scoot_max_yaw": 5.0,
+     "scoot_max_tilt": 5.3,
+     "scoot_max_hood_force": 6.8,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 243.5,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 2,
+     "docked": true,
+     "err": [
+      -0.09,
+      0.08,
+      -0.54
+     ],
+     "after_sit": [
+      168.5,
+      3.1,
+      4.1,
+      61.3
+     ],
+     "con_step": 552,
+     "start": [
+      407,
+      -6,
+      182.3
+     ],
+     "out_mm": 70.6,
+     "release_s": 1.36,
+     "scoot_s": 2.3,
+     "scoot_max_yaw": 6.7,
+     "scoot_max_tilt": 6.4,
+     "scoot_max_hood_force": 7.4,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 249.2,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 3,
+     "docked": true,
+     "err": [
+      -0.1,
+      0.03,
+      -0.2
+     ],
+     "after_sit": [
+      162.0,
+      -2.0,
+      3.4,
+      61.5
+     ],
+     "con_step": 560,
+     "start": [
+      441,
+      -27,
+      174.7
+     ],
+     "out_mm": 70.2,
+     "release_s": 1.44,
+     "scoot_s": 2.42,
+     "scoot_max_yaw": 5.0,
+     "scoot_max_tilt": 7.0,
+     "scoot_max_hood_force": 8.7,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 244.9,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 4,
+     "docked": true,
+     "err": [
+      -0.12,
+      0.15,
+      -0.21
+     ],
+     "after_sit": [
+      164.3,
+      6.1,
+      2.6,
+      61.4
+     ],
+     "con_step": 566,
+     "start": [
+      454,
+      -12,
+      188.1
+     ],
+     "out_mm": 70.1,
+     "release_s": 1.38,
+     "scoot_s": 2.3,
+     "scoot_max_yaw": 6.9,
+     "scoot_max_tilt": 6.1,
+     "scoot_max_hood_force": 8.0,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 245.4,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 5,
+     "docked": true,
+     "err": [
+      -0.08,
+      0.02,
+      -0.31
+     ],
+     "after_sit": [
+      169.7,
+      -2.3,
+      4.1,
+      61.2
+     ],
+     "con_step": 565,
+     "start": [
+      450,
+      -28,
+      187.0
+     ],
+     "out_mm": 71.1,
+     "release_s": 1.44,
+     "scoot_s": 2.42,
+     "scoot_max_yaw": 4.1,
+     "scoot_max_tilt": 7.4,
+     "scoot_max_hood_force": 6.2,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 246.9,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 6,
+     "docked": true,
+     "err": [
+      -0.1,
+      -0.09,
+      -0.27
+     ],
+     "after_sit": [
+      142.2,
+      -9.4,
+      -4.5,
+      62.1
+     ],
+     "con_step": 524,
+     "start": [
+      437,
+      30,
+      175.7
+     ],
+     "out_mm": 70.8,
+     "release_s": 1.42,
+     "scoot_s": 2.38,
+     "scoot_max_yaw": 3.9,
+     "scoot_max_tilt": 6.7,
+     "scoot_max_hood_force": 7.2,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 244.5,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 7,
+     "docked": true,
+     "err": [
+      -0.12,
+      0.24,
+      -0.46
+     ],
+     "after_sit": [
+      167.2,
+      12.8,
+      1.6,
+      61.3
+     ],
+     "con_step": 573,
+     "start": [
+      441,
+      29,
+      181.4
+     ],
+     "out_mm": 70.9,
+     "release_s": 1.54,
+     "scoot_s": 2.58,
+     "scoot_max_yaw": 2.2,
+     "scoot_max_tilt": 4.8,
+     "scoot_max_hood_force": 5.6,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 244.9,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 8,
+     "docked": true,
+     "err": [
+      -0.06,
+      0.0,
+      -0.25
+     ],
+     "after_sit": [
+      173.3,
+      0.8,
+      7.1,
+      61.1
+     ],
+     "con_step": 547,
+     "start": [
+      410,
+      -7,
+      188.0
+     ],
+     "out_mm": 70.6,
+     "release_s": 1.46,
+     "scoot_s": 2.5,
+     "scoot_max_yaw": 3.0,
+     "scoot_max_tilt": 6.2,
+     "scoot_max_hood_force": 7.1,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 248.1,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 9,
+     "docked": true,
+     "err": [
+      -0.08,
+      0.12,
+      -0.24
+     ],
+     "after_sit": [
+      171.7,
+      8.5,
+      2.6,
+      61.1
+     ],
+     "con_step": 590,
+     "start": [
+      454,
+      -32,
+      185.3
+     ],
+     "out_mm": 70.8,
+     "release_s": 1.82,
+     "scoot_s": 2.78,
+     "scoot_max_yaw": 3.4,
+     "scoot_max_tilt": 7.5,
+     "scoot_max_hood_force": 10.5,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 246.2,
+     "walked": true
+    },
+    {
+     "seed": 42,
+     "t": 0,
+     "docked": true,
+     "err": [
+      -0.07,
+      0.14,
+      -0.25
+     ],
+     "after_sit": [
+      171.7,
+      8.9,
+      8.3,
+      61.2
+     ],
+     "con_step": 573,
+     "start": [
+      442,
+      -5,
+      188.6
+     ],
+     "out_mm": 70.5,
+     "release_s": 1.44,
+     "scoot_s": 2.44,
+     "scoot_max_yaw": 4.5,
+     "scoot_max_tilt": 6.2,
+     "scoot_max_hood_force": 7.0,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 249.4,
+     "walked": true
+    },
+    {
+     "seed": 42,
+     "t": 1,
+     "docked": true,
+     "err": [
+      -0.11,
+      -0.24,
+      -0.34
+     ],
+     "after_sit": [
+      140.9,
+      -18.3,
+      -1.9,
+      62.0
+     ],
+     "con_step": 522,
+     "start": [
+      441,
+      23,
+      171.1
+     ],
+     "out_mm": 70.6,
+     "release_s": 1.48,
+     "scoot_s": 2.44,
+     "scoot_max_yaw": 5.4,
+     "scoot_max_tilt": 6.1,
+     "scoot_max_hood_force": 7.6,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 242.2,
+     "walked": true
+    },
+    {
+     "seed": 42,
+     "t": 2,
+     "docked": true,
+     "err": [
+      -0.1,
+      -0.13,
+      -0.43
+     ],
+     "after_sit": [
+      151.7,
+      -14.5,
+      0.2,
+      62.1
+     ],
+     "con_step": 549,
+     "start": [
+      432,
+      26,
+      178.6
+     ],
+     "out_mm": 70.1,
+     "release_s": 1.46,
+     "scoot_s": 2.52,
+     "scoot_max_yaw": 3.8,
+     "scoot_max_tilt": 5.8,
+     "scoot_max_hood_force": 6.3,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 245.9,
+     "walked": true
+    },
+    {
+     "seed": 42,
+     "t": 3,
+     "docked": true,
+     "err": [
+      -0.09,
+      0.16,
+      -0.2
+     ],
+     "after_sit": [
+      173.1,
+      8.2,
+      6.3,
+      61.1
+     ],
+     "con_step": 580,
+     "start": [
+      446,
+      11,
+      186.2
+     ],
+     "out_mm": 71.0,
+     "release_s": 1.46,
+     "scoot_s": 2.48,
+     "scoot_max_yaw": 4.7,
+     "scoot_max_tilt": 5.6,
+     "scoot_max_hood_force": 6.8,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 242.5,
+     "walked": true
+    },
+    {
+     "seed": 42,
+     "t": 4,
+     "docked": true,
+     "err": [
+      -0.1,
+      0.15,
+      -0.2
+     ],
+     "after_sit": [
+      173.8,
+      6.4,
+      1.7,
+      61.0
+     ],
+     "con_step": 584,
+     "start": [
+      442,
+      -24,
+      179.2
+     ],
+     "out_mm": 70.8,
+     "release_s": 1.44,
+     "scoot_s": 2.46,
+     "scoot_max_yaw": 3.6,
+     "scoot_max_tilt": 6.2,
+     "scoot_max_hood_force": 6.8,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 249.7,
+     "walked": true
+    },
+    {
+     "seed": 42,
+     "t": 5,
+     "docked": true,
+     "err": [
+      -0.09,
+      -0.05,
+      -0.24
+     ],
+     "after_sit": [
+      142.7,
+      -5.1,
+      -4.9,
+      62.0
+     ],
+     "con_step": 530,
+     "start": [
+      440,
+      37,
+      175.8
+     ],
+     "out_mm": 71.2,
+     "release_s": 1.86,
+     "scoot_s": 2.86,
+     "scoot_max_yaw": 2.5,
+     "scoot_max_tilt": 5.9,
+     "scoot_max_hood_force": 9.8,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 249.0,
+     "walked": true
+    },
+    {
+     "seed": 42,
+     "t": 6,
+     "docked": true,
+     "err": [
+      -0.1,
+      0.16,
+      -0.35
+     ],
+     "after_sit": [
+      168.8,
+      8.0,
+      3.1,
+      61.2
+     ],
+     "con_step": 547,
+     "start": [
+      390,
+      -2,
+      173.4
+     ],
+     "out_mm": 70.9,
+     "release_s": 1.4,
+     "scoot_s": 2.34,
+     "scoot_max_yaw": 5.7,
+     "scoot_max_tilt": 7.9,
+     "scoot_max_hood_force": 8.3,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 248.1,
+     "walked": true
+    },
+    {
+     "seed": 42,
+     "t": 7,
+     "docked": true,
+     "err": [
+      -0.12,
+      0.19,
+      -0.36
+     ],
+     "after_sit": [
+      167.8,
+      10.9,
+      2.2,
+      61.4
+     ],
+     "con_step": 591,
+     "start": [
+      447,
+      24,
+      177.3
+     ],
+     "out_mm": 70.4,
+     "release_s": 1.48,
+     "scoot_s": 2.5,
+     "scoot_max_yaw": 3.4,
+     "scoot_max_tilt": 5.9,
+     "scoot_max_hood_force": 6.4,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 238.9,
+     "walked": true
+    },
+    {
+     "seed": 42,
+     "t": 8,
+     "docked": true,
+     "err": [
+      -0.1,
+      0.09,
+      -0.4
+     ],
+     "after_sit": [
+      168.6,
+      2.6,
+      3.4,
+      61.3
+     ],
+     "con_step": 534,
+     "start": [
+      396,
+      -39,
+      186.9
+     ],
+     "out_mm": 70.8,
+     "release_s": 1.82,
+     "scoot_s": 2.86,
+     "scoot_max_yaw": 2.6,
+     "scoot_max_tilt": 6.5,
+     "scoot_max_hood_force": 17.2,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 245.4,
+     "walked": true
+    },
+    {
+     "seed": 42,
+     "t": 9,
+     "docked": true,
+     "err": [
+      -0.05,
+      0.23,
+      -0.5
+     ],
+     "after_sit": [
+      168.6,
+      11.1,
+      5.2,
+      61.3
+     ],
+     "con_step": 557,
+     "start": [
+      417,
+      5,
+      171.4
+     ],
+     "out_mm": 70.4,
+     "release_s": 1.52,
+     "scoot_s": 2.56,
+     "scoot_max_yaw": 1.7,
+     "scoot_max_tilt": 4.7,
+     "scoot_max_hood_force": 5.6,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 244.5,
+     "walked": true
+    },
+    {
+     "seed": 43,
+     "t": 0,
+     "docked": true,
+     "err": [
+      -0.1,
+      0.22,
+      -0.4
+     ],
+     "after_sit": [
+      168.6,
+      11.6,
+      1.4,
+      61.3
+     ],
+     "con_step": 557,
+     "start": [
+      432,
+      -36,
+      168.5
+     ],
+     "out_mm": 70.5,
+     "release_s": 1.36,
+     "scoot_s": 2.3,
+     "scoot_max_yaw": 7.4,
+     "scoot_max_tilt": 5.4,
+     "scoot_max_hood_force": 7.9,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 246.0,
+     "walked": true
+    },
+    {
+     "seed": 43,
+     "t": 1,
+     "docked": true,
+     "err": [
+      -0.07,
+      0.08,
+      -0.44
+     ],
+     "after_sit": [
+      167.8,
+      0.4,
+      4.9,
+      61.4
+     ],
+     "con_step": 570,
+     "start": [
+      440,
+      -19,
+      178.1
+     ],
+     "out_mm": 70.7,
+     "release_s": 1.48,
+     "scoot_s": 2.48,
+     "scoot_max_yaw": 3.8,
+     "scoot_max_tilt": 6.5,
+     "scoot_max_hood_force": 6.0,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 245.2,
+     "walked": true
+    },
+    {
+     "seed": 43,
+     "t": 2,
+     "docked": true,
+     "err": [
+      -0.08,
+      -0.2,
+      -0.28
+     ],
+     "after_sit": [
+      140.0,
+      -16.4,
+      -1.8,
+      62.1
+     ],
+     "con_step": 502,
+     "start": [
+      402,
+      -18,
+      178.1
+     ],
+     "out_mm": 70.1,
+     "release_s": 1.46,
+     "scoot_s": 2.44,
+     "scoot_max_yaw": 4.6,
+     "scoot_max_tilt": 6.9,
+     "scoot_max_hood_force": 6.9,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 244.3,
+     "walked": true
+    },
+    {
+     "seed": 43,
+     "t": 3,
+     "docked": true,
+     "err": [
+      -0.1,
+      -0.06,
+      -0.36
+     ],
+     "after_sit": [
+      143.5,
+      -6.4,
+      -6.1,
+      62.0
+     ],
+     "con_step": 533,
+     "start": [
+      447,
+      3,
+      179.7
+     ],
+     "out_mm": 71.0,
+     "release_s": 1.48,
+     "scoot_s": 2.56,
+     "scoot_max_yaw": 2.9,
+     "scoot_max_tilt": 4.8,
+     "scoot_max_hood_force": 5.9,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 241.4,
+     "walked": true
+    },
+    {
+     "seed": 43,
+     "t": 4,
+     "docked": true,
+     "err": [
+      -0.16,
+      0.05,
+      -0.31
+     ],
+     "after_sit": [
+      169.3,
+      -0.7,
+      6.7,
+      61.3
+     ],
+     "con_step": 577,
+     "start": [
+      460,
+      -37,
+      170.8
+     ],
+     "out_mm": 71.3,
+     "release_s": 1.46,
+     "scoot_s": 2.48,
+     "scoot_max_yaw": 3.6,
+     "scoot_max_tilt": 6.4,
+     "scoot_max_hood_force": 6.4,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 241.3,
+     "walked": true
+    },
+    {
+     "seed": 43,
+     "t": 5,
+     "docked": true,
+     "err": [
+      -0.16,
+      0.32,
+      -0.39
+     ],
+     "after_sit": [
+      168.7,
+      11.9,
+      4.4,
+      61.3
+     ],
+     "con_step": 558,
+     "start": [
+      404,
+      4,
+      169.2
+     ],
+     "out_mm": 70.3,
+     "release_s": 1.42,
+     "scoot_s": 2.42,
+     "scoot_max_yaw": 3.7,
+     "scoot_max_tilt": 6.8,
+     "scoot_max_hood_force": 7.0,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 241.4,
+     "walked": true
+    },
+    {
+     "seed": 43,
+     "t": 6,
+     "docked": true,
+     "err": [
+      -0.11,
+      0.19,
+      -0.39
+     ],
+     "after_sit": [
+      168.7,
+      12.6,
+      4.9,
+      61.2
+     ],
+     "con_step": 564,
+     "start": [
+      407,
+      0,
+      175.3
+     ],
+     "out_mm": 70.7,
+     "release_s": 1.38,
+     "scoot_s": 2.34,
+     "scoot_max_yaw": 5.6,
+     "scoot_max_tilt": 7.0,
+     "scoot_max_hood_force": 8.9,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 250.3,
+     "walked": true
+    },
+    {
+     "seed": 43,
+     "t": 7,
+     "docked": true,
+     "err": [
+      -0.09,
+      0.06,
+      -0.32
+     ],
+     "after_sit": [
+      169.0,
+      3.0,
+      5.4,
+      61.3
+     ],
+     "con_step": 554,
+     "start": [
+      427,
+      -34,
+      181.9
+     ],
+     "out_mm": 70.8,
+     "release_s": 1.38,
+     "scoot_s": 2.36,
+     "scoot_max_yaw": 5.8,
+     "scoot_max_tilt": 6.2,
+     "scoot_max_hood_force": 7.6,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 244.8,
+     "walked": true
+    },
+    {
+     "seed": 43,
+     "t": 8,
+     "docked": true,
+     "err": [
+      -0.08,
+      0.22,
+      -0.24
+     ],
+     "after_sit": [
+      170.9,
+      14.5,
+      1.4,
+      61.2
+     ],
+     "con_step": 567,
+     "start": [
+      403,
+      -33,
+      175.7
+     ],
+     "out_mm": 71.3,
+     "release_s": 1.44,
+     "scoot_s": 2.46,
+     "scoot_max_yaw": 3.5,
+     "scoot_max_tilt": 5.7,
+     "scoot_max_hood_force": 9.9,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 241.9,
+     "walked": true
+    },
+    {
+     "seed": 43,
+     "t": 9,
+     "docked": true,
+     "err": [
+      -0.1,
+      0.06,
+      -0.27
+     ],
+     "after_sit": [
+      144.1,
+      1.0,
+      -3.9,
+      62.0
+     ],
+     "con_step": 491,
+     "start": [
+      380,
+      27,
+      178.9
+     ],
+     "out_mm": 70.4,
+     "release_s": 1.48,
+     "scoot_s": 2.42,
+     "scoot_max_yaw": 4.6,
+     "scoot_max_tilt": 7.2,
+     "scoot_max_hood_force": 8.1,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 245.8,
+     "walked": true
+    }
+   ]
+  },
+  {
+   "cmd": "MICRODUCK_BUTT_WALK=hardware/microdock-v2/policy/experimental/butt_walk_dock_undock.onnx undocking_seated.py --undock hardware/microdock-v2/policy/experimental/butt_walk_dock_undock.onnx --seeds 41 --n 10 --mag 6",
+   "summary": {
+    "undock": "butt_walk_dock_undock.onnx",
+    "butt_walk": "butt_walk_dock_undock.onnx",
+    "mag_N": 6.0,
+    "docked": 10,
+    "runs": 10,
+    "released": 10,
+    "out": 10.0,
+    "stood": 10,
+    "walked": 10,
+    "release_s_max": 3.28,
+    "scoot_max_yaw": 6.0,
+    "stand_max_hood_force": 0.0
+   },
+   "results": [
+    {
+     "seed": 41,
+     "t": 0,
+     "docked": true,
+     "err": [
+      -0.14,
+      0.05,
+      -0.5
+     ],
+     "after_sit": [
+      153.9,
+      -3.3,
+      -4.5,
+      62.0
+     ],
+     "con_step": 564,
+     "start": [
+      456,
+      21,
+      171.0
+     ],
+     "out_mm": 70.6,
+     "release_s": 2.68,
+     "scoot_s": 5.66,
+     "scoot_max_yaw": 3.7,
+     "scoot_max_tilt": 7.9,
+     "scoot_max_hood_force": 43.1,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 248.2,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 1,
+     "docked": true,
+     "err": [
+      -0.15,
+      -0.07,
+      -0.33
+     ],
+     "after_sit": [
+      142.2,
+      -7.1,
+      -3.6,
+      62.0
+     ],
+     "con_step": 516,
+     "start": [
+      421,
+      8,
+      176.1
+     ],
+     "out_mm": 70.8,
+     "release_s": 2.42,
+     "scoot_s": 5.66,
+     "scoot_max_yaw": 6.0,
+     "scoot_max_tilt": 6.7,
+     "scoot_max_hood_force": 35.4,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 240.9,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 2,
+     "docked": true,
+     "err": [
+      -0.15,
+      0.08,
+      -0.33
+     ],
+     "after_sit": [
+      168.5,
+      3.1,
+      4.1,
+      61.3
+     ],
+     "con_step": 551,
+     "start": [
+      407,
+      -6,
+      182.3
+     ],
+     "out_mm": 70.2,
+     "release_s": 2.36,
+     "scoot_s": 3.58,
+     "scoot_max_yaw": 5.5,
+     "scoot_max_tilt": 5.1,
+     "scoot_max_hood_force": 34.9,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 244.6,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 3,
+     "docked": true,
+     "err": [
+      -0.15,
+      0.01,
+      -0.27
+     ],
+     "after_sit": [
+      162.0,
+      -2.0,
+      3.4,
+      61.5
+     ],
+     "con_step": 562,
+     "start": [
+      441,
+      -27,
+      174.7
+     ],
+     "out_mm": 71.4,
+     "release_s": 3.28,
+     "scoot_s": 6.18,
+     "scoot_max_yaw": 6.0,
+     "scoot_max_tilt": 6.2,
+     "scoot_max_hood_force": 46.4,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 243.9,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 4,
+     "docked": true,
+     "err": [
+      -0.12,
+      0.01,
+      -0.18
+     ],
+     "after_sit": [
+      164.3,
+      6.1,
+      2.6,
+      61.4
+     ],
+     "con_step": 564,
+     "start": [
+      454,
+      -12,
+      188.1
+     ],
+     "out_mm": 70.4,
+     "release_s": 1.82,
+     "scoot_s": 3.02,
+     "scoot_max_yaw": 3.8,
+     "scoot_max_tilt": 6.4,
+     "scoot_max_hood_force": 10.9,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 247.7,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 5,
+     "docked": true,
+     "err": [
+      -0.15,
+      0.05,
+      -0.34
+     ],
+     "after_sit": [
+      169.7,
+      -2.3,
+      4.1,
+      61.2
+     ],
+     "con_step": 565,
+     "start": [
+      450,
+      -28,
+      187.0
+     ],
+     "out_mm": 70.5,
+     "release_s": 2.02,
+     "scoot_s": 3.46,
+     "scoot_max_yaw": 4.1,
+     "scoot_max_tilt": 8.6,
+     "scoot_max_hood_force": 52.0,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 246.5,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 6,
+     "docked": true,
+     "err": [
+      -0.15,
+      -0.13,
+      -0.24
+     ],
+     "after_sit": [
+      142.2,
+      -9.4,
+      -4.5,
+      62.1
+     ],
+     "con_step": 524,
+     "start": [
+      437,
+      30,
+      175.7
+     ],
+     "out_mm": 70.7,
+     "release_s": 1.86,
+     "scoot_s": 4.22,
+     "scoot_max_yaw": 4.6,
+     "scoot_max_tilt": 6.8,
+     "scoot_max_hood_force": 23.2,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 240.6,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 7,
+     "docked": true,
+     "err": [
+      -0.15,
+      0.28,
+      -0.5
+     ],
+     "after_sit": [
+      167.2,
+      12.8,
+      1.6,
+      61.3
+     ],
+     "con_step": 574,
+     "start": [
+      441,
+      29,
+      181.4
+     ],
+     "out_mm": 70.3,
+     "release_s": 1.44,
+     "scoot_s": 2.98,
+     "scoot_max_yaw": 4.2,
+     "scoot_max_tilt": 6.1,
+     "scoot_max_hood_force": 19.3,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 243.7,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 8,
+     "docked": true,
+     "err": [
+      -0.07,
+      0.01,
+      -0.27
+     ],
+     "after_sit": [
+      173.3,
+      0.8,
+      7.1,
+      61.1
+     ],
+     "con_step": 547,
+     "start": [
+      410,
+      -7,
+      188.0
+     ],
+     "out_mm": 70.0,
+     "release_s": 2.96,
+     "scoot_s": 4.24,
+     "scoot_max_yaw": 4.9,
+     "scoot_max_tilt": 5.2,
+     "scoot_max_hood_force": 38.6,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 246.1,
+     "walked": true
+    },
+    {
+     "seed": 41,
+     "t": 9,
+     "docked": true,
+     "err": [
+      -0.1,
+      0.1,
+      -0.31
+     ],
+     "after_sit": [
+      171.7,
+      8.5,
+      2.6,
+      61.1
+     ],
+     "con_step": 590,
+     "start": [
+      454,
+      -32,
+      185.3
+     ],
+     "out_mm": 70.3,
+     "release_s": 1.76,
+     "scoot_s": 2.84,
+     "scoot_max_yaw": 5.2,
+     "scoot_max_tilt": 4.6,
+     "scoot_max_hood_force": 10.5,
+     "stood": true,
+     "stand_max_hood_force": 0.0,
+     "walk_mm": 247.6,
+     "walked": true
+    }
+   ]
+  }
+ ]
+}

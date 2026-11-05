@@ -23,12 +23,13 @@ delays, commandable head, NaN guard, BAM friction fields), with:
 """
 
 import math
+import os
 from copy import deepcopy
 from dataclasses import replace
 
 from mjlab.envs import ManagerBasedRlEnvCfg
 from mjlab.envs.mdp import dr
-from mjlab.managers import CurriculumTermCfg, EventTermCfg, RewardTermCfg, TerminationTermCfg
+from mjlab.managers import CurriculumTermCfg, EventTermCfg, ObservationTermCfg, RewardTermCfg, TerminationTermCfg
 from mjlab.managers.scene_entity_config import SceneEntityCfg
 from mjlab.tasks.velocity import mdp
 from mjlab.tasks.velocity.mdp import UniformVelocityCommandCfg
@@ -52,6 +53,11 @@ LIN_VEL_Y_RANGE = (-0.01, 0.01)
 ANG_VEL_Z_RANGE = (-0.30, 0.30)
 ZERO_COMMAND_FRAC = 0.2              # exact all-zero commands: sit still (the deployment idle and the docked rest)
 COMMAND_RESAMPLE_S = (2.5, 6.0)
+# Backing up straight, the docking's command: this share of the resamples gets no turn and |vx| >= 0.02 m/s (75 %
+# backward), and a linear yaw-rate cost (mdp.yaw_rate_error_l1, positive weight) where the Gaussian has gone flat.
+# Both off by default (the released policy trained without them).
+STRAIGHT_FRAC = float(os.environ.get("MICRODUCK_BW_STRAIGHT", "0"))
+YAW_L1_WEIGHT = float(os.environ.get("MICRODUCK_BW_YAW_L1", "0"))
 
 # ── Seated band (trunk z, m) ───────────────────────────────────────────────────
 # SIT_Z = 0.060 is the measured seated rest; the butt-scoot actor rides 0.067-0.083 while moving.
@@ -61,9 +67,16 @@ SEATED_Z_MAX = 0.095                 # terminate above this (standing is 0.115)
 
 # Sit UPRIGHT: the dock's hood meets the trunk in the trunk frame, so a consistent, near-zero seated pitch keeps the
 # magnetic tip square to the adapter (the official sit leans back ~7 deg). Sharp Gaussian on tilt (std 0.07 = ~4 deg).
-ENABLE_SEATED_UPRIGHT = True
-SEATED_UPRIGHT_STD = 0.07
-SEATED_UPRIGHT_WEIGHT = 1.5
+ENABLE_SEATED_UPRIGHT = os.environ.get("MICRODUCK_BW_UPRIGHT", "1") != "0"
+SEATED_UPRIGHT_STD = float(os.environ.get("MICRODUCK_BW_UPRIGHT_STD", "0.07"))
+SEATED_UPRIGHT_WEIGHT = float(os.environ.get("MICRODUCK_BW_UPRIGHT_WEIGHT", "1.5"))
+# ...and a linear tilt cost: the Gaussian alone has no pull at the ~9 deg the policies settled at.
+TILT_L1_WEIGHT = float(os.environ.get("MICRODUCK_BW_TILT_L1", "0"))
+# ...or a linear cost on pitch away from the scooting lean (one consistent seated pitch, moving or at rest).
+PITCH_TARGET_DEG = float(os.environ.get("MICRODUCK_BW_PITCH_TARGET", "3.0"))
+PITCH_L1_WEIGHT = float(os.environ.get("MICRODUCK_BW_PITCH_L1", "0"))
+# ...only at rest: the stroke itself rocks the trunk, and any tilt cost while moving killed it.
+REST_PITCH_WEIGHT = float(os.environ.get("MICRODUCK_BW_REST_PITCH", "0"))
 
 # Seat friction. The seat slides on the floor all the time, so its friction matters: a plastic shell on PLA or wood is
 # ~0.3-0.5, while the model's collision geoms default to 1.0. The export leaves them unnamed (only the soles are named),
@@ -71,7 +84,7 @@ SEATED_UPRIGHT_WEIGHT = 1.5
 # Every collision geom then gets priority 1 (its own friction is used against the terrain) and the non-foot ones a
 # friction randomized per env over SEAT_FRICTION_RANGE.
 _FEET = r"^(left|right)_foot_collision$"
-SEAT_FRICTION_RANGE = (0.3, 1.0)
+SEAT_FRICTION_RANGE = tuple(float(v) for v in os.environ.get("MICRODUCK_BW_SEAT_MU", "0.3,1.0").split(","))
 SEATED_COLLISION = CollisionCfg(
     geom_names_expr=(".*_collision",),
     condim={_FEET: 3, ".*_collision": 3},
@@ -94,16 +107,47 @@ def _seated_spec():
 
 
 # Discovering the stroke: a slippery seat first, then the realistic range (iterations).
-ENABLE_SEAT_FRICTION_CURRICULUM = True
+ENABLE_SEAT_FRICTION_CURRICULUM = os.environ.get("MICRODUCK_BW_MU_CURRICULUM", "1") != "0"
 SEAT_FRICTION_STAGES = ((0, (0.05, 0.25)), (400, (0.15, 0.45)), (900, (0.25, 0.7)), (1500, SEAT_FRICTION_RANGE))
 # Progress along the commanded vx / wz (linear, capped): the Gaussians are flat at the small docking speeds.
-ENABLE_PROGRESS = True
+ENABLE_PROGRESS = os.environ.get("MICRODUCK_BW_PROGRESS", "1") != "0"
 
 # Head up. Left to the Gaussian head tracking alone, the policy bowed its head ~85 deg forward (neck pitch -1.15 rad)
 # to put its weight over its feet and unload the seat: the camera an inch off the floor. A linear price and a hard
 # limit keep the head at the commanded pose (small balance motions are still free).
-HEAD_L1_WEIGHT = 5.0
-HEAD_MAX_ERROR = 0.8                 # rad
+HEAD_L1_WEIGHT = float(os.environ.get("MICRODUCK_BW_HEAD_L1", "5.0"))
+HEAD_MAX_ERROR = float(os.environ.get("MICRODUCK_BW_HEAD_TERM", "0.8"))      # rad; 0 = no termination
+
+# Hips off their stops. Unpriced, the policy parked both hip rolls (and a hip yaw) on their stops with targets far past
+# them (+94..+340 deg): the servos pushed at their current limit even sitting still, ~18 W of motor heat in the CPU
+# rehearsal against 0.5 W on the official sit policy. The price lives on the qpos side, next to the hard limits (the
+# command-side overshoot is how a low-kp servo reaches its target, so it stays free); the leg torque^2 (~ motor heat)
+# can be priced too, staged in once the stroke exists ("ITER:WEIGHT,...", weights as magnitudes). 0 / "" = off.
+HIP_LIMIT_WEIGHT = float(os.environ.get("MICRODUCK_BW_HIP_LIMIT", "0"))
+HIP_LIMIT_MARGIN = float(os.environ.get("MICRODUCK_BW_HIP_LIMIT_MARGIN", "0.15"))     # rad from each hard stop
+LEG_TORQUE_STAGES = [tuple(float(v) for v in s.split(":")) for s in os.environ.get("MICRODUCK_BW_TORQUE", "").split(",") if s]
+_HIPS = r"^(left|right)_hip_(roll|yaw)$"
+_LEG_ACTUATORS = r"^(left|right)_(hip_yaw|hip_roll|hip_pitch|knee|ankle)$"
+
+# Undocking (off by default): this share of the episodes starts docked at the MicroDock, the magnet holding the port and
+# the hood over the back (mdp.undock_forces), with a forward command for the first UNDOCK_CMD_S seconds. The magnet's
+# pull is unknown (no adapter measured yet), so it is drawn per episode from a range that grows over training:
+# "iteration:lo-hi,..." in newtons. The CPU docking simulation models 4 N; the released butt walk breaks free of 1 N only.
+UNDOCK_PROB = float(os.environ.get("MICRODUCK_BW_UNDOCK", "0"))
+UNDOCK_F_STAGES = [(int(it), tuple(float(v) for v in rng.split("-"))) for it, rng in
+                   (s.split(":") for s in os.environ.get("MICRODUCK_BW_UNDOCK_F", "0:0.5-1.5,300:1-3,600:1.5-4.5,900:2-6").split(","))]
+UNDOCK_VX_RANGE = tuple(float(v) for v in os.environ.get("MICRODUCK_BW_UNDOCK_VX", "0.03,0.06").split(","))
+UNDOCK_CMD_S = float(os.environ.get("MICRODUCK_BW_UNDOCK_CMD_S", "5.0"))
+UNDOCK_PROGRESS_WEIGHT = float(os.environ.get("MICRODUCK_BW_UNDOCK_PROGRESS", "0"))    # per mm of net progress out of the dock
+UNDOCK_CRITIC = os.environ.get("MICRODUCK_BW_UNDOCK_CRITIC", "0") != "0"              # the magnet in the critic's obs
+UNDOCK_YAW_K = float(os.environ.get("MICRODUCK_BW_UNDOCK_YAW_K", "2.0"))   # N m/rad: the hood's hold on the heading (0 = off)
+
+# The sit-stand curricula the butt walk inherits harden at iteration 1500 (head-pose range 0.49 -> 0.91, pushes x2,
+# action rate -1.0, rise speed 5) and the butt walk collapses there: head-off terminations x15, episodes 580 -> 250
+# steps, never recovering by 2000 (the released policy is the iteration-1400 checkpoint). This drops their stages from
+# this iteration on (0 = keep them all); the butt walk's own curricula (seat friction, magnet, leg torques) keep theirs.
+CURRICULUM_CAP = int(os.environ.get("MICRODUCK_BW_CURRICULUM_CAP", "0"))
+_OWN_CURRICULA = ("seat_friction_range", "undock_magnet", "leg_torques_weight")
 
 TRACK_LIN_STD = 0.04                 # m/s: the errors that matter at docking speeds (~0.05 m/s)
 TRACK_ANG_STD = 0.25                 # rad/s
@@ -128,7 +172,9 @@ def make_microduck_butt_walk_env_cfg(play: bool = False, rough: bool = False) ->
 
     # ── Command: the usual velocity twist on the same slot ─────────────────────
     sit_cmd = cfg.commands["twist"]
-    cfg.commands["twist"] = UniformVelocityCommandCfg(
+    straight = dict(rel_straight_envs=STRAIGHT_FRAC) if STRAIGHT_FRAC > 0 else {}
+    cfg.commands["twist"] = (microduck_mdp.VelocityCommandCommandOnlyCfg if straight else UniformVelocityCommandCfg)(
+        **straight,
         entity_name=sit_cmd.entity_name,
         resampling_time_range=COMMAND_RESAMPLE_S,
         rel_standing_envs=ZERO_COMMAND_FRAC,
@@ -164,6 +210,10 @@ def make_microduck_butt_walk_env_cfg(play: bool = False, rough: bool = False) ->
         cfg.rewards["progress_ang"] = RewardTermCfg(
             func=microduck_mdp.command_progress, weight=1.0, params={"command_name": "twist", "axis": "ang_z", "min_cmd": 0.05},
         )
+    if YAW_L1_WEIGHT > 0:
+        cfg.rewards["yaw_rate_l1"] = RewardTermCfg(
+            func=microduck_mdp.yaw_rate_error_l1, weight=YAW_L1_WEIGHT, params={"command_name": "twist"},
+        )
     cfg.rewards["still_at_zero_command"] = RewardTermCfg(
         func=microduck_mdp.stillness_at_zero_command, weight=1.0,
         params={"command_name": "twist", "command_threshold": 0.01, "vel_std": 0.03},
@@ -184,6 +234,14 @@ def make_microduck_butt_walk_env_cfg(play: bool = False, rough: bool = False) ->
         cfg.rewards["seated_upright"] = RewardTermCfg(
             func=mdp.upright, weight=SEATED_UPRIGHT_WEIGHT, params={"std": SEATED_UPRIGHT_STD, "asset_cfg": SceneEntityCfg("robot", body_names=("trunk_base",))},
         )
+    if TILT_L1_WEIGHT > 0:
+        cfg.rewards["tilt_l1"] = RewardTermCfg(func=microduck_mdp.tilt_l1, weight=TILT_L1_WEIGHT)
+    if PITCH_L1_WEIGHT > 0:
+        cfg.rewards["pitch_target_l1"] = RewardTermCfg(func=microduck_mdp.pitch_target_l1, weight=PITCH_L1_WEIGHT,
+                                                      params={"target_deg": PITCH_TARGET_DEG})
+    if REST_PITCH_WEIGHT > 0:
+        cfg.rewards["rest_pitch_l1"] = RewardTermCfg(func=microduck_mdp.rest_pitch_l1, weight=REST_PITCH_WEIGHT,
+                                                    params={"target_deg": PITCH_TARGET_DEG, "command_name": "twist"})
     # Kept from sitstand: head_pose_tracking, upright_linear, descent_speed / rise_speed (anti-hop caps), gentle_motion
     # (|a_z|), action_rate / torque_rate (with their curricula), body_ang_vel, angular_momentum, self_collisions.
 
@@ -192,6 +250,43 @@ def make_microduck_butt_walk_env_cfg(play: bool = False, rough: bool = False) ->
     if HEAD_L1_WEIGHT > 0:
         cfg.rewards["head_pose_l1"] = RewardTermCfg(func=microduck_mdp.head_pose_l1, weight=HEAD_L1_WEIGHT,
                                                    params={"command_name": "head_pose"})
+
+    # Hips off their stops (costs >= 0 -> NEGATIVE weights).
+    if HIP_LIMIT_WEIGHT > 0:
+        cfg.rewards["hip_limit_proximity"] = RewardTermCfg(
+            func=microduck_mdp.joint_pos_limit_proximity, weight=-HIP_LIMIT_WEIGHT,
+            params={"asset_cfg": SceneEntityCfg("robot", joint_names=(_HIPS,)), "margin": HIP_LIMIT_MARGIN},
+        )
+    if LEG_TORQUE_STAGES:
+        first_it, first_w = LEG_TORQUE_STAGES[0]
+        cfg.rewards["leg_torques"] = RewardTermCfg(
+            func=mdp.joint_torques_l2, weight=-first_w if first_it == 0 else 0.0,
+            params={"asset_cfg": SceneEntityCfg("robot", actuator_names=(_LEG_ACTUATORS,))},
+        )
+        cfg.curriculum["leg_torques_weight"] = CurriculumTermCfg(
+            func=microduck_mdp.reward_weight,
+            params={"reward_name": "leg_torques", "weight_stages": [{"step": int(it)*24, "weight": -w} for it, w in LEG_TORQUE_STAGES]},
+        )
+
+    # ── Undocking: docked starts, the magnet and the hood, a forward command ───
+    if UNDOCK_PROB > 0:
+        cfg.events["undock_reset"] = EventTermCfg(
+            mode="reset", func=microduck_mdp.undock_reset,
+            params={"prob": UNDOCK_PROB, "fmax_range": UNDOCK_F_STAGES[0][1], "vx_range": UNDOCK_VX_RANGE, "cmd_s": UNDOCK_CMD_S},
+        )
+        cfg.events["undock_forces"] = EventTermCfg(
+            mode="step", func=microduck_mdp.undock_forces,
+            params={"command_name": "twist", "k_yaw": UNDOCK_YAW_K, "asset_cfg": SceneEntityCfg("robot", body_names=("trunk_base",))},
+        )
+        if UNDOCK_PROGRESS_WEIGHT > 0:
+            cfg.rewards["undock_progress"] = RewardTermCfg(func=microduck_mdp.undock_progress, weight=UNDOCK_PROGRESS_WEIGHT)
+        if UNDOCK_CRITIC:
+            cfg.observations["critic"].terms["undock"] = ObservationTermCfg(func=microduck_mdp.undock_critic_obs)
+        cfg.curriculum["undock_magnet"] = CurriculumTermCfg(
+            func=microduck_mdp.event_param_curriculum,
+            params={"event_name": "undock_reset",
+                    "param_stages": [{"step": it*24, "params": {"fmax_range": rng}} for it, rng in UNDOCK_F_STAGES]},
+        )
 
     # ── Terminations ───────────────────────────────────────────────────────────
     cfg.terminations["stood_up"] = TerminationTermCfg(
@@ -210,6 +305,15 @@ def make_microduck_butt_walk_env_cfg(play: bool = False, rough: bool = False) ->
     gs = cfg.events["set_ground_state"].params
     gs["sitting_prob"] = 1.0
     gs["standing_prob"] = 0.0
+
+    # ── Inherited curricula capped (CURRICULUM_CAP) ────────────────────────────
+    if CURRICULUM_CAP > 0:
+        for name, term in cfg.curriculum.items():
+            if name in _OWN_CURRICULA:
+                continue
+            for k, stages in term.params.items():
+                if k.endswith("_stages") and isinstance(stages, list):
+                    term.params[k] = [st for st in stages if st["step"] < CURRICULUM_CAP*24]
     return cfg
 
 

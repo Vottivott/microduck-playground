@@ -12,9 +12,12 @@ and the official policies (huggingface.co/pollen-robotics/microduck-policies):
   uv run python hardware/microdock-v2/sim/docking_seated.py --n 1 --seed 0 --noise 0 --start 450,15,178 --hold 4 --save run.pkl
 
 With --rest doze it dozes off once docked: it stretches its legs out and nods off (a scripted settle), then switches
-its leg servos off.
+its leg servos off. With --rest limp it goes to sleep as in the video: the legs go limp at once, the head sinks onto its
+stops, then every servo switches off. The showcased run, which undocking_seated.py --continue takes on from:
 
   uv run python hardware/microdock-v2/sim/docking_seated.py --seeds 41,42,43 --n 10 --rest doze --out doze.json
+  uv run python hardware/microdock-v2/sim/docking_seated.py --n 1 --seed 0 --noise 0 --start 450,15,178 --hold 4 \
+      --rest limp --doze_pause 0.1 --handover_s 0 --sit_until_still --save run.pkl
 
 The MicroDock's render_preview.py replays a saved run (hardware/microdock/sim).
 """
@@ -45,6 +48,10 @@ DOZE = [(0.0, 1.4, LEGS_DOWN),                                       # stretches
         (2.6, 0.5, dict(neck_pitch=23, head_pitch=38)),             # catches itself
         (3.1, 2.2, dict(neck_pitch=24, head_pitch=68, head_roll=10))]   # and dozes off, the head tilting
 LEGS_OFF_S = 1.6                    # the leg servos switch off once the legs are down
+# The "limp" rest (--rest limp, the video's): the legs go limp at once, the head sinks onto its neck_pitch +60 and
+# head_pitch +90 stops (where it comes to rest unpowered) in 0.6 s, then every servo switches off.
+LIMP = [(0.0, 0.6, dict(neck_pitch=60, head_pitch=90, head_roll=0))]
+LIMP_LEGS_OFF_S = 0.01
 
 
 def seat_friction(model, mu=SEAT_MU):
@@ -78,23 +85,24 @@ def scripted_step(model, data, bc, off=()):
         mujoco.mj_step(model, data); dk.magnet(model, data)
 
 
-def doze(model, bc, step, off):
-    """The scripted settle of DOZE. `step(phase)` advances one control step; the leg servos are added to `off` once
-    the legs are down."""
+def doze(model, bc, step, off, keys=None, legs_off_s=None):
+    """The scripted settle of DOZE (or `keys`). `step(phase)` advances one control step; the leg servos are added to
+    `off` once the legs are down (after `legs_off_s`)."""
+    keys = DOZE if keys is None else keys; legs_off_s = LEGS_OFF_S if legs_off_s is None else legs_off_s
     names = [str(n) for n in bc.actuator]; idx = {n: i for i, n in enumerate(names)}
     lo, hi = model.jnt_range[np.array(bc.joint_indexes)].T
     tgt = np.clip(bc.q_target.copy(), lo, hi)            # from where the policy left the targets, inside the joint ranges
     start = {}; err = None
-    for k in range(int(round(max(t0 + d for t0, d, _ in DOZE)*50))):
+    for k in range(int(round(max(t0 + d for t0, d, _ in keys)*50))):
         t = (k + 1)/50
-        for s, (t0, d, pose) in enumerate(DOZE):
+        for s, (t0, d, pose) in enumerate(keys):
             if t <= t0: continue
             u = min(1.0, (t - t0)/d); w = 10*u**3 - 15*u**4 + 6*u**5
             for j, deg in pose.items():
                 q0 = start.setdefault((s, idx[j]), tgt[idx[j]])
                 tgt[idx[j]] = q0 + (math.radians(deg) - q0)*w
         bc.q_target[:] = tgt
-        if t > LEGS_OFF_S and not off:
+        if t > legs_off_s and not off:
             off.extend(bc.act_indexes[i] for i, n in enumerate(names) if any(s in n for s in ("hip", "knee", "ankle")))
         err = step("doze")
     return err
@@ -165,11 +173,15 @@ def run(model, data, bc, pol, p, a, x0, y0, yaw0, nx, ny, nyaw, rec=None):
         if dk.connected(err): break
         if X() < p.dock_x - 15: break
     resting[0] = con_step is not None
-    if a.rest == "doze":
+    if a.rest in ("doze", "limp"):
         for _ in range(int(a.doze_pause*50)):          # still, or (--doze_push) still backing in to seat the plug
             e_yaw = dg.wrap(a.yawt - (dg.yaw_deg(data) + nyaw))
             err = st("docked", a.vback, 0, float(np.clip(a.kyaw*e_yaw, -0.3, 0.3))) if a.doze_push else st("docked", 0, 0, 0)
-        err = doze(model, bc, lambda ph: st(ph, 0, 0, 0, policy=False), off)
+        if a.rest == "limp":
+            err = doze(model, bc, lambda ph: st(ph, 0, 0, 0, policy=False), off, keys=LIMP, legs_off_s=LIMP_LEGS_OFF_S)
+            off[:] = list(bc.act_indexes)              # asleep: every servo off
+        else:
+            err = doze(model, bc, lambda ph: st(ph, 0, 0, 0, policy=False), off)
         for _ in range(int(a.hold*50)): err = st("asleep", 0, 0, 0, policy=False)
     else:
         for _ in range(int(a.hold*50)): err = st("docked", 0, 0, 0)
@@ -189,12 +201,13 @@ if __name__ == "__main__":
     ap.add_argument("--sit_yaw", type=float, default=6.6, help="turn this much past the target heading (deg): the sit turns the duck back by about as much")
     ap.add_argument("--yawt", type=float, default=0.0)
     ap.add_argument("--sit_s", type=float, default=4.0, help="seconds for the sit"); ap.add_argument("--handover_s", type=float, default=0.5)
+    ap.add_argument("--sit_until_still", action="store_true", help="hand over to the butt walk as soon as the sit is done (at most --sit_s)")
     ap.add_argument("--vback", type=float, default=-0.05, help="butt-walk speed (m/s, negative = backward)")
     ap.add_argument("--kyaw", type=float, default=0.03, help="heading hold gain (rad/s per deg)")
     ap.add_argument("--max_back_s", type=float, default=12.0)
     ap.add_argument("--hold", type=float, default=3.0, help="seconds resting seated, docked, at the end")
-    ap.add_argument("--rest", default="policy", choices=["policy", "doze"],
-                    help="once docked: sit still on the butt walk (policy), or doze off and switch the leg servos off (doze)")
+    ap.add_argument("--rest", default="policy", choices=["policy", "doze", "limp"],
+                    help="once docked: sit still on the butt walk (policy), doze off and switch the leg servos off (doze), or go limp and switch every servo off (limp, the video's)")
     ap.add_argument("--doze_pause", type=float, default=0.5, help="seconds still on the butt walk before dozing off")
     ap.add_argument("--doze_push", action="store_true", help="keep backing in during that time instead of stopping")
     ap.add_argument("--save", default="", help="pickle the first trial's qpos at 50 Hz (for the renders)")

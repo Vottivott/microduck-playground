@@ -131,17 +131,19 @@ full-video link—to open the complete video.
       <td><strong>MicroDock v2</strong></td>
       <td>
         <a href="hardware/microdock-v2/media/preview.mp4">
-          <img src="hardware/microdock-v2/media/preview.gif" width="280" alt="Animated preview of Microduck turning around, sitting down and butt-walking back into the seated dock until the magnetic tip in its USB-C port meets the charging adapter">
+          <img src="hardware/microdock-v2/media/preview.gif" width="280" alt="Animated preview of Microduck turning around, sitting down and butt-walking back into the seated dock until the magnetic tip in its USB-C port meets the charging adapter, dozing off, then scooting out, standing up and walking off">
         </a>
       </td>
       <td>
         Sits down to charge: after turning around it sits and butt-walks back until its USB-C port meets the adapter.
         Seated, its legs carry almost no weight, so it draws little power while it charges, its servos don't heat up holding
-        a stance for hours, and it can't fall over while it rests. 30/30 docked in simulation with the official walk and sit
-        policies and a new butt-walk policy. Not yet printed or tried on hardware.<br>
+        a stance for hours, and it can't fall over while it rests. When it is charged, a second butt walk scoots it out of
+        the dock against the magnet, and it stands up and walks off. In simulation, with the official walk and sit policies
+        and two new butt-walk policies: 30/30 docked, and 30/30 undocked from a 4 N magnet. One new part: the board. Not yet
+        printed or tried on hardware.<br>
         <a href="hardware/microdock-v2/README.md">Hardware and simulation</a> ·
         <a href="hardware/microdock-v2/print/microdock_v2_P1S.3mf">Bambu P1S project (3 plates)</a> ·
-        <a href="hardware/microdock-v2/training/README.md">Butt-walk policy and training</a>
+        <a href="hardware/microdock-v2/training/README.md">Butt-walk policies and training</a>
       </td>
     </tr>
   </tbody>
@@ -240,7 +242,7 @@ experiments/
   swing/                 selected checkpoints, evaluation, media, methodology
 hardware/
   microdock/             printable charging dock, docking simulation, renders
-  microdock-v2/          the seated dock: new board and hood, butt-walk policy and training, simulation
+  microdock-v2/          the seated dock: new board, butt-walk policies and training, simulation
   stilts/                parametric stilt generator and printable meshes
   swing-seat/            retained-seat generator, meshes, clearance reports
 src/mjlab_microduck/     tasks, robot models, actuator model, rewards
