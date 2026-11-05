@@ -190,20 +190,20 @@ Printable models, generators, assembly instructions and the full gallery are und
   </tr>
 </table>
 
-The MicroDock charging dock prints without screws or inserts. Microduck backs in
-until the magnetic tip in its own USB-C port meets a magnetic adapter in a
-floating hood, which lines the robot up and rides clear of the power button.
-The generator, printable meshes, docking simulation and renders are under
-[`hardware/microdock`](hardware/microdock/README.md), with a ready-to-print Bambu Studio project for a Bambu Lab
-P1S in [`hardware/microdock/print`](hardware/microdock/print/README.md). The seated
-[MicroDock v2](hardware/microdock-v2/README.md) has the duck sit down and butt-walk back instead, with a new board and
-hood.
+The MicroDock v2 charging dock prints without screws or inserts. Microduck sits
+down and butt-walks back until the magnetic tip in its own USB-C port meets a
+magnetic adapter in a floating hood, which lines the robot up and rides clear of
+the power button. When it is charged, it scoots out, stands up and walks off.
+The generator, printable meshes, docking and undocking simulation, butt-walk policies and renders are under
+[`hardware/microdock-v2`](hardware/microdock-v2/README.md), with a ready-to-print Bambu Studio project for a Bambu
+Lab P1S in [`hardware/microdock-v2/print`](hardware/microdock-v2/README.md#parts-and-printing). The original
+[MicroDock](hardware/microdock/README.md), which the duck backs into standing, shares every part but the board.
 
 <table>
   <tr>
-    <td align="center"><img src="hardware/microdock/renders/microdock_three_quarter.png" width="300" alt="MicroDock assembled: base plate, board with AprilTag and floating hood"><br><sub>Assembled</sub></td>
-    <td align="center"><img src="hardware/microdock/renders/microdock_parts.png" width="300" alt="MicroDock printed parts pulled apart: base, board, tag, hood and keeper"><br><sub>Printed parts</sub></td>
-    <td align="center"><img src="hardware/microdock/renders/microdock_docked.png" width="300" alt="Microduck docked, with the hood resting on its back"><br><sub>Docked</sub></td>
+    <td align="center"><img src="hardware/microdock-v2/renders/microdock_three_quarter.png" width="300" alt="MicroDock v2 assembled: base plate, board with AprilTag and floating hood"><br><sub>Assembled</sub></td>
+    <td align="center"><img src="hardware/microdock-v2/renders/microdock_parts.png" width="300" alt="MicroDock v2 printed parts pulled apart: base, board, tag, hood and keeper"><br><sub>Printed parts</sub></td>
+    <td align="center"><img src="hardware/microdock-v2/renders/microdock_docked.png" width="300" alt="Microduck docked sitting down, with the hood resting on its back"><br><sub>Docked</sub></td>
   </tr>
 </table>
 
