@@ -24,7 +24,7 @@ thickness. The parts and a ready Bambu Studio project are under [Parts and print
 2. It sits with the official sit policy and **scoots backward on its seat** until the magnetic tip in its USB-C port
    meets the adapter in the dock's floating hood.
 3. It stops when USB power appears and rests seated while it charges.
-4. When it is charged, a second butt walk **scoots it forward out of the dock** against the magnet. The official sit
+4. When it is charged, an undocking policy **scoots it forward out of the dock** against the magnet. The official sit
    policy stands it up and the official walk takes it away.
 
 Why sitting is better while it charges:
@@ -43,7 +43,7 @@ sideways and down. The hood, base, keeper and tag are the MicroDock's.
 [![Microduck sitting down, scooting back into the MicroDock v2 on its seat, dozing off, then scooting out and walking off, in simulation](media/preview.gif)](media/preview.mp4)
 
 **Status:** designed and tested in simulation only, like the MicroDock; not yet tried on hardware.
-- **The butt walks:** two new policies, trained for this dock in simulation (see [`training/`](training/README.md)).
+- **The scoot policies:** both new, trained for this dock in simulation (see [`training/`](training/README.md)).
   They have not run on a robot yet.
 - **The behaviour around them:** these are scripted in the simulation, not implemented on the robot:
   - tag detection, the turn and the sit;
@@ -56,7 +56,7 @@ sideways and down. The hood, base, keeper and tag are the MicroDock's.
 1. **Find the dock and turn around:** as on the MicroDock. The duck walks toward the tag and turns in place about 200 mm
    from the board. It turns 6.6° past straight, because the sit turns it back by about that much.
 2. **Sit:** the official `alpha_sitstand` policy sits the duck down. It moves back about 65 mm while sitting.
-3. **Scoot back:** the docking butt walk (`policy/butt_walk.onnx`) scoots backward on its seat at about 4 cm/s,
+3. **Scoot back:** the docking policy (`policy/scoot_dock.onnx`) scoots backward on its seat at about 4 cm/s,
    holding its heading, for the last 6–9 cm. On the way in, as on the MicroDock:
    - the hood's flared side walls line the duck up;
    - the hood rides up onto its back, floating up to 20 mm sideways;
@@ -69,7 +69,7 @@ sideways and down. The hood, base, keeper and tag are the MicroDock's.
 ## How undocking works
 
 1. **Wake:** the servos come back on, and the duck returns to its seated pose in a second.
-2. **Scoot out:** the undocking butt walk (`policy/butt_walk_undock.onnx`) scoots forward, holding its heading. It
+2. **Scoot out:** the undocking policy (`policy/scoot_undock.onnx`) scoots forward, holding its heading. It
    breaks free of the magnet about a second in and is 70 mm out after about two.
 3. **Stand up:** the official `alpha_sitstand` policy stands the duck up, clear of the hood.
 4. **Walk off:** the official `velstand` policy.
@@ -78,12 +78,12 @@ sideways and down. The hood, base, keeper and tag are the MicroDock's.
 
 - **Policies:**
   - the official `velstand.onnx` (walk) and `alpha_sitstand.onnx` (sit, stand), unmodified;
-  - `butt_walk.onnx` (docking) and `butt_walk_undock.onnx` (undocking).
+  - `scoot_dock.onnx` (docking) and `scoot_undock.onnx` (undocking).
 
   All of them run on the BAM XL330 actuator model (`microduck_rl` develop `bae39f59`).
 - **Starts:** 380–460 mm out, ±40 mm sideways, heading 180 ± 12°. The tag estimate is the true position plus noise,
   σ = 5 mm along, 3 mm across and 1°.
-- **Seat friction:** 0.45, a plastic shell on PLA. The butt walks trained with 0.3–1.0 (undocking 0.25–0.7).
+- **Seat friction:** 0.45, a plastic shell on PLA. The scoot policies trained with 0.25–0.7.
 
 **Docking** (`sim/docking_seated.py`):
 
@@ -98,7 +98,7 @@ sideways and down. The hood, base, keeper and tag are the MicroDock's.
   absorbed it.
 
 **Undocking** (`sim/undocking_seated.py`): each run docks as above, rests, then scoots out, stands up and walks off.
-Both butt walks run with the training's latencies.
+Both scoot policies run with the training's latencies.
 
 | Batch | Docked | Broke free | Stood up | Walked off |
 |---|---|---|---|---|
@@ -116,7 +116,7 @@ Both butt walks run with the training's latencies.
 
 ### Experimental: one policy for both
 
-[`policy/experimental/butt_walk_dock_undock.onnx`](policy/experimental/butt_walk_dock_undock.onnx) both backs in and
+[`policy/experimental/scoot_dock_undock.onnx`](policy/experimental/scoot_dock_undock.onnx) both backs in and
 scoots out; only the command's sign differs. With one policy, a duck that docked crooked could pull forward and try
 again without switching policies.
 
@@ -172,7 +172,7 @@ uv run hardware/microdock-v2/source/build.py --check
 uv run hardware/microdock-v2/source/build.py --bambu /path/to/bambu-studio --check   # also the Bambu Studio project
 ```
 
-The simulation needs the same checkout and official policies as the MicroDock's. The butt walks are in `policy/`.
+The simulation needs the same checkout and official policies as the MicroDock's. The scoot policies are in `policy/`.
 
 ```bash
 export MICRODUCK_RL_DIR=/path/to/microduck_rl MICRODUCK_POLICY_DIR=/path/to/microduck-policies
@@ -196,14 +196,14 @@ MUJOCO_GL=egl uv run --with manifold3d python hardware/microdock/sim/render_gall
   - more drop.
 - `source/build.py`: the board, the print plates and the Bambu Studio project.
 - `stl/`, `print/`: the v2 board, and the P1S plates with it.
-- `sim/docking_seated.py`: the docking trials (walk, turn, sit, butt walk, connect, rest).
+- `sim/docking_seated.py`: the docking trials (walk, turn, sit, scoot back, connect, rest).
 - `sim/undocking_seated.py`: the undocking trials (dock, scoot out, stand up, walk off), and the continuation of a saved
   run.
-- `sim/latency.py`: the training's latencies, for the butt walks.
-- `sim/bw_eval.py`: the docking butt walk's command battery (speed, turning, stillness, tilt, head).
-- `policy/butt_walk.onnx`, `policy/butt_walk_undock.onnx`: the docking and undocking butt walks (61 inputs,
-  14 outputs, the observation normalizer baked in).
-- `policy/experimental/butt_walk_dock_undock.onnx`: the experimental single policy.
+- `sim/latency.py`: the training's latencies, for the scoot policies.
+- `sim/scoot_eval.py`: the docking policy's command battery (speed, turning, stillness, tilt, head).
+- `policy/scoot_dock.onnx`, `policy/scoot_undock.onnx`: the docking and undocking policies (61 inputs, 14 outputs,
+  the observation normalizer baked in).
+- `policy/experimental/scoot_dock_undock.onnx`: the experimental single policy.
 - `training/`: the environment they were trained in, and how.
 - `results/`, `media/`, `renders/`: the trial results, the preview and the gallery.
 - `media/assembly/`, `media/microdock_v2_assembly.pdf`: the assembly manual.

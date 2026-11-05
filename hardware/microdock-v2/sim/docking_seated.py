@@ -1,8 +1,8 @@
 """MicroDock v2 docking trials in MuJoCo: Microduck walks toward the dock's tag (detection emulated as truth + noise),
-turns in place, SITS (the official sitstand policy), then scoots backward on its seat (the butt-walk policy) until the
+turns in place, SITS (the official sitstand policy), then scoots backward on its seat (the docking policy) until the
 magnetic tip in its USB-C port meets the adapter in the floating hood, stops when USB power appears and rests seated.
 
-Walking is the official velstand.onnx and sitting the official alpha_sitstand.onnx; the butt walk is policy/butt_walk.onnx
+Walking is the official velstand.onnx and sitting the official alpha_sitstand.onnx; scooting is policy/scoot_dock.onnx
 (seated locomotion on command, trained for this dock: ../training). All three run on the BAM XL330 actuator model. Needs
 a checkout of pollen-robotics/microduck_rl (develop, validated at bae39f59: its scripts/infer_policy.py and robot model)
 and the official policies (huggingface.co/pollen-robotics/microduck-policies):
@@ -31,10 +31,10 @@ sys.path.insert(0, os.path.join(V2, "source")); sys.path.insert(0, os.path.join(
 import docking as dg              # the MicroDock's simulation: scene, BAM actuators, official policies, magnet
 import seated
 dk = dg.dk
-BUTT_WALK = os.environ.get("MICRODUCK_BUTT_WALK", os.path.join(V2, "policy", "butt_walk.onnx"))
+SCOOT_DOCK = os.environ.get("MICRODUCK_SCOOT_DOCK", os.path.join(V2, "policy", "scoot_dock.onnx"))
 
 
-SEAT_MU = 0.45                      # the seat (shell, battery cover) on PLA or a floor; the butt walk trained with 0.3-0.6
+SEAT_MU = 0.45                      # the seat (shell, battery cover) on PLA or a floor (scoot training: 0.25-0.7)
 
 # The "dozing off" rest (--rest doze): when USB power appears, the duck stretches its legs out onto the floor and nods
 # off. It is a scripted settle on the servos' position control, slow enough not to tug the plug: keyframes (start s,
@@ -55,8 +55,9 @@ LIMP_LEGS_OFF_S = 0.01
 
 
 def seat_friction(model, mu=SEAT_MU):
-    """Contacts as the butt walk trained them: every robot collision geom uses its own friction against the floor and the
-    dock (priority 1), the seat `mu`, the feet 1.0. The geoms that meet the hood (contype 4) keep their low friction."""
+    """Contacts as the scoot policies trained them: every robot collision geom uses its own friction against the floor
+    and the dock (priority 1), the seat `mu`, the feet 1.0. The geoms that meet the hood (contype 4) keep their low
+    friction."""
     for g in range(model.ngeom):
         b = model.body(model.geom_bodyid[g]).name
         if (model.geom_contype[g] == 0 and model.geom_conaffinity[g] == 0) or b in ("world", "hood"):
@@ -70,10 +71,10 @@ def seat_friction(model, mu=SEAT_MU):
 def make(p, vin=7.6, seat_mu=SEAT_MU):
     model, data, bc, pol = dg.make(p, vin)
     seat_friction(model, seat_mu)
-    if not os.path.exists(BUTT_WALK):
-        sys.exit(f"butt-walk policy not found: {BUTT_WALK}")
+    if not os.path.exists(SCOOT_DOCK):
+        sys.exit(f"docking policy not found: {SCOOT_DOCK}")
     import onnxruntime as ort
-    pol.butt_walk_session = ort.InferenceSession(BUTT_WALK)
+    pol.dock_session = ort.InferenceSession(SCOOT_DOCK)
     return model, data, bc, pol
 
 
@@ -151,7 +152,7 @@ def run(model, data, bc, pol, p, a, x0, y0, yaw0, nx, ny, nyaw, rec=None):
         st("turn", 0, 0, float(np.sign(e)*(0.6 if abs(e) > 4 else 0.45)))
     for _ in range(25): st("settle", 0, 0, 0)
     after_turn = (X(), Y(), dg.yaw_deg(data))
-    # sit (official sitstand: posture flag 1), then hand over to the butt walk
+    # sit (official sitstand: posture flag 1), then hand over to the docking policy
     with contextlib.redirect_stdout(io.StringIO()):
         pol.toggle_sit()
     still = 0
@@ -162,7 +163,7 @@ def run(model, data, bc, pol, p, a, x0, y0, yaw0, nx, ny, nyaw, rec=None):
             still = 0 if moving else still + 1
             if k >= 30 and still >= 5: break
     after_sit = (X(), Y(), dg.yaw_deg(data), data.qpos[2]*1000)
-    pol.sit_mode = False; pol.current_policy = 'walking'; pol.ort_session = pol.butt_walk_session
+    pol.sit_mode = False; pol.current_policy = 'walking'; pol.ort_session = pol.dock_session
     for _ in range(int(a.handover_s*50)): st("seated", 0, 0, 0)
     # scoot backward with heading hold until the tip meets the adapter (USB power)
     con_step = None
@@ -196,19 +197,19 @@ if __name__ == "__main__":
     ap.add_argument("--n", type=int, default=6, help="trials per seed")
     ap.add_argument("--seed", type=int, default=0); ap.add_argument("--seeds", default="", help="comma list; overrides --seed")
     ap.add_argument("--xturn", type=float, default=200.0, help="turn point: trunk x (mm from the board) where the duck stops and turns")
-    ap.add_argument("--seat_mu", type=float, default=SEAT_MU, help="seat friction (the butt walk trained with 0.3-1.0)")
+    ap.add_argument("--seat_mu", type=float, default=SEAT_MU, help="seat friction (the scoot policies trained with 0.25-0.7)")
     ap.add_argument("--yaim", type=float, default=-29.0, help="aim this far to one side (mm): the turn and the sit shift the duck back by about as much")
     ap.add_argument("--sit_yaw", type=float, default=6.6, help="turn this much past the target heading (deg): the sit turns the duck back by about as much")
     ap.add_argument("--yawt", type=float, default=0.0)
     ap.add_argument("--sit_s", type=float, default=4.0, help="seconds for the sit"); ap.add_argument("--handover_s", type=float, default=0.5)
-    ap.add_argument("--sit_until_still", action="store_true", help="hand over to the butt walk as soon as the sit is done (at most --sit_s)")
-    ap.add_argument("--vback", type=float, default=-0.05, help="butt-walk speed (m/s, negative = backward)")
+    ap.add_argument("--sit_until_still", action="store_true", help="hand over to the docking policy as soon as the sit is done (at most --sit_s)")
+    ap.add_argument("--vback", type=float, default=-0.05, help="scoot speed (m/s, negative = backward)")
     ap.add_argument("--kyaw", type=float, default=0.03, help="heading hold gain (rad/s per deg)")
     ap.add_argument("--max_back_s", type=float, default=12.0)
     ap.add_argument("--hold", type=float, default=3.0, help="seconds resting seated, docked, at the end")
     ap.add_argument("--rest", default="policy", choices=["policy", "doze", "limp"],
-                    help="once docked: sit still on the butt walk (policy), doze off and switch the leg servos off (doze), or go limp and switch every servo off (limp, the video's)")
-    ap.add_argument("--doze_pause", type=float, default=0.5, help="seconds still on the butt walk before dozing off")
+                    help="once docked: sit still on the docking policy (policy), doze off and switch the leg servos off (doze), or go limp and switch every servo off (limp, the video's)")
+    ap.add_argument("--doze_pause", type=float, default=0.5, help="seconds still on the docking policy before dozing off")
     ap.add_argument("--doze_push", action="store_true", help="keep backing in during that time instead of stopping")
     ap.add_argument("--save", default="", help="pickle the first trial's qpos at 50 Hz (for the renders)")
     ap.add_argument("--out", default="", help="write the results (and a summary) as JSON")

@@ -4,8 +4,8 @@
   {
    "cmd": "undocking_seated.py --seeds 41 --n 10 --mag 6",
    "summary": {
-    "undock": "butt_walk_undock.onnx",
-    "butt_walk": "butt_walk.onnx",
+    "undock": "scoot_undock.onnx",
+    "dock": "scoot_dock.onnx",
     "mag_N": 6.0,
     "docked": 10,
     "runs": 10,
@@ -343,8 +343,8 @@
   {
    "cmd": "undocking_seated.py --seeds 41 --n 10 --mag 8",
    "summary": {
-    "undock": "butt_walk_undock.onnx",
-    "butt_walk": "butt_walk.onnx",
+    "undock": "scoot_undock.onnx",
+    "dock": "scoot_dock.onnx",
     "mag_N": 8.0,
     "docked": 10,
     "runs": 10,

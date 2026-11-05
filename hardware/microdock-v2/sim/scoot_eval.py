@@ -1,9 +1,9 @@
-"""Butt-walk command battery in the CPU MuJoCo docking scene (BAM actuators, the runtime's observation pipeline): for each
-command, stand on the plate, sit with the official sitstand policy, hand over to the butt walk, run the command and
-report what the trunk did. The sim-to-sim check before any docking trial.
+"""A scoot policy's command battery in the CPU MuJoCo docking scene (BAM actuators, the runtime's observation pipeline):
+for each command, stand on the plate, sit with the official sitstand policy, hand over to the scoot policy, run the
+command and report what the trunk did. The sim-to-sim check before any docking trial.
 
   export MICRODUCK_RL_DIR=/path/to/microduck_rl MICRODUCK_POLICY_DIR=/path/to/microduck-policies
-  uv run python hardware/microdock-v2/sim/bw_eval.py hardware/microdock-v2/policy/butt_walk.onnx [--seconds 4] [--json out.json]
+  uv run python hardware/microdock-v2/sim/scoot_eval.py hardware/microdock-v2/policy/scoot_dock.onnx [--seconds 4] [--json out.json]
 """
 import argparse, contextlib, io, json, math, os, sys
 import numpy as np, mujoco

@@ -139,7 +139,7 @@ full-video link—to open the complete video.
         30/30 docked and undocked in simulation. Not yet tried on hardware.<br>
         <a href="hardware/microdock-v2/README.md">Hardware and simulation</a> ·
         <a href="hardware/microdock-v2/print/microdock_v2_P1S.3mf">Bambu P1S project (3 plates)</a> ·
-        <a href="hardware/microdock-v2/training/README.md">Butt-walk policies and training</a>
+        <a href="hardware/microdock-v2/training/README.md">Scoot policies and training</a>
       </td>
     </tr>
   </tbody>
@@ -194,7 +194,7 @@ The MicroDock v2 charging dock prints without screws or inserts. Microduck sits
 down and scoots back on its seat until the magnetic tip in its own USB-C port meets a
 magnetic adapter in a floating hood, which lines the robot up and rides clear of
 the power button. When it is charged, it scoots out, stands up and walks off.
-The generator, printable meshes, docking and undocking simulation, butt-walk policies and renders are under
+The generator, printable meshes, docking and undocking simulation, scoot policies and renders are under
 [`hardware/microdock-v2`](hardware/microdock-v2/README.md), with a ready-to-print Bambu Studio project for a Bambu
 Lab P1S in [`hardware/microdock-v2/print`](hardware/microdock-v2/README.md#parts-and-printing). The original
 [MicroDock](hardware/microdock/README.md), which the duck backs into standing, shares every part but the board.
@@ -238,7 +238,7 @@ experiments/
   swing/                 selected checkpoints, evaluation, media, methodology
 hardware/
   microdock/             printable charging dock, docking simulation, renders
-  microdock-v2/          the seated dock: new board, butt-walk policies and training, simulation
+  microdock-v2/          the seated dock: new board, scoot policies and training, simulation
   stilts/                parametric stilt generator and printable meshes
   swing-seat/            retained-seat generator, meshes, clearance reports
 src/mjlab_microduck/     tasks, robot models, actuator model, rewards

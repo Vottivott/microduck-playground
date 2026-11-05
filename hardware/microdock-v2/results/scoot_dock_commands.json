@@ -1,5 +1,5 @@
 {
- "policy": "butt_walk.onnx",
+ "policy": "scoot_dock.onnx",
  "seat_mu": 0.45,
  "seconds": 4.0,
  "results": [

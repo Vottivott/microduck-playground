@@ -29,11 +29,11 @@ def test_the_hood_floats_further_than_on_the_microdock():
 
 
 def test_the_adapter_sits_at_the_ports_height():
-    assert P.adapter_dz == 0.0                   # the butt walk sits level (an earlier, leaning policy needed -2.3 mm)
+    assert P.adapter_dz == 0.0                   # the docking policy sits level (an older, leaning one needed -2.3 mm)
     assert P.adapter_z == P.port_z and P1.adapter_z == P1.port_z
 
 
 def test_the_policies_ship_with_the_dock():
-    for name in ("butt_walk.onnx", "butt_walk_undock.onnx", "experimental/butt_walk_dock_undock.onnx"):
+    for name in ("scoot_dock.onnx", "scoot_undock.onnx", "experimental/scoot_dock_undock.onnx"):
         policy = ROOT / "hardware/microdock-v2/policy" / name
         assert policy.exists() and policy.stat().st_size > 100_000, name

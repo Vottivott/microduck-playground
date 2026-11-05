@@ -1,18 +1,18 @@
 """MicroDock v2 undocking in MuJoCo: from the dock, Microduck scoots forward out of it against the magnet (the undocking
-policy, policy/butt_walk_undock.onnx), stands up (the official alpha_sitstand) and walks off (the official velstand).
+policy, policy/scoot_undock.onnx), stands up (the official alpha_sitstand) and walks off (the official velstand).
 
-Both butt walks run with the training's latencies (latency.py): the undocking policy only breaks free with them. --mag
-sets the magnet's pull in newtons; the real adapter's has not been measured. Needs the same checkout and official
-policies as docking_seated.py:
+Both scoot policies run with the training's latencies (latency.py): the undocking policy only breaks free with them.
+--mag sets the magnet's pull in newtons; the real adapter's has not been measured. Needs the same checkout and
+official policies as docking_seated.py:
 
   export MICRODUCK_RL_DIR=/path/to/microduck_rl MICRODUCK_POLICY_DIR=/path/to/microduck-policies
-  # trials: dock as docking_seated.py does (then rest 2 s on the butt walk), undock, stand up, walk off
+  # trials: dock as docking_seated.py does (then rest 2 s on the docking policy), undock, stand up, walk off
   uv run python hardware/microdock-v2/sim/undocking_seated.py --seeds 41,42,43 --n 10 --mag 4 --out undock.json
   # the showcased run: continue docking_seated.py's saved run (--rest limp) through the undocking, for the preview
   uv run python hardware/microdock-v2/sim/undocking_seated.py --continue run.pkl --save full.pkl
 
-The experimental single policy docks and undocks: set MICRODUCK_BUTT_WALK and --undock to
-policy/experimental/butt_walk_dock_undock.onnx.
+The experimental single policy docks and undocks: set MICRODUCK_SCOOT_DOCK and --undock to
+policy/experimental/scoot_dock_undock.onnx.
 """
 import argparse, contextlib, io, json, math, os, pickle, sys
 import numpy as np, mujoco, onnxruntime as ort
@@ -20,9 +20,9 @@ HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import docking_seated as ds
 import latency
 dg, dk, seated = ds.dg, ds.dk, ds.seated
-UNDOCK = os.path.join(os.path.dirname(HERE), "policy", "butt_walk_undock.onnx")
-# How the trials dock: docking_seated.py's defaults, handing over to the butt walk as soon as the sit is done, then
-# resting 2 s on the butt walk.
+UNDOCK = os.path.join(os.path.dirname(HERE), "policy", "scoot_undock.onnx")
+# How the trials dock: docking_seated.py's defaults, handing over to the docking policy as soon as the sit is done,
+# then resting 2 s on it.
 DOCK = argparse.Namespace(xturn=200.0, seat_mu=ds.SEAT_MU, yaim=-29.0, sit_yaw=6.6, yawt=0.0, sit_s=4.0, handover_s=0.0,
                           vback=-0.05, kyaw=0.03, max_back_s=12.0, hold=2.0, rest="policy", doze_pause=0.1,
                           doze_push=False, sit_until_still=True)
@@ -79,7 +79,7 @@ def trials(a):
     p = seated.Params(); res = []
     for seed in [int(s) for s in a.seeds.split(",")]:   # each seed from scratch: the same as one run per seed
         model, data, bc, pol = ds.make(p, seat_mu=DOCK.seat_mu)
-        latency.enable(pol, bc, seed=seed, official=False, butt=True)
+        latency.enable(pol, bc, seed=seed, official=False, scoot=True)
         sess = ort.InferenceSession(a.undock); pol.undock_session = sess
         rng = np.random.default_rng(seed)
         for t in range(a.n):
@@ -91,7 +91,7 @@ def trials(a):
                        start=[round(x0), round(y0), round(yaw0, 1)], **u)
             res.append(row); print(json.dumps(row, default=float), flush=True)
     ok = [r for r in res if r["docked"]]
-    summ = dict(undock=os.path.basename(a.undock), butt_walk=os.path.basename(ds.BUTT_WALK), mag_N=a.mag, docked=len(ok),
+    summ = dict(undock=os.path.basename(a.undock), dock=os.path.basename(ds.SCOOT_DOCK), mag_N=a.mag, docked=len(ok),
                 runs=len(res), released=sum(r["release_s"] is not None for r in ok), out=sum(r["out_mm"] >= 69 for r in ok),
                 stood=sum(r["stood"] for r in ok), walked=sum(r["walked"] for r in ok),
                 release_s_max=max((r["release_s"] for r in ok if r["release_s"] is not None), default=None),
@@ -116,7 +116,7 @@ def continue_run(a):
     model, data, bc, pol = ds.make(p)
     assert H["qpos"].shape[1] == model.nq, (H["qpos"].shape, model.nq)
     pol.undock_session = ort.InferenceSession(a.undock)
-    latency.enable(pol, bc, seed=41, official=False, butt=True)
+    latency.enable(pol, bc, seed=41, official=False, scoot=True)
     hz = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hood_z")]
     hy = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hood_y")]
     hb = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "hood")

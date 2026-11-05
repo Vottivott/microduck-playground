@@ -4,8 +4,8 @@ The duck sits in front of the dock (the official sitstand policy), then scoots b
 Seated, its trunk rides about 57 mm lower than standing, so everything on the board that meets the hood (its window and
 V-seats, the cable clip) moves down with `z0`. The window also lets the hood float further sideways (the sit shifts the
 duck by up to ~25 mm) and drop further (the seated height varies more than the standing one).
-The butt walk sits level, so the adapter stays at the port's height, as on the MicroDock (`adapter_dz` 0; an earlier
-policy leaned ~7 deg forward and needed it 2.3 mm lower).
+The docking policy sits level, so the adapter stays at the port's height, as on the MicroDock (`adapter_dz` 0; an
+earlier policy leaned ~7 deg forward and needed it 2.3 mm lower).
 So the board is new; the hood, base, keeper and tag are the MicroDock's.
 """
 import os, sys

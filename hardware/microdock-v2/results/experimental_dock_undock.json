@@ -1,11 +1,11 @@
 {
- "note": "the experimental single policy: it backs in and scoots out (MICRODUCK_BUTT_WALK and --undock both set to it)",
+ "note": "the experimental single policy: it backs in and scoots out (MICRODUCK_SCOOT_DOCK and --undock both set to it)",
  "runs": [
   {
-   "cmd": "MICRODUCK_BUTT_WALK=hardware/microdock-v2/policy/experimental/butt_walk_dock_undock.onnx undocking_seated.py --undock hardware/microdock-v2/policy/experimental/butt_walk_dock_undock.onnx --seeds 41,42,43 --n 10 --mag 4",
+   "cmd": "MICRODUCK_SCOOT_DOCK=hardware/microdock-v2/policy/experimental/scoot_dock_undock.onnx undocking_seated.py --undock hardware/microdock-v2/policy/experimental/scoot_dock_undock.onnx --seeds 41,42,43 --n 10 --mag 4",
    "summary": {
-    "undock": "butt_walk_dock_undock.onnx",
-    "butt_walk": "butt_walk_dock_undock.onnx",
+    "undock": "scoot_dock_undock.onnx",
+    "dock": "scoot_dock_undock.onnx",
     "mag_N": 4.0,
     "docked": 30,
     "runs": 30,
@@ -981,10 +981,10 @@
    ]
   },
   {
-   "cmd": "MICRODUCK_BUTT_WALK=hardware/microdock-v2/policy/experimental/butt_walk_dock_undock.onnx undocking_seated.py --undock hardware/microdock-v2/policy/experimental/butt_walk_dock_undock.onnx --seeds 41 --n 10 --mag 6",
+   "cmd": "MICRODUCK_SCOOT_DOCK=hardware/microdock-v2/policy/experimental/scoot_dock_undock.onnx undocking_seated.py --undock hardware/microdock-v2/policy/experimental/scoot_dock_undock.onnx --seeds 41 --n 10 --mag 6",
    "summary": {
-    "undock": "butt_walk_dock_undock.onnx",
-    "butt_walk": "butt_walk_dock_undock.onnx",
+    "undock": "scoot_dock_undock.onnx",
+    "dock": "scoot_dock_undock.onnx",
     "mag_N": 6.0,
     "docked": 10,
     "runs": 10,

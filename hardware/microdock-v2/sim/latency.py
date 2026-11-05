@@ -1,12 +1,12 @@
 """The training's latencies for the docking simulation.
 
-The butt walks were trained with mjlab's actuator delay (servo targets 3 to 6 physics steps late, resampled every
-physics step), the joint velocities one control step late and the IMU (gyro, gravity) zero to one step late. The
+The scoot policies were trained with mjlab's actuator delay (servo targets 3 to 6 physics steps late, resampled
+every physics step), the joint velocities one control step late and the IMU (gyro, gravity) zero to one step late. The
 simulation's control loop (docking.step_control) has none, and the undocking policy only breaks free of the magnet with
 them: it pushes in the rhythm the delays set. enable() swaps in a delayed control loop and delayed observations (the
 IMU always one step late):
 - official: the official policies' phases (walk, turn, sit, stand);
-- butt: the butt walks' phases (backing in, scooting out).
+- scoot: the scoot policies' phases (backing in, scooting out).
 Call it after docking_seated.make(). The real robot's latency has not been measured.
 """
 import numpy as np, mujoco
@@ -14,13 +14,13 @@ import docking_seated as ds
 dg, dk = ds.dg, ds.dk
 
 
-def enable(pol, bc, seed=0, official=True, butt=True):
-    """official / butt: delay the official policies' phases / the butt walks'. Returns a function that clears the delay
-    lines (docking.reset calls it too)."""
+def enable(pol, bc, seed=0, official=True, scoot=True):
+    """official / scoot: delay the official policies' phases / the scoot policies'. Returns a function that clears the
+    delay lines (docking.reset calls it too)."""
     rng = np.random.default_rng(seed); tq = [bc.q_target.copy()]*8; hist = []
     orig = pol.get_observations
     def on():
-        return butt if pol.ort_session is getattr(pol, "butt_walk_session", None) or getattr(pol, "undock_session", None) is pol.ort_session else official
+        return scoot if pol.ort_session is getattr(pol, "dock_session", None) or getattr(pol, "undock_session", None) is pol.ort_session else official
     def delayed():                                     # the IMU (0:6) and the joint velocities (20:34) one control step late
         o = orig(); hist.append(o.copy()); del hist[:-2]; o = o.copy()
         if on(): o[0:6] = hist[0][0:6]; o[20:34] = hist[0][20:34]

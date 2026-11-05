@@ -1,5 +1,5 @@
 {
- "note": "seat friction robustness: the butt walk trained with 0.3-1.0; the main batch (seated30.json) uses 0.45",
+ "note": "seat friction robustness: the docking policy trained with 0.25-0.7; the main batch (seated30.json) uses 0.45",
  "runs": [
   {
    "cmd": "docking_seated.py --seeds 41 --n 10 --seat_mu 0.3",

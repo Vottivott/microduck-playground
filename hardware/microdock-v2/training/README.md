@@ -1,11 +1,11 @@
-# The butt walks: seated locomotion on command
+# The scoot policies: seated locomotion on command
 
-A butt walk makes a seated Microduck scoot on its seat on command. The MicroDock v2 uses two of them:
-- **`../policy/butt_walk.onnx` (docking):** backs the duck into the dock after it sits down, and holds it still there.
-- **`../policy/butt_walk_undock.onnx` (undocking):** scoots it forward out of the dock against the magnet, for the
+A scoot policy makes a seated Microduck scoot on its seat on command. The MicroDock v2 uses two of them:
+- **`../policy/scoot_dock.onnx` (docking):** backs the duck into the dock after it sits down, and holds it still there.
+- **`../policy/scoot_undock.onnx` (undocking):** scoots it forward out of the dock against the magnet, for the
   official sit policy to stand it up.
 
-An experimental third, `../policy/experimental/butt_walk_dock_undock.onnx`, does both (see
+An experimental third, `../policy/experimental/scoot_dock_undock.onnx`, does both (see
 [below](#experimental-one-policy-for-both)).
 
 Each is an ordinary member of the policy family:
@@ -16,6 +16,9 @@ Each is an ordinary member of the policy family:
   to it after a sit, and back.
 
 ## The environment
+
+The training code calls these policies butt walks: the files here, the task `Mjlab-ButtWalk-Flat-MicroDuck` and its
+`MICRODUCK_BW_*` options.
 
 `microduck_butt_walk_env_cfg.py` builds on the sitstand environment of
 [pollen-robotics/microduck_rl](https://github.com/pollen-robotics/microduck_rl) (develop, `bae39f59`). That gives it the
@@ -61,7 +64,7 @@ starts slippery (0.05–0.25) and ramps to the full range by iteration 1500.
   turn-rate error. Without them, a policy that also undocks spun while backing up (0.3–0.65 rad/s at wz 0) and missed
   the dock.
 - **`MICRODUCK_BW_CURRICULUM_CAP`:** drops the inherited sitstand curricula from this iteration on. They harden at
-  1500 (head-pose range, pushes, action rate, rise speed), and every butt-walk run collapsed there.
+  1500 (head-pose range, pushes, action rate, rise speed), and every run collapsed there.
 - **`MICRODUCK_BW_SEAT_MU`, `MICRODUCK_BW_HEAD_TERM`:** the seat friction range (default 0.3–1.0) and the head
   termination (rad).
 
@@ -79,7 +82,7 @@ git -C microduck_rl checkout bae39f59 && git -C microduck_rl apply /path/to/hard
 cd microduck_rl
 uv run train Mjlab-ButtWalk-Flat-MicroDuck --env.scene.num-envs 64 --agent.max-iterations 5     # smoke test
 MICRODUCK_BW_HIP_LIMIT=3 uv run train Mjlab-ButtWalk-Flat-MicroDuck --env.scene.num-envs 4096 --agent.max-iterations 2000
-uv run scripts/export.py Mjlab-ButtWalk-Flat-MicroDuck --checkpoint-file logs/rsl_rl/microduck_butt_walk/<run>/model_1400.pt --onnx-file butt_walk.onnx
+uv run scripts/export.py Mjlab-ButtWalk-Flat-MicroDuck --checkpoint-file logs/rsl_rl/microduck_butt_walk/<run>/model_1400.pt --onnx-file scoot_dock.onnx
 ```
 
 ## The released policies
@@ -87,13 +90,13 @@ uv run scripts/export.py Mjlab-ButtWalk-Flat-MicroDuck --checkpoint-file logs/rs
 All three were trained from scratch with 4096 environments on one H200, at about 30 iterations a minute. Each was picked
 from its run's checkpoints with the docking simulation (`../sim`).
 
-### Docking: `butt_walk.onnx`
+### Docking: `scoot_dock.onnx`
 
 Iteration 1400 of a 2000-iteration run with `MICRODUCK_BW_HIP_LIMIT=3`. The later checkpoints regressed after the
-inherited curricula hardened at 1500.
+inherited curricula hardened at 1500. Its seat friction got as far as 0.25–0.7; the full range starts at 1500 too.
 
-`../sim/bw_eval.py` runs a command battery ([`../results/butt_walk_commands.json`](../results/butt_walk_commands.json)) in
-the CPU MuJoCo docking scene:
+`../sim/scoot_eval.py` runs a command battery
+([`../results/scoot_dock_commands.json`](../results/scoot_dock_commands.json)) in the CPU MuJoCo docking scene:
 - BAM actuators and the runtime's observation pipeline;
 - seat friction 0.45;
 - before each command, the official sitstand policy sits the duck down and hands over.
@@ -111,7 +114,7 @@ the CPU MuJoCo docking scene:
 - **Docking:** with the MicroDock v2 it docked 30/30 (see the dock's [README](../README.md)).
 - **The magnet:** it can't break free of the 4 N magnet; that is the undocking policy's job.
 
-### Undocking: `butt_walk_undock.onnx`
+### Undocking: `scoot_undock.onnx`
 
 Iteration 1100 of a run where 30 % of the episodes start docked:
 
@@ -133,7 +136,7 @@ rhythm the delays set. Without them it gets free once in ten.
 
 ### Experimental: one policy for both
 
-`../policy/experimental/butt_walk_dock_undock.onnx` both backs in and scoots out; only the command's sign differs. It is
+`../policy/experimental/scoot_dock_undock.onnx` both backs in and scoots out; only the command's sign differs. It is
 iteration 2699 of a 2700-iteration run with the undocking settings above, plus:
 
 ```
@@ -153,7 +156,8 @@ It is experimental because:
 
 One policy for both would let a duck that docked crooked pull forward and try again without switching policies.
 
-These are simulation results: none of the butt walks has run on a robot. Before trying one, check these on a real unit:
-- whether the seat slides on your floor (friction 0.3–1.0 was trained);
+These are simulation results: none of the scoot policies has run on a robot. Before trying one, check these on a
+real unit:
+- whether the seat slides on your floor (friction 0.25–0.7 was trained);
 - the hand-over from the sit;
 - for the undocking, the real magnet's pull and the robot's latency.
