@@ -131,11 +131,11 @@ full-video link—to open the complete video.
       <td><strong>MicroDock v2</strong></td>
       <td>
         <a href="hardware/microdock-v2/media/preview.mp4">
-          <img src="hardware/microdock-v2/media/preview.gif" width="280" alt="Animated preview of Microduck turning around, sitting down and butt-walking back into the seated dock until the magnetic tip in its USB-C port meets the charging adapter, dozing off, then scooting out, standing up and walking off">
+          <img src="hardware/microdock-v2/media/preview.gif" width="280" alt="Animated preview of Microduck turning around, sitting down and scooting back on its seat into the seated dock until the magnetic tip in its USB-C port meets the charging adapter, dozing off, then scooting out, standing up and walking off">
         </a>
       </td>
       <td>
-        Sits down to charge: it butt-walks back into the dock, then scoots out and walks off when charged.
+        Sits down to charge: it scoots back into the dock on its seat, then scoots out and walks off when charged.
         30/30 docked and undocked in simulation. Not yet tried on hardware.<br>
         <a href="hardware/microdock-v2/README.md">Hardware and simulation</a> ·
         <a href="hardware/microdock-v2/print/microdock_v2_P1S.3mf">Bambu P1S project (3 plates)</a> ·
@@ -191,7 +191,7 @@ Printable models, generators, assembly instructions and the full gallery are und
 </table>
 
 The MicroDock v2 charging dock prints without screws or inserts. Microduck sits
-down and butt-walks back until the magnetic tip in its own USB-C port meets a
+down and scoots back on its seat until the magnetic tip in its own USB-C port meets a
 magnetic adapter in a floating hood, which lines the robot up and rides clear of
 the power button. When it is charged, it scoots out, stands up and walks off.
 The generator, printable meshes, docking and undocking simulation, butt-walk policies and renders are under

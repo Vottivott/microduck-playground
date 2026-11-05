@@ -1,6 +1,6 @@
 """MicroDock v2 docking trials in MuJoCo: Microduck walks toward the dock's tag (detection emulated as truth + noise),
-turns in place, SITS (the official sitstand policy), then butt-walks backward (the butt-walk policy) until the magnetic
-tip in its USB-C port meets the adapter in the floating hood, stops when USB power appears and rests seated.
+turns in place, SITS (the official sitstand policy), then scoots backward on its seat (the butt-walk policy) until the
+magnetic tip in its USB-C port meets the adapter in the floating hood, stops when USB power appears and rests seated.
 
 Walking is the official velstand.onnx and sitting the official alpha_sitstand.onnx; the butt walk is policy/butt_walk.onnx
 (seated locomotion on command, trained for this dock: ../training). All three run on the BAM XL330 actuator model. Needs
@@ -164,7 +164,7 @@ def run(model, data, bc, pol, p, a, x0, y0, yaw0, nx, ny, nyaw, rec=None):
     after_sit = (X(), Y(), dg.yaw_deg(data), data.qpos[2]*1000)
     pol.sit_mode = False; pol.current_policy = 'walking'; pol.ort_session = pol.butt_walk_session
     for _ in range(int(a.handover_s*50)): st("seated", 0, 0, 0)
-    # butt-walk backward with heading hold until the tip meets the adapter (USB power)
+    # scoot backward with heading hold until the tip meets the adapter (USB power)
     con_step = None
     for k in range(int(a.max_back_s*50)):
         e_yaw = dg.wrap(a.yawt - (dg.yaw_deg(data) + nyaw))

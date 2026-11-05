@@ -1,9 +1,28 @@
 # MicroDock v2: the seated dock
 
-The [MicroDock](../microdock/README.md), but Microduck **sits down to charge**.
+The [MicroDock](../microdock/README.md), but Microduck **sits down to charge**: it scoots backward on its seat into
+the dock, rests seated while it charges, and scoots out and walks off when it is charged. One new part, the board;
+the hood, base, keeper and tag are the MicroDock's.
+
+## Assembly
+
+The assembly manual. Print the [PDF](media/microdock_v2_assembly.pdf) at 100 % to use page 2's 1:1 check of the cable's
+thickness. The parts and a ready Bambu Studio project are under [Parts and printing](#parts-and-printing).
+
+![What you need: the five printed parts and two filament pins, a magnetic USB-C adapter pair, a right-angle USB-C cable and a USB-C charger](media/assembly/page_02.jpg)
+![Steps 1 and 2: push the board into the base, then press the tag into its pocket](media/assembly/page_03.jpg)
+![Steps 3 and 4: plug the right-angle cable into the magnetic adapter, then turn the hood upside down](media/assembly/page_04.jpg)
+![Steps 5 and 6: lower the cable head and adapter into the hood, then press them down until they click](media/assembly/page_05.jpg)
+![Steps 7 and 8: push the hood's pegs through the board's window, then slide the keeper onto them from behind](media/assembly/page_06.jpg)
+![Steps 9 and 10: lock the keeper with a filament pin through each peg, then press the cable into the board's clip, leaving about 11 cm of loop](media/assembly/page_07.jpg)
+![Step 11 and a check: plug the cable into a USB-C charger, then check that the hood floats freely](media/assembly/page_08.jpg)
+![Step 12 and done: push the magnetic tip into Microduck's USB-C port, then stand the dock against a wall and tape its base to the floor](media/assembly/page_09.jpg)
+
+## What it does
+
 1. It walks up to the dock's AprilTag and turns around, as before.
-2. It sits with the official sit policy and **butt-walks backward** until the magnetic tip in its USB-C port meets the
-   adapter in the dock's floating hood.
+2. It sits with the official sit policy and **scoots backward on its seat** until the magnetic tip in its USB-C port
+   meets the adapter in the dock's floating hood.
 3. It stops when USB power appears and rests seated while it charges.
 4. When it is charged, a second butt walk **scoots it forward out of the dock** against the magnet. The official sit
    policy stands it up and the official walk takes it away.
@@ -21,7 +40,7 @@ sideways and down. The hood, base, keeper and tag are the MicroDock's.
 |---|---|---|
 | ![](renders/microdock_three_quarter.png) | ![](renders/microdock_parts.png) | ![](renders/microdock_docked.png) |
 
-[![Microduck sitting down, butt-walking back into the MicroDock v2, dozing off, then scooting out and walking off, in simulation](media/preview.gif)](media/preview.mp4)
+[![Microduck sitting down, scooting back into the MicroDock v2 on its seat, dozing off, then scooting out and walking off, in simulation](media/preview.gif)](media/preview.mp4)
 
 **Status:** designed and tested in simulation only, like the MicroDock; not yet tried on hardware.
 - **The butt walks:** two new policies, trained for this dock in simulation (see [`training/`](training/README.md)).
@@ -37,7 +56,7 @@ sideways and down. The hood, base, keeper and tag are the MicroDock's.
 1. **Find the dock and turn around:** as on the MicroDock. The duck walks toward the tag and turns in place about 200 mm
    from the board. It turns 6.6° past straight, because the sit turns it back by about that much.
 2. **Sit:** the official `alpha_sitstand` policy sits the duck down. It moves back about 65 mm while sitting.
-3. **Butt-walk back:** the docking butt walk (`policy/butt_walk.onnx`) scoots backward on its seat at about 4 cm/s,
+3. **Scoot back:** the docking butt walk (`policy/butt_walk.onnx`) scoots backward on its seat at about 4 cm/s,
    holding its heading, for the last 6–9 cm. On the way in, as on the MicroDock:
    - the hood's flared side walls line the duck up;
    - the hood rides up onto its back, floating up to 20 mm sideways;
@@ -123,21 +142,7 @@ Studio's estimates:
 
 That's about 5 h 32 min and 240 g in all.
 
-The [assembly manual](#assembly) below shows what to buy and how to put it together.
-
-## Assembly
-
-The assembly manual. Print the [PDF](media/microdock_v2_assembly.pdf) at 100 % to use page 2's 1:1 check of the cable's
-thickness.
-
-![What you need: the five printed parts and two filament pins, a magnetic USB-C adapter pair, a right-angle USB-C cable and a USB-C charger](media/assembly/page_02.jpg)
-![Steps 1 and 2: push the board into the base, then press the tag into its pocket](media/assembly/page_03.jpg)
-![Steps 3 and 4: plug the right-angle cable into the magnetic adapter, then turn the hood upside down](media/assembly/page_04.jpg)
-![Steps 5 and 6: lower the cable head and adapter into the hood, then press them down until they click](media/assembly/page_05.jpg)
-![Steps 7 and 8: push the hood's pegs through the board's window, then slide the keeper onto them from behind](media/assembly/page_06.jpg)
-![Steps 9 and 10: lock the keeper with a filament pin through each peg, then press the cable into the board's clip, leaving about 11 cm of loop](media/assembly/page_07.jpg)
-![Step 11 and a check: plug the cable into a USB-C charger, then check that the hood floats freely](media/assembly/page_08.jpg)
-![Step 12 and done: push the magnetic tip into Microduck's USB-C port, then stand the dock against a wall and tape its base to the floor](media/assembly/page_09.jpg)
+The [assembly manual](#assembly) above shows what to buy and how to put it together.
 
 ## What the simulation leaves out
 
