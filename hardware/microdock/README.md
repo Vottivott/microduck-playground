@@ -19,6 +19,15 @@ power appears, then stands and charges.
 **Status:** designed and tested in simulation only; not yet printed or tried on hardware. The docking behaviour (tag
 detection, the turn and stopping on USB power) is scripted in the simulation, not implemented on the robot.
 
+**Update, 5 November 2026:** if you printed the MicroDock before this date, reprint plate 2 (the board, the hood and
+the keeper).
+- **The keeper:** the first one was too short. At some hood heights it slipped through the board's window, and its holes
+  were a loose fit, so nothing held the hood on. The new keeper is 32 mm tall, and a piece of 1.75 mm filament through
+  each of the hood's pegs locks it on.
+- **The board:** it now has a clip for the cable.
+
+The [MicroDock v2](../microdock-v2/README.md) is the same dock for a duck that sits down to charge.
+
 ## What it relies on
 
 - **Onboard charging.** Pollen says the final production units will have it
