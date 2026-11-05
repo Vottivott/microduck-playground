@@ -135,12 +135,8 @@ full-video link—to open the complete video.
         </a>
       </td>
       <td>
-        Sits down to charge: after turning around it sits and butt-walks back until its USB-C port meets the adapter.
-        Seated, its legs carry almost no weight, so it draws little power while it charges, its servos don't heat up holding
-        a stance for hours, and it can't fall over while it rests. When it is charged, a second butt walk scoots it out of
-        the dock against the magnet, and it stands up and walks off. In simulation, with the official walk and sit policies
-        and two new butt-walk policies: 30/30 docked, and 30/30 undocked from a 4 N magnet. One new part: the board. Not yet
-        tried on hardware.<br>
+        Sits down to charge: it butt-walks back into the dock, then scoots out and walks off when charged.
+        30/30 docked and undocked in simulation. Not yet tried on hardware.<br>
         <a href="hardware/microdock-v2/README.md">Hardware and simulation</a> ·
         <a href="hardware/microdock-v2/print/microdock_v2_P1S.3mf">Bambu P1S project (3 plates)</a> ·
         <a href="hardware/microdock-v2/training/README.md">Butt-walk policies and training</a>
