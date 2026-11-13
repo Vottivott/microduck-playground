@@ -112,11 +112,12 @@ def board(p: Params):
 
 def catch_geometry(p: Params):
     """Where the catch's hooks sit (hood frame, mm). The adapter's section is nearly a stadium, so a hook can't reach
-    under a flat bottom edge: its tip sits under the rounded corner, 0.1 mm below it, and the adapter rests on the tips."""
+    under a flat bottom edge: its tip sits under the rounded corner, 0.1 mm below it, and the adapter rests on the tips.
+    p.catch_lift (if set) raises the hooks: they then press the adapter up against the pocket's roof."""
     pv, ph, pl = p.plug; r = ADAPTER_R
     yw = ph/2 + 0.2                                  # the side walls' inner face
     yt = yw - CATCH_HOOK                             # a hook's tip
-    zt = p.adapter_z - (pv/2 - r) - np.sqrt(r**2 - (yt - (ph/2 - r))**2) - 0.1
+    zt = p.adapter_z - (pv/2 - r) - np.sqrt(r**2 - (yt - (ph/2 - r))**2) - 0.1 + getattr(p, "catch_lift", 0.0)
     zc = zt + CATCH_HOOK                             # the hook's 45-degree top meets the wall here
     zb = zt - 0.3 - CATCH_HOOK*np.sqrt(3)            # 0.3 mm flat, then the 30-degree lead-in down to the wall
     root = min(zt + CATCH_L, p.trunk_top - 1.0)      # the slots end here (at least 1 mm under the top plate)
@@ -149,34 +150,37 @@ def catch(p: Params, flex=0.0):
     return both(wall), both(window), both(finger.translate((0, flex, 0)))
 
 
-def hood(p: Params, flex=0.0):
+def hood(p: Params, flex=0.0, head=True):
     """Hood frame. Union of the simulator's convex pieces + pegs; adapter pocket and cable path cut out, adapter catch
-    added (inside the hood, behind the battery stop, where the duck never reaches: the simulator leaves it out)."""
+    added (inside the hood, behind the battery stop, where the duck never reaches: the simulator leaves it out).
+    head=False leaves out the right-angle cable head's channel, stop rib and cable slot (the caller fits its own)."""
     pcs = hood_pieces(p)
     s = union([hull(P) for P in pcs.values()])
     pv, ph, pl = p.plug
     ax0 = p.adapter_face_x
-    # adapter pocket (0.15 mm clearance), open at the bottom: the adapter + cable go in from below as one piece
-    s = s - cube(ax0 - pl - 0.2, ax0 + 1, -ph/2 - 0.15, ph/2 + 0.15, -1.0, p.adapter_z + pv/2 + 0.15)
+    # adapter pocket (0.15 mm clearance; its roof p.pocket_top, if set, over the adapter), open at the bottom: the
+    # adapter + cable go in from below as one piece
+    s = s - cube(ax0 - pl - 0.2, ax0 + 1, -ph/2 - 0.15, ph/2 + 0.15, -1.0, p.adapter_z + pv/2 + getattr(p, "pocket_top", 0.15))
     walls, windows, fingers = catch(p, flex)
     s = s + walls - windows + fingers
-    al, aw, at = p.angle_plug
-    ed, el, xe = p.angle_elbow
-    # Right-angle head behind the adapter: its body runs along the plug's wide side, so with the port horizontal it lies
-    # flat (body diameter `at` vertical, `aw` deep behind the adapter) and points to the duck's left (+y); its cable
-    # leaves through the left side wall. The channel fits it with 0.6 mm to spare behind.
-    s = s - cube(ax0 - pl - aw - 0.6, ax0 - pl + 0.2, -xe - 0.65, p.side_in + 0.01, -1.0, p.adapter_z + at/2 + 0.3)   # open below, like the pocket
-    # Head stop: a rib behind the sleeve's left wall catches the front of the head's body, so the magnet can't pull the
-    # adapter forward out of place (the elbow alone would fit into the pocket's back). It clears the elbow's flared side
-    # and the body's path when the pair goes in from below.
-    s = s + cube(ax0 - pl - ed + 0.15, ax0 - pl + 0.4, (el - xe) + 2.1, ph/2 + 2.2, p.adapter_z - at/2 - 0.5, p.adapter_z + pv/2 + 2.0)
-    # cable exit: a slot open at the wall's bottom edge, so the cable slips in from below (no need to unplug it)
-    xc = ax0 - pl - (aw - at/2)                    # the cable leaves the head on its body's axis
-    s = s - m3.Manifold.cylinder(p.wall_t + 2.0, CABLE_SLOT/2, CABLE_SLOT/2, 40).rotate((-90, 0, 0)).translate((xc, p.side_in - 1.0, p.adapter_z))
-    s = s - cube(xc - CABLE_SLOT/2, xc + CABLE_SLOT/2, p.side_in - 1.0, p.side_in + p.wall_t + 1.0, p.side_bot - 2.0, p.adapter_z)
-    for sx in (-1, 1):                     # small lead-in chamfers at the slot's mouth
-        s = s - hull(np.array([[xc + sx*(CABLE_SLOT/2 - 0.01), y, z] for y in (p.side_in - 1.0, p.side_in + p.wall_t + 1.0) for z in (p.side_bot - 2.0, p.side_bot + 1.2)] +
-                              [[xc + sx*(CABLE_SLOT/2 + 1.2), y, p.side_bot - 2.0] for y in (p.side_in - 1.0, p.side_in + p.wall_t + 1.0)]))
+    if head:
+        al, aw, at = p.angle_plug
+        ed, el, xe = p.angle_elbow
+        # Right-angle head behind the adapter: its body runs along the plug's wide side, so with the port horizontal it lies
+        # flat (body diameter `at` vertical, `aw` deep behind the adapter) and points to the duck's left (+y); its cable
+        # leaves through the left side wall. The channel fits it with 0.6 mm to spare behind.
+        s = s - cube(ax0 - pl - aw - 0.6, ax0 - pl + 0.2, -xe - 0.65, p.side_in + 0.01, -1.0, p.adapter_z + at/2 + 0.3)   # open below, like the pocket
+        # Head stop: a rib behind the sleeve's left wall catches the front of the head's body, so the magnet can't pull the
+        # adapter forward out of place (the elbow alone would fit into the pocket's back). It clears the elbow's flared side
+        # and the body's path when the pair goes in from below.
+        s = s + cube(ax0 - pl - ed + 0.15, ax0 - pl + 0.4, (el - xe) + 2.1, ph/2 + 2.2, p.adapter_z - at/2 - 0.5, p.adapter_z + pv/2 + 2.0)
+        # cable exit: a slot open at the wall's bottom edge, so the cable slips in from below (no need to unplug it)
+        xc = ax0 - pl - (aw - at/2)                    # the cable leaves the head on its body's axis
+        s = s - m3.Manifold.cylinder(p.wall_t + 2.0, CABLE_SLOT/2, CABLE_SLOT/2, 40).rotate((-90, 0, 0)).translate((xc, p.side_in - 1.0, p.adapter_z))
+        s = s - cube(xc - CABLE_SLOT/2, xc + CABLE_SLOT/2, p.side_in - 1.0, p.side_in + p.wall_t + 1.0, p.side_bot - 2.0, p.adapter_z)
+        for sx in (-1, 1):                     # small lead-in chamfers at the slot's mouth
+            s = s - hull(np.array([[xc + sx*(CABLE_SLOT/2 - 0.01), y, z] for y in (p.side_in - 1.0, p.side_in + p.wall_t + 1.0) for z in (p.side_bot - 2.0, p.side_bot + 1.2)] +
+                                  [[xc + sx*(CABLE_SLOT/2 + 1.2), y, p.side_bot - 2.0] for y in (p.side_in - 1.0, p.side_in + p.wall_t + 1.0)]))
     # D-pegs (flat on top), long enough to carry the keeper and, behind it, a vertical hole for its filament pin
     xp = pin_x(p)
     for sy in (-1, 1):
