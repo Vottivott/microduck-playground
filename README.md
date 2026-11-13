@@ -153,6 +153,7 @@ full-video link—to open the complete video.
       <td>
         The egg dock: the hood floats on printed springs hidden inside the egg. 90/90 docked and undocked in
         simulation with v2's scoot policies; printed and tried by hand.<br>
+        <a href="https://x.com/HannesVonEssen/status/2121314714525241573">Full video</a> ·
         <a href="hardware/microdock-v3/README.md">Hardware and simulation</a> ·
         <a href="hardware/microdock-v3/print/microdock_v3_P1S.3mf">Bambu P1S project (7 plates)</a> ·
         <a href="hardware/microdock-v3/media/microdock_v3_assembly.pdf">Assembly manual</a>
