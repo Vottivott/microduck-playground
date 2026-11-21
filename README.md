@@ -34,15 +34,16 @@ full-video link—to open the complete video.
   </thead>
   <tbody>
     <tr>
-      <td><strong>Self-charging dock</strong></td>
+      <td><strong>MicroDock v3</strong></td>
       <td>
         <a href="hardware/microdock-v3/media/preview.mp4">
           <img src="hardware/microdock-v3/media/preview.gif" width="280" alt="Animated preview of Microduck turning around, sitting down and scooting back into the egg dock until the magnetic tip in its USB-C port meets the adapter in the floating hood, then scooting out, standing up and walking off">
         </a>
       </td>
       <td>
-        The robot sits down and scoots backwards into a fully 3D printed dock that connects a magnetic charger to its
-        own USB-C port. 90/90 docked and undocked in simulation. Real-life validation in progress.<br>
+        Self-charging dock. The robot sits down and scoots backwards into a fully 3D printed dock that connects a
+        magnetic charger to its own USB-C port. 90/90 docked and undocked in simulation. Real-life validation in
+        progress.<br>
         <a href="https://x.com/HannesVonEssen/status/2121314714525241573">Full video</a> ·
         <a href="hardware/microdock-v3/README.md">Hardware and simulation</a> ·
         <a href="hardware/microdock-v3/media/microdock_v3_assembly.pdf">Assembly manual</a> ·
