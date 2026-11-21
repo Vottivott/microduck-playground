@@ -130,7 +130,8 @@ Standard. Bambu Studio's estimates:
 Plates 1–6: about 9 h 15 min and 365 g. Plate 7 prints the hood's slice round the adapters, to try the magnetic
 adapter, the angle adapter and the duck's tip before printing the hood.
 
-The pins are two pieces of 1.75 mm PLA filament, about 4 cm each, cut flush once they are in.
+The pins are two pieces of 1.75 mm PLA filament, about 4 cm each, cut flush once they are in. You may not need them:
+if the post already sits firmly on its pegs (step 2), or the arm in the carriage (step 7), you can leave that pin out.
 
 ### What to buy
 
