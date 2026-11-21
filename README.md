@@ -41,9 +41,9 @@ full-video link—to open the complete video.
         </a>
       </td>
       <td>
-        Self-charging dock. The robot sits down and scoots backwards into a fully 3D printed dock that connects a
-        magnetic charger to its own USB-C port. 90/90 docked and undocked in simulation. Real-life validation in
-        progress.<br>
+        <strong>Self-charging dock.</strong> The robot sits down and scoots backwards into a fully 3D printed dock
+        that connects a magnetic charger to its own USB-C port. 90/90 docked and undocked in simulation. Real-life
+        validation in progress.<br>
         <a href="https://x.com/HannesVonEssen/status/2121314714525241573">Full video</a> ·
         <a href="hardware/microdock-v3/README.md">Hardware and simulation</a> ·
         <a href="hardware/microdock-v3/media/microdock_v3_assembly.pdf">Assembly manual</a> ·
