@@ -1,5 +1,7 @@
 # MicroDock v2: the seated dock
 
+> **Superseded by [MicroDock v3](../microdock-v3/README.md)**, the dock to build. This one stays because v3 builds on its code and uses its scoot policies.
+
 The [MicroDock](../microdock/README.md), but Microduck **sits down to charge**: it scoots backward on its seat into
 the dock, rests seated while it charges, and scoots out and walks off when it is charged. One new part, the board;
 the hood, base, keeper and tag are the MicroDock's.
