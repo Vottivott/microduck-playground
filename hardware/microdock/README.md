@@ -1,5 +1,7 @@
 # MicroDock: a self-charging dock for Microduck
 
+> **Superseded by [MicroDock v3](../microdock-v3/README.md)**, the dock to build. This one stays because v3 builds on its code.
+
 Microduck walks up to the dock's AprilTag, turns around in place, and backs in. A floating hood on the dock's board
 settles onto its back. The hood's side walls line the duck up, and a magnetic USB-C adapter in the hood meets a magnetic
 tip that lives in **Microduck's own USB-C port**, on its back just above the battery. The duck stops walking when USB

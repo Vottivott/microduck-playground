@@ -34,6 +34,23 @@ full-video link—to open the complete video.
   </thead>
   <tbody>
     <tr>
+      <td><strong>Self-charging dock</strong></td>
+      <td>
+        <a href="hardware/microdock-v3/media/preview.mp4">
+          <img src="hardware/microdock-v3/media/preview.gif" width="280" alt="Animated preview of Microduck turning around, sitting down and scooting back into the egg dock until the magnetic tip in its USB-C port meets the adapter in the floating hood, then scooting out, standing up and walking off">
+        </a>
+      </td>
+      <td>
+        The robot sits down and scoots backwards into a fully 3D printed dock that connects a magnetic charger to its
+        own USB-C port. 90/90 docked and undocked in simulation. Real-life validation in progress.<br>
+        <a href="https://x.com/HannesVonEssen/status/2121314714525241573">Full video</a> ·
+        <a href="hardware/microdock-v3/README.md">Hardware and simulation</a> ·
+        <a href="hardware/microdock-v3/media/microdock_v3_assembly.pdf">Assembly manual</a> ·
+        <a href="hardware/microdock-v3/README.md#what-to-buy">What to buy</a> ·
+        <a href="hardware/microdock-v3/print/microdock_v3_P1S.3mf">Bambu P1S project (7 plates)</a>
+      </td>
+    </tr>
+    <tr>
       <td><strong>Self-pumped swing</strong></td>
       <td>
         <a href="experiments/swing/media/alpha050_seed27.mp4">
@@ -111,54 +128,6 @@ full-video link—to open the complete video.
     </tr>
     <tr><td><strong>Raised-platform long jump</strong></td><td><a href="experiments/parkour/media/long-jump.mp4"><img src="experiments/parkour/media/long-jump.gif" width="280" alt="Raised-platform long jump in simulation"></a></td><td>Simulation only; not yet validated on hardware.<br><a href="experiments/parkour/long-jump/README.md">Details and reproduction</a> · <a href="https://huggingface.co/HannesVonEssen/microduck-long-jump">Policy and training checkpoint</a></td></tr>
     <tr><td><strong>Raised-platform backflip</strong></td><td><a href="experiments/parkour/media/backflip-tight-v2.mp4"><img src="experiments/parkour/media/backflip-tight-v2.gif" width="280" alt="Raised-platform backflip in simulation"></a></td><td>Experimental simulation policy; hardware unvalidated. ⚠️ Landings may break the robot.<br><a href="experiments/parkour/backflip/README.md">Details and reproduction</a> · <a href="https://huggingface.co/HannesVonEssen/microduck-backflip">Policy and training checkpoint</a></td></tr>
-    <tr>
-      <td><strong>Self-charging dock</strong></td>
-      <td>
-        <a href="hardware/microdock/media/preview.mp4">
-          <img src="hardware/microdock/media/preview.gif" width="280" alt="Animated preview of Microduck turning around and backing into a printed dock until the magnetic tip in its USB-C port meets the charging adapter">
-        </a>
-      </td>
-      <td>
-        Backs into a fully printed dock that connects a magnetic charger to its own USB-C port:
-        30/30 docked in simulation with the official walking policy. Not yet tried on hardware.<br>
-        <a href="https://x.com/HannesVonEssen/status/2117688155600007338">Full video</a> ·
-        <a href="hardware/microdock/README.md">Hardware and simulation</a> ·
-        <a href="hardware/microdock/print/microdock_P1S.3mf">Bambu P1S project (3 plates)</a>
-        (<a href="hardware/microdock/print/README.md">how to print</a>)
-      </td>
-    </tr>
-    <tr>
-      <td><strong>MicroDock v2</strong></td>
-      <td>
-        <a href="hardware/microdock-v2/media/preview.mp4">
-          <img src="hardware/microdock-v2/media/preview.gif" width="280" alt="Animated preview of Microduck turning around, sitting down and scooting back on its seat into the seated dock until the magnetic tip in its USB-C port meets the charging adapter, dozing off, then scooting out, standing up and walking off">
-        </a>
-      </td>
-      <td>
-        Sits down to charge: it scoots back into the dock on its seat, then scoots out and walks off when charged.
-        30/30 docked and undocked in simulation. Not yet tried on hardware.<br>
-        <a href="https://x.com/HannesVonEssen/status/2118390483869213114">Full video</a> ·
-        <a href="hardware/microdock-v2/README.md">Hardware and simulation</a> ·
-        <a href="hardware/microdock-v2/print/microdock_v2_P1S.3mf">Bambu P1S project (3 plates)</a> ·
-        <a href="hardware/microdock-v2/training/README.md">Scoot policies and training</a>
-      </td>
-    </tr>
-    <tr>
-      <td><strong>MicroDock v3</strong></td>
-      <td>
-        <a href="hardware/microdock-v3/media/preview.mp4">
-          <img src="hardware/microdock-v3/media/preview.gif" width="280" alt="Animated preview of Microduck turning around, sitting down and scooting back into the egg dock until the magnetic tip in its USB-C port meets the adapter in the floating hood, then scooting out, standing up and walking off">
-        </a>
-      </td>
-      <td>
-        The egg dock: the hood floats on printed springs hidden inside the egg. 90/90 docked and undocked in
-        simulation with v2's scoot policies; printed and tried by hand.<br>
-        <a href="https://x.com/HannesVonEssen/status/2121314714525241573">Full video</a> ·
-        <a href="hardware/microdock-v3/README.md">Hardware and simulation</a> ·
-        <a href="hardware/microdock-v3/print/microdock_v3_P1S.3mf">Bambu P1S project (7 plates)</a> ·
-        <a href="hardware/microdock-v3/media/microdock_v3_assembly.pdf">Assembly manual</a>
-      </td>
-    </tr>
   </tbody>
 </table>
 
@@ -213,8 +182,9 @@ printed in PLA and hidden inside an egg. When it is charged, it scoots out, stan
 printable meshes, docking and undocking simulation, renders and assembly manual are under
 [`hardware/microdock-v3`](hardware/microdock-v3/README.md), with a ready-to-print Bambu Studio project for a Bambu Lab
 P1S in [`hardware/microdock-v3/print`](hardware/microdock-v3/README.md#parts-and-printing). The
-[MicroDock v2](hardware/microdock-v2/README.md), whose hood slides on pegs in a flat board, has the scoot policies and
-their training; the original [MicroDock](hardware/microdock/README.md) is the one the duck backs into standing.
+earlier versions stay because v3 builds on their code: [MicroDock v2](hardware/microdock-v2/README.md), with the scoot
+policies and their training, and the original [MicroDock](hardware/microdock/README.md), which the duck backs into
+standing.
 
 <table>
   <tr>
@@ -254,9 +224,9 @@ experiments/
   stilts/                policy index, executed curriculum, continuation guide
   swing/                 selected checkpoints, evaluation, media, methodology
 hardware/
-  microdock/             printable charging dock, docking simulation, renders
-  microdock-v2/          the seated dock: new board, scoot policies and training, simulation
-  microdock-v3/          the egg dock: printed spring stage, simulation, assembly manual
+  microdock/             the first charging dock (earlier version; v3 builds on its code)
+  microdock-v2/          the seated dock (earlier version): scoot policies and training
+  microdock-v3/          the self-charging dock to build: egg dock, assembly manual, simulation
   stilts/                parametric stilt generator and printable meshes
   swing-seat/            retained-seat generator, meshes, clearance reports
 src/mjlab_microduck/     tasks, robot models, actuator model, rewards

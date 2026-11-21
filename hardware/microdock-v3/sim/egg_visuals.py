@@ -14,7 +14,11 @@ dk = st.dk
 HIDDEN, PLA, TAG_BLACK, TAG_WHITE, ADAPTER = visuals.HIDDEN, visuals.PLA, visuals.TAG_BLACK, visuals.TAG_WHITE, visuals.ADAPTER
 WHITE = (0.93, 0.93, 0.91, 1.0)                  # the cable, its plug and strain relief
 CABLE_R = fc.CORD["cable_d"]/2*1e-3              # the cable's radius (m)
-CABLE_X = -0.036                                 # its run along the floor behind the base (world x, m)
+CABLE_X = -0.036                                 # where it reaches the floor behind the base (world x, m)
+# its loose curve along the floor (world x, y, m): backward first, away from the egg, then sideways out of the picture,
+# never along the floor's grid lines
+FLOOR_ROUTE = [(-0.055, 0.118), (-0.085, 0.126), (-0.125, 0.130), (-0.170, 0.136), (-0.215, 0.150), (-0.255, 0.175),
+               (-0.290, 0.215), (-0.320, 0.270), (-0.360, 0.350), (-0.430, 0.460), (-0.560, 0.640), (-1.60, 2.00)]
 CLIP_DEPTH = 17.0                                # the egg's depth at its edge clip (mm): front plate and dome
 
 
@@ -66,12 +70,12 @@ def scene(p, robot_dir, back=True):
     return dress(dk.modify_robot(dk.build_scene(p, robot_dir), p), p, back=back)
 
 
-def cable_points(p, hood_pos, hood_mat, far_y=3.0):
+def cable_points(p, hood_pos, hood_mat):
     """The charging cable's route (world, m), as in the README's assembly steps:
     - out of the plug's strain relief along the hood's +y (through its left wall);
     - in a loose loop down to the clip in the egg's edge, through the front plate and the dome;
-    - down beside the egg onto the base, over its rear corner onto the floor, then along the floor toward +y, out of
-      the picture.
+    - down beside the egg onto the base, over its rear corner onto the floor, then in a loose curve along the floor
+      (FLOOR_ROUTE), out of the picture.
     The plug rides in the hood, so the first points move with the hood body (hood_pos, hood_mat: its pose)."""
     R = np.asarray(hood_mat); out_d = R[:, 1]; dn = np.array([0.0, 0.0, -1.0])
     cs = hood_pos + R @ (np.array(p.cable_out)*1e-3)
@@ -80,7 +84,7 @@ def cable_points(p, hood_pos, hood_mat, far_y=3.0):
     return [cs, cs + out_d*0.006, cs + out_d*0.015 + dn*0.006, w(0.016, yk - 0.006, zk + 0.020), w(0.006, yk, zk + 0.003),
             w(0.0, yk, zk), w(-bt, yk, zk), w(-bt - 0.005, yk, zk - 0.005), w(-bt - 0.007, yk - 0.002, (p.T + p.socket_h + 3.0)*1e-3),
             w(-bt - 0.008, yk + 0.002, top), w(-0.026, 0.088, top), w(-0.031, 0.097, top - 0.0004),
-            w(CABLE_X, 0.106, CABLE_R), w(CABLE_X, 0.140, CABLE_R), w(CABLE_X, 0.40, CABLE_R), w(CABLE_X, far_y, CABLE_R)]
+            w(CABLE_X, 0.106, CABLE_R)] + [w(x, y, CABLE_R) for x, y in FLOOR_ROUTE]
 
 
 def draw_cable(scn, p, hood_pos, hood_mat):
