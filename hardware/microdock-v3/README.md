@@ -8,14 +8,15 @@ no screws or glue.
 ## Assembly
 
 The assembly manual. Print the [PDF](media/microdock_v3_assembly.pdf) at 100 % to use page 2's 1:1 check of the
-cable's plug. The parts and a ready Bambu Studio project are under [Parts and printing](#parts-and-printing).
+cable's plug. The printed parts, a ready Bambu Studio project and what to buy are under
+[Parts and printing](#parts-and-printing).
 
-![What you need: the six printed parts and two filament pins, a magnetic USB-C adapter pair, a 90° USB-C adapter, and a USB-C cable and charger](media/assembly/page_02.jpg)
+![What you need: the six printed parts and two filament pins, a magnetic USB-C adapter pair, a 90° USB-C adapter, and a cable and charger](media/assembly/page_02.jpg)
 ![Steps 1 and 2: put the spring stage on the front plate's pegs, then pin the post through the plate's ears](media/assembly/page_03.jpg)
 ![Steps 3 to 5: plug the cable into the angle adapter and the angle adapter into the magnetic adapter, lower the three into the upside-down hood, and press until they click](media/assembly/page_04.jpg)
 ![Steps 6 and 7: push the hood's arm through the front plate's window into the stage's carriage, then pin it from behind](media/assembly/page_05.jpg)
 ![Steps 8 and 9: press the cable into the clip in the egg's edge with a loose loop, then snap the dome on from behind](media/assembly/page_06.jpg)
-![Steps 10 and 11: push the egg into the base's socket, then press the tag into its pocket](media/assembly/page_07.jpg)
+![Steps 10 and 11: push the egg into the base's socket, then cut any support out of the tag's pocket and press the tag in](media/assembly/page_07.jpg)
 ![Step 12 and a check: plug the cable into the charger, then check that the hood floats and springs back](media/assembly/page_08.jpg)
 ![Step 13 and done: push the magnetic tip into Microduck's USB-C port, then stand the dock against a wall and tape its base to the floor](media/assembly/page_09.jpg)
 
@@ -129,19 +130,30 @@ Standard. Bambu Studio's estimates:
 Plates 1–6: about 9 h 15 min and 365 g. Plate 7 prints the hood's slice round the adapters, to try the magnetic
 adapter, the angle adapter and the duck's tip before printing the hood.
 
-The pins are two pieces of 1.75 mm PLA filament, about 4 cm each, cut flush once they are in.
+The pins are two pieces of 1.75 mm PLA filament, about 4 cm each, cut flush once they are in. You may not need them:
+if the post already sits firmly on its pegs (step 2), or the arm in the carriage (step 7), you can leave that pin out.
 
-### Bill of materials
+### What to buy
 
-| Item | What we use |
-|---|---|
-| Magnetic USB-C adapter, 2-pack (24-pin, passes CC, so chargers switch on) | Auravale 240 W, as the MicroDock's |
-| 90° USB-C adapter, "horizontal": the hood holds this one and turns the cable sideways | goobay USB4 angle adapter, Kjell & Company 66960 |
-| USB-C cable: the hood's clip holds this one's plug (12.3 × 20 mm, 6.4 mm thick) | white 60 W, 1 m, in Clas Ohlson's 20 W charger kit 39-2051 |
-| USB-C charger, or any phone charger you have | the same kit's 20 W charger |
+| | Part | What we use | Where | Price |
+|---|---|---|---|---|
+| <img src="media/parts/magnetic-adapter.png" height="110" alt="Auravale's magnetic adapters and tips"> | **Magnetic USB-C adapter**, 2-pack: 24-pin, passing CC, so chargers switch on. The adapter goes in the hood, the tip in Microduck. | Auravale 240 W, 2-pack | Amazon [DE](https://www.amazon.de/dp/B0GWQ71YND) · [FR](https://www.amazon.fr/dp/B0GWQ71YND) · [IT](https://www.amazon.it/dp/B0GWQ71YND) · [ES](https://www.amazon.es/dp/B0GWQ71YND) | about €9–13 |
+| <img src="media/parts/angle-adapter.png" height="110" alt="goobay 74441"> | **90° USB-C adapter, "horizontal"**: it turns the cable sideways in the hood. goobay's vertical and U-shaped ones (74442–74446) don't fit. | goobay 74441 (USB4) | [goobay](https://www.wentronic.com/en/usb-ctm-adapter-horizontal-90-usb4tm-74441) · Amazon [FR](https://www.amazon.fr/dp/B0DHCW7VTP) · [IT](https://www.amazon.it/dp/B0DHCW7VTP) · [Kjell](https://www.kjell.com/se/produkter/dator/kablar-adaptrar/usb-adaptrar-kontakter/usb-adaptrar/usb-c-adapter-med-90-horisontell-vinkel-usb4-p66960) (Sweden, Norway) | about €6, 99 kr |
+| <img src="media/parts/usb-c-cable.png" height="110" alt="Apple's 60 W USB-C Charge Cable"> | **Cable** with a USB-C plug for the dock; the other end to suit your charger | Apple 60 W USB-C Charge Cable (1 m), the one in the box of an iPhone 15 or later | Apple [US](https://www.apple.com/shop/product/MW493AM/A) · [UK](https://www.apple.com/uk/shop/product/MW493ZM/A) · [DE](https://www.apple.com/de/shop/product/MW493ZM/A) · [FR](https://www.apple.com/fr/shop/product/MW493ZM/A) · [SE](https://www.apple.com/se/shop/product/MW493ZM/A) | $19, £19, €19, 270 kr |
+| <img src="media/parts/charger.png" height="110" alt="Apple's 20 W USB-C Power Adapter"> | **Charger** | any phone charger (with a USB-C port for Apple's cable), e.g. Apple 20 W USB-C Power Adapter | Apple [US](https://www.apple.com/shop/product/MWVV3AM/A) · [UK](https://www.apple.com/uk/shop/product/MUVT3B/A) · [DE](https://www.apple.com/de/shop/product/MD3J4ZM/A) · [FR](https://www.apple.com/fr/shop/product/MD3J4ZM/A) · [SE](https://www.apple.com/se/shop/product/MD3J4ZM/A) | $19, £19, €19, 270 kr |
 
-These replace the MicroDock's right-angle cable: the hood is shaped for this angle adapter and plug, and checked
-against calipered parts. The [assembly manual](#assembly) above shows how it all goes together.
+Prices as of November 2026. Photos: Amazon, goobay, Apple.
+
+**The cable:** only the end in the dock has to be USB-C. Apple's is the default; its plug is 10.2 × 14.5 mm and 4.5 mm
+thick. We have also tested the white cable in Clas Ohlson's 20 W charger kit
+([39-2051](https://www.clasohlson.com/se/USB-C-PD-laddare-med-kabel,-1-m,-20-W,-vit/p/39-2051), Nordic only), with a
+plug 12.3 × 20 mm and 6.4 mm thick. The hood holds the two adapters; the cable's plug only has to pass through, so it
+must be at most 12.3 mm wide and 6.4 mm thick. Most cables probably fit, but choose a thin, flexible one: a thick or
+stiff cable pushes the floating hood. Page 2 of the [assembly manual](media/microdock_v3_assembly.pdf) has a 1:1 plug
+check.
+
+These replace the MicroDock's right-angle cable. The hood is shaped for this magnetic adapter and angle adapter, and
+checked against calipered parts. The [assembly manual](#assembly) above shows how it all goes together.
 
 ## What the simulation leaves out
 
