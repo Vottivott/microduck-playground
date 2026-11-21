@@ -16,7 +16,7 @@ cable's plug. The printed parts, a ready Bambu Studio project and what to buy ar
 ![Steps 3 to 5: plug the cable into the angle adapter and the angle adapter into the magnetic adapter, lower the three into the upside-down hood, and press until they click](media/assembly/page_04.jpg)
 ![Steps 6 and 7: push the hood's arm through the front plate's window into the stage's carriage, then pin it from behind](media/assembly/page_05.jpg)
 ![Steps 8 and 9: press the cable into the clip in the egg's edge with a loose loop, then snap the dome on from behind](media/assembly/page_06.jpg)
-![Steps 10 and 11: push the egg into the base's socket, then press the tag into its pocket](media/assembly/page_07.jpg)
+![Steps 10 and 11: push the egg into the base's socket, then cut any support out of the tag's pocket and press the tag in](media/assembly/page_07.jpg)
 ![Step 12 and a check: plug the cable into the charger, then check that the hood floats and springs back](media/assembly/page_08.jpg)
 ![Step 13 and done: push the magnetic tip into Microduck's USB-C port, then stand the dock against a wall and tape its base to the floor](media/assembly/page_09.jpg)
 
